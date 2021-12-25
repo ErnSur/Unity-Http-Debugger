@@ -1,0 +1,41 @@
+#req-type-menu {
+    max-width: 60px;
+    min-width: 60px;
+}
+
+#req-send-button {
+    max-width: 45px;
+    min-width: 45px;
+}
+
+#req-url-field {
+    flex-grow: 1;
+}
+
+#main-panel {
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.main-panel-container {
+    flex-grow: 1;
+    flex-basis: 1px;
+}
+
+.main-panel-container > ScrollView {
+    flex-grow: 1;
+}
+
+.header-element {
+    flex-direction: row;
+}
+
+.header-element > TextField {
+    flex-grow: 1;
+    flex-basis: 1px;
+}
+
+#req-headers-view {
+    display: none;
+}
