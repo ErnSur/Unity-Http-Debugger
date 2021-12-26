@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.artehacker.uitkeditoraid": "https://github.com/OscarAbraham/UITKEditorAid.git",
     "com.quickeye.ui-toolkit-plus": "https://github.com/ErnSur/UI-Toolkit-Plus.git",
     "com.unity.collab-proxy": "1.14.4",
     "com.unity.ide.rider": "1.2.1",

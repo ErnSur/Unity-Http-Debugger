@@ -4,6 +4,7 @@ using static UnityEditor.EditorWindow;
 
 namespace QuickEye.RequestWatcher
 {
+    
     internal static class EditorFullscreenUtility
     {
         private static Type prevWindowType;
@@ -15,8 +16,11 @@ namespace QuickEye.RequestWatcher
 
         public static EditorWindow ToggleEditorFullscreen(Type editorType)
         {
-            if (focusedWindow.GetType() != editorType)
+            if (focusedWindow != null && focusedWindow.GetType() != editorType)
+            {
                 prevWindowType = focusedWindow.GetType();
+                focusedWindow.maximized = false;
+            }
             var wnd = GetWindow(editorType);
             if (wnd == null)
                 return null;

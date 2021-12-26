@@ -1,11 +1,18 @@
 {
   "dependencies": {
+    "com.artehacker.uitkeditoraid": {
+      "version": "https://github.com/OscarAbraham/UITKEditorAid.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b851c766bb9c9fe51e45995c16ec409a7c066367"
+    },
     "com.quickeye.ui-toolkit-plus": {
       "version": "https://github.com/ErnSur/UI-Toolkit-Plus.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "515f7536f45a03692892da6a0aa7381641a68e2e"
+      "hash": "2f5738b5c6918cbf2a637f0c451659319e4efcb7"
     },
     "com.unity.collab-proxy": {
       "version": "1.14.4",

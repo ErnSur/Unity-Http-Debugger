@@ -1,25 +1,30 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:VisualElement name="main-panel">
         <Style src="PostmanWindow.uss" />
-        <ui:VisualElement name="sidebar" class="main-panel-container" style="max-width: 180px; min-width: 180px;">
-            <ui:ListView focusable="true" style="flex-grow: 1;">
-                <ui:VisualElement>
-                    <ui:Label text="Label" />
+        <ui:VisualElement name="sidebar" class="main-panel-container panel-border" style="max-width: 180px; min-width: 180px;">
+            <uie:Toolbar>
+                <uie:ToolbarButton text="+" name="req-list-create-button" style="width: 20px;" />
+                <uie:ToolbarSearchField focusable="true" name="req-list-search" style="flex-shrink: 1; flex-grow: 1;" />
+            </uie:Toolbar>
+            <ui:ListView focusable="true" name="req-list" style="flex-grow: 1;">
+                <ui:VisualElement class="sidebar-req-el">
+                    <ui:Label text="GET" class="sidebar-req-el-type" />
+                    <ArteHacker.UITKEditorAid.EditableLabel value="Reqest name" class="sidebar-req-el-name" />
                 </ui:VisualElement>
             </ui:ListView>
         </ui:VisualElement>
-        <ui:VisualElement name="req-panel" class="main-panel-container">
+        <ui:VisualElement name="req-panel" class="main-panel-container panel-border">
             <uie:Toolbar style="flex-direction: row;">
                 <uie:EnumField value="Center" name="req-type-menu" />
                 <ui:TextField picking-mode="Ignore" name="req-url-field" />
                 <uie:ToolbarButton text="Send" name="req-send-button" />
             </uie:Toolbar>
-            <uie:Toolbar>
+            <uie:Toolbar style="display: none;">
                 <uie:ToolbarToggle focusable="false" label="JSON" name="req-json-tab" />
                 <uie:ToolbarToggle focusable="false" label="Headers" name="req-headers-tab" />
             </uie:Toolbar>
             <ui:ScrollView>
-                <ui:TextField picking-mode="Ignore" name="req-body-field" multiline="true" />
+                <ui:TextField picking-mode="Ignore" name="req-body-field" multiline="true" class="code-field" />
                 <ui:VisualElement name="req-headers-view">
                     <ui:VisualElement class="header-element">
                         <ui:TextField picking-mode="Ignore" value="Content-Type" text="Content-Type" class="header-name" />
@@ -33,7 +38,7 @@
                 <ui:Label text="Response Status" name="res-status-label" />
             </uie:Toolbar>
             <ui:ScrollView>
-                <ui:TextField picking-mode="Ignore" name="res-body-field" multiline="true" />
+                <ui:TextField picking-mode="Ignore" name="res-body-field" multiline="true" class="code-field" />
             </ui:ScrollView>
         </ui:VisualElement>
     </ui:VisualElement>

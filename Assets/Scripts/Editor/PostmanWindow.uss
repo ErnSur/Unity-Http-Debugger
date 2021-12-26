@@ -39,3 +39,30 @@
 #req-headers-view {
     display: none;
 }
+
+.sidebar-req-el {
+    height: 36px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 11px;
+}
+
+.sidebar-req-el > * {
+    font-size: 15px;
+}
+
+.panel-border {
+    border-right-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.73);
+}
+
+.sidebar-req-el-type {
+    -unity-font-style: bold;
+    width: 42px;
+}
+
+.sidebar-req-el-name {
+}
+.code-field{
+    -unity-font: resource('QuickEye/RobotoMono-Regular');
+}

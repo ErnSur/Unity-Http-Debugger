@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using ArteHacker.UITKEditorAid;
 using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEngine;
@@ -12,20 +13,33 @@ namespace QuickEye.RequestWatcher
     {
         private static Type prevWindowType;
 
-        [MenuItem("Window/UIElements/PostmanWindow #&p")]
+        [MenuItem("Test/PostmanWindow #&p")]
         public static void Open()
         {
             EditorFullscreenUtility.ToggleEditorFullscreen<PostmanWindow>();
         }
 
-        [MenuItem("Window/UI Toolkit/UI Builder Toggle Fullscreen #&b")]
+        [MenuItem("Test/UI Builder Toggle Fullscreen #&b")]
         public static void ToggleUIBuilderFullScreen()
         {
-            EditorFullscreenUtility.ToggleEditorFullscreen(Type.GetType("Unity.UI.Builder.Builder, UnityEditor.UIBuilderModule"));
+            EditorFullscreenUtility.ToggleEditorFullscreen(
+                Type.GetType("Unity.UI.Builder.Builder, UnityEditor.UIBuilderModule"));
         }
 
         [Q("main-panel")]
         private VisualElement mainPanel;
+
+        [Q("sidebar")]
+        private VisualElement sidebar;
+
+        [Q("req-list-create-button")]
+        private ToolbarButton reqListCreateButton;
+
+        [Q("req-list-search")]
+        private ToolbarSearchField reqListSearch;
+
+        [Q("req-list")]
+        private ListView reqList;
 
         [Q("req-panel")]
         private VisualElement reqPanel;
@@ -39,8 +53,17 @@ namespace QuickEye.RequestWatcher
         [Q("req-send-button")]
         private ToolbarButton reqSendButton;
 
+        [Q("req-json-tab")]
+        private ToolbarToggle reqJsonTab;
+
+        [Q("req-headers-tab")]
+        private ToolbarToggle reqHeadersTab;
+
         [Q("req-body-field")]
         private TextField reqBodyField;
+
+        [Q("req-headers-view")]
+        private VisualElement reqHeadersView;
 
         [Q("res-panel")]
         private VisualElement resPanel;
@@ -51,75 +74,124 @@ namespace QuickEye.RequestWatcher
         [Q("res-body-field")]
         private TextField resBodyField;
 
-        [Q("req-headers-view")]
-        private VisualElement reqHeadersView;
+        private HttpReq SelectedReq => data.requests[reqList.selectedIndex];
 
-        [Q("sidebar")]
-        private VisualElement sidebar;
+        private const string PrefsKey = "postmanData";
 
         [SerializeField]
-        private HttpRequestSettings selectedRequestSettings;
+        private PostmanData data;
+
+        private SerializedObject serializedObject;
+
+        private void LoadData()
+        {
+            var json = EditorPrefs.GetString(PrefsKey, JsonUtility.ToJson(new PostmanData()));
+            data = JsonUtility.FromJson<PostmanData>(json);
+        }
+
+        private void SaveData()
+        {
+            EditorPrefs.SetString(PrefsKey, JsonUtility.ToJson(data));
+        }
 
         private void OnEnable()
         {
-            if (selectedRequestSettings == null)
-                selectedRequestSettings = CreateInstance<HttpRequestSettings>();
+            LoadData();
+            Debug.Log($"OnEnable {serializedObject}");
+        }
+
+        private void OnDisable()
+        {
+            SaveData();
         }
 
         public void CreateGUI()
         {
+            Debug.Log($"OnCreateGUI: {serializedObject}");
             // Each editor window contains a root VisualElement object
             var root = rootVisualElement;
 
             // Import UXML
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Editor/PostmanWindow.uxml");
-            VisualElement labelFromUXML = visualTree.CloneTree();
-            root.Add(labelFromUXML);
+            visualTree.CloneTree(root);
             root.AssignQueryResults(this);
-            InitReqTypeField();
-            InitReqUrlField();
-            InitReqBodyField();
-            InitReqSendButton();
             InitSidebar();
-            GetHeaders();
+            InitReqSendButton();
+            RefreshReqView();
+            serializedObject = new SerializedObject(this);
+            rootVisualElement.Bind(serializedObject);
+        }
+
+        [ContextMenu("test")]
+        private void test()
+        {
+            //rootVisualElement.Bind(new SerializedObject(this));
+            reqList.Refresh();
+        }
+
+        private void RefreshReqView()
+        {
+            Debug.Log($"Refresh Req View");
+            var i = reqList.selectedIndex;
+            reqTypeMenu.bindingPath = $"data.requests.Array.data[{i}].type";
+            reqUrlField.bindingPath = $"data.requests.Array.data[{i}].url";
+            reqBodyField.bindingPath = $"data.requests.Array.data[{i}].body";
+
+            var code = SelectedReq.lastResponse.statusCode;
+            resStatusLabel.text = $"({(int) code}) {code}";
+            resBodyField.bindingPath = $"data.requests.Array.data[{i}].lastResponse.payload";
+            
+            rootVisualElement.Unbind();
+            rootVisualElement.Bind(serializedObject);
         }
 
         private void InitSidebar()
         {
+            reqListCreateButton.Clicked(() =>
+            {
+                data.requests.Add(new HttpReq());
+                reqList.Refresh();
+            });
+            InitRequestList();
         }
 
-        private void InitReqBodyField()
+        private void InitRequestList()
         {
-            reqBodyField.value = selectedRequestSettings.body;
-            reqBodyField.RegisterValueChangedCallback(evt => { selectedRequestSettings.body = evt.newValue; });
-        }
+            var elementPrefab = reqList.Q(null, "sidebar-req-el");
+            elementPrefab.ToggleDisplayStyle(false);
+            reqList.itemHeight = 36;
+            reqList.makeItem = () =>
+            {
+                var ve = new VisualElement();
 
-        private void InitReqUrlField()
-        {
-            reqUrlField.value = selectedRequestSettings.url;
-            reqUrlField.RegisterValueChangedCallback(evt => { selectedRequestSettings.url = evt.newValue; });
+                ve.Class("sidebar-req-el");
+                ve.Add(new Label().Class("sidebar-req-el-type").BindingPath("type"));
+                var renameField = new EditableLabel().Class("sidebar-req-el-name");
+                ve.Add(renameField);
+                return ve;
+            };
+            reqList.bindItem = (ve, index) =>
+            {
+                var typeProp = serializedObject.FindProperty($"data.requests.Array.data[{index}].type");
+                var nameProp = serializedObject.FindProperty($"data.requests.Array.data[{index}].name");
+                var typeLabel = ve.Q<Label>(null, "sidebar-req-el-type");
+                typeLabel.BindProperty(typeProp);
+                var renameLabel = ve.Q<EditableLabel>(null, "sidebar-req-el-name");
+                renameLabel.BindProperty(nameProp);
+            };
+            reqList.onSelectionChanged += list => RefreshReqView();
+            reqList.itemsSource = data.requests;
+            reqList.selectedIndex = 0;
         }
 
         private void InitReqSendButton()
         {
             reqSendButton.clicked += async () =>
             {
-                resStatusLabel.text = "Loading...";
-                var res = await selectedRequestSettings.SendAsync();
-                resStatusLabel.text = res.StatusCode.ToString();
-                var prettyJson = new JsonFormatter(await res.Content.ReadAsStringAsync()).Format();
-                resBodyField.value = prettyJson;
+                resStatusLabel.text = "Status: Loading...";
+                await SelectedReq.SendAsync();
+                RefreshReqView();
             };
-        }
-
-        private void InitReqTypeField()
-        {
-            reqTypeMenu.Init(selectedRequestSettings.type);
-
-            reqTypeMenu.RegisterCallback<ChangeEvent<Enum>>((evt) =>
-            {
-                selectedRequestSettings.type = (HttpReqType)evt.newValue;
-            });
         }
 
         private (string header, string value)[] GetHeaders()
