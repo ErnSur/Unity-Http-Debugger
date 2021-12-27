@@ -23,8 +23,8 @@
                 <uie:ToolbarToggle focusable="false" label="JSON" name="req-json-tab" />
                 <uie:ToolbarToggle focusable="false" label="Headers" name="req-headers-tab" />
             </uie:Toolbar>
-            <ui:ScrollView>
-                <ui:TextField picking-mode="Ignore" name="req-body-field" multiline="true" class="code-field" />
+            <ui:ScrollView mode="VerticalAndHorizontal">
+                <QuickEye.RequestWatcher.CodeField multiline="true" name="req-body-field" />
                 <ui:VisualElement name="req-headers-view">
                     <ui:VisualElement class="header-element">
                         <ui:TextField picking-mode="Ignore" value="Content-Type" text="Content-Type" class="header-name" />
@@ -35,10 +35,10 @@
         </ui:VisualElement>
         <ui:VisualElement name="res-panel" class="main-panel-container">
             <uie:Toolbar style="flex-direction: row;">
-                <ui:Label text="Response Status" name="res-status-label" />
+                <ui:Label text="Response Status" name="res-status-label" style="-unity-text-align: middle-left;" />
             </uie:Toolbar>
-            <ui:ScrollView>
-                <ui:TextField picking-mode="Ignore" name="res-body-field" multiline="true" class="code-field" />
+            <ui:ScrollView mode="VerticalAndHorizontal">
+                <QuickEye.RequestWatcher.CodeField name="res-body-field" readonly="true" />
             </ui:ScrollView>
         </ui:VisualElement>
     </ui:VisualElement>

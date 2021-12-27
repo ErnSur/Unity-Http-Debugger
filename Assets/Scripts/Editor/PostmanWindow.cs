@@ -28,51 +28,37 @@ namespace QuickEye.RequestWatcher
 
         [Q("main-panel")]
         private VisualElement mainPanel;
-
         [Q("sidebar")]
         private VisualElement sidebar;
-
         [Q("req-list-create-button")]
         private ToolbarButton reqListCreateButton;
-
         [Q("req-list-search")]
         private ToolbarSearchField reqListSearch;
-
         [Q("req-list")]
         private ListView reqList;
-
         [Q("req-panel")]
         private VisualElement reqPanel;
-
         [Q("req-type-menu")]
         private EnumField reqTypeMenu;
-
         [Q("req-url-field")]
         private TextField reqUrlField;
-
         [Q("req-send-button")]
         private ToolbarButton reqSendButton;
-
         [Q("req-json-tab")]
         private ToolbarToggle reqJsonTab;
-
         [Q("req-headers-tab")]
         private ToolbarToggle reqHeadersTab;
-
         [Q("req-body-field")]
-        private TextField reqBodyField;
-
+        private CodeField reqBodyField;
         [Q("req-headers-view")]
         private VisualElement reqHeadersView;
-
         [Q("res-panel")]
         private VisualElement resPanel;
-
         [Q("res-status-label")]
         private Label resStatusLabel;
-
         [Q("res-body-field")]
-        private TextField resBodyField;
+        private CodeField resBodyField;
+
 
         private HttpReq SelectedReq => data.requests[reqList.selectedIndex];
 
@@ -110,7 +96,7 @@ namespace QuickEye.RequestWatcher
             Debug.Log($"OnCreateGUI: {serializedObject}");
             // Each editor window contains a root VisualElement object
             var root = rootVisualElement;
-
+            
             // Import UXML
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Editor/PostmanWindow.uxml");
             visualTree.CloneTree(root);
@@ -122,13 +108,6 @@ namespace QuickEye.RequestWatcher
             rootVisualElement.Bind(serializedObject);
         }
 
-        [ContextMenu("test")]
-        private void test()
-        {
-            //rootVisualElement.Bind(new SerializedObject(this));
-            reqList.Refresh();
-        }
-
         private void RefreshReqView()
         {
             Debug.Log($"Refresh Req View");
@@ -137,7 +116,7 @@ namespace QuickEye.RequestWatcher
             reqUrlField.bindingPath = $"data.requests.Array.data[{i}].url";
             reqBodyField.bindingPath = $"data.requests.Array.data[{i}].body";
 
-            var code = SelectedReq.lastResponse.statusCode;
+            var code = SelectedReq?.lastResponse.statusCode ?? 0;
             resStatusLabel.text = $"({(int) code}) {code}";
             resBodyField.bindingPath = $"data.requests.Array.data[{i}].lastResponse.payload";
             

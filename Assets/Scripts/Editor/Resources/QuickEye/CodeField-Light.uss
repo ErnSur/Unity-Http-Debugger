@@ -1,0 +1,30 @@
+CodeField {
+    background-color: rgb(211, 211, 211);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(211, 211, 211);
+    border-right-color: rgb(211, 211, 211);
+    border-top-color: rgb(211, 211, 211);
+    border-bottom-color: rgb(211, 211, 211);
+    flex-direction: row;
+}
+
+CodeField > Label {
+    -unity-font: resource('QuickEye/RobotoMono-Regular');
+    color: rgb(100, 100, 100);
+    -unity-text-align: middle-right;
+    margin-left: 5px;
+}
+
+CodeField > TextField {
+    flex-grow: 1;
+    flex-shrink: 2;
+}
+
+CodeField > TextField #unity-text-input {
+    flex-grow: 1;
+    flex-shrink: 2;
+    background-color: rgb(211, 211, 211);
+}

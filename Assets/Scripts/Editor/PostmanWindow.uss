@@ -25,6 +25,7 @@
 
 .main-panel-container > ScrollView {
     flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .header-element {
@@ -62,7 +63,4 @@
 }
 
 .sidebar-req-el-name {
-}
-.code-field{
-    -unity-font: resource('QuickEye/RobotoMono-Regular');
 }

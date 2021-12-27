@@ -1,0 +1,24 @@
+CodeField {
+    background-color: rgba(36, 36, 36, 255);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(84, 84, 84);
+    border-right-color: rgb(84, 84, 84);
+    border-top-color: rgb(84, 84, 84);
+    border-bottom-color: rgb(84, 84, 84);
+    flex-direction: row;
+}
+
+CodeField > Label {
+    -unity-font: resource('QuickEye/RobotoMono-Regular');
+    color: rgb(89, 89, 89);
+    -unity-text-align: middle-right;
+    margin-left: 5px;
+}
+
+CodeField > TextField {
+    flex-grow: 1;
+    flex-shrink: 2;
+}
