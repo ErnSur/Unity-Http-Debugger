@@ -1,0 +1,19 @@
+{
+    "name": "QuickEye.RequestWatcher.Editor",
+    "references": [
+        "GUID:cc849d66545be244a9c60f51db5a5bcc",
+        "GUID:9861c8596b4de1544a09a56d39ef2572",
+        "GUID:a694a97319423354491cdb55c9b2746c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -2,44 +2,68 @@
     <ui:VisualElement name="main-panel">
         <Style src="PostmanWindow.uss" />
         <ui:VisualElement name="sidebar" class="main-panel-container panel-border" style="max-width: 180px; min-width: 180px;">
-            <uie:Toolbar>
-                <uie:ToolbarButton text="+" name="req-list-create-button" style="width: 20px;" />
-                <uie:ToolbarSearchField focusable="true" name="req-list-search" style="flex-shrink: 1; flex-grow: 1;" />
+            <uie:Toolbar class="toolbar-tab">
+                <uie:ToolbarToggle focusable="false" label="Editor" name="editor-tab-toggle" class="toolbar-tab-toggle" />
+                <uie:ToolbarToggle focusable="false" label="Play Mode" name="playmode-tab-toggle" class="toolbar-tab-toggle" />
             </uie:Toolbar>
-            <ui:ListView focusable="true" name="req-list" style="flex-grow: 1;">
-                <ui:VisualElement class="sidebar-req-el">
-                    <ui:Label text="GET" class="sidebar-req-el-type" />
-                    <ArteHacker.UITKEditorAid.EditableLabel value="Reqest name" class="sidebar-req-el-name" />
-                </ui:VisualElement>
-            </ui:ListView>
-        </ui:VisualElement>
-        <ui:VisualElement name="req-panel" class="main-panel-container panel-border">
-            <uie:Toolbar style="flex-direction: row;">
-                <uie:EnumField value="Center" name="req-type-menu" />
-                <ui:TextField picking-mode="Ignore" name="req-url-field" />
-                <uie:ToolbarButton text="Send" name="req-send-button" />
-            </uie:Toolbar>
-            <uie:Toolbar style="display: none;">
-                <uie:ToolbarToggle focusable="false" label="JSON" name="req-json-tab" />
-                <uie:ToolbarToggle focusable="false" label="Headers" name="req-headers-tab" />
-            </uie:Toolbar>
-            <ui:ScrollView mode="VerticalAndHorizontal">
-                <QuickEye.RequestWatcher.CodeField multiline="true" name="req-body-field" />
-                <ui:VisualElement name="req-headers-view">
-                    <ui:VisualElement class="header-element">
-                        <ui:TextField picking-mode="Ignore" value="Content-Type" text="Content-Type" class="header-name" />
-                        <ui:TextField picking-mode="Ignore" value="application/json" text="application/json" class="header-value" />
+            <ui:VisualElement name="sidebar-editor" style="flex-grow: 1; display: flex;">
+                <uie:Toolbar>
+                    <uie:ToolbarButton text="+" name="req-list-create-button" style="width: 20px;" />
+                    <uie:ToolbarSearchField focusable="true" name="req-list-search" style="flex-shrink: 1; flex-grow: 1;" />
+                </uie:Toolbar>
+                <ui:ListView focusable="true" name="req-list" style="flex-grow: 1;">
+                    <ui:VisualElement class="sidebar-req-el">
+                        <ui:Label text="GET" class="sidebar-req-el-type" />
+                        <ArteHacker.UITKEditorAid.EditableLabel value="Reqest name" class="sidebar-req-el-name" />
                     </ui:VisualElement>
-                </ui:VisualElement>
-            </ui:ScrollView>
+                </ui:ListView>
+            </ui:VisualElement>
+            <ui:VisualElement name="sidebar-playmode" style="flex-grow: 1; display: none;">
+                <uie:Toolbar>
+                    <uie:ToolbarButton text="Clear" name="req-list-create-button" style="width: 43px;" />
+                    <uie:ToolbarSearchField focusable="true" name="req-list-search" style="flex-shrink: 1; flex-grow: 1;" />
+                </uie:Toolbar>
+                <ui:ListView focusable="true" name="playmode-list" item-height="20" style="flex-grow: 1;">
+                    <ui:VisualElement style="height: 20px; padding-left: 3px; flex-direction: row;">
+                        <ui:VisualElement style="width: 16px;" />
+                        <ui:Label text="GET" class="sidebar-req-el-type" style="width: 35px; font-size: 9px; -unity-text-align: middle-left;" />
+                        <ui:Label text="Label" style="flex-grow: 1; -unity-text-align: middle-left;" />
+                    </ui:VisualElement>
+                </ui:ListView>
+            </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="res-panel" class="main-panel-container">
-            <uie:Toolbar style="flex-direction: row;">
-                <ui:Label text="Response Status" name="res-status-label" style="-unity-text-align: middle-left;" />
-            </uie:Toolbar>
-            <ui:ScrollView mode="VerticalAndHorizontal">
-                <QuickEye.RequestWatcher.CodeField name="res-body-field" readonly="true" />
-            </ui:ScrollView>
+        <ui:VisualElement name="exchange-view" style="flex-direction: row; flex-grow: 1; display: flex;">
+            <ui:VisualElement name="req-panel" class="main-panel-container panel-border">
+                <uie:Toolbar style="flex-direction: row;">
+                    <uie:EnumField value="Center" name="req-type-menu" />
+                    <ui:TextField picking-mode="Ignore" name="req-url-field" />
+                    <uie:ToolbarButton text="Send" name="req-send-button" />
+                </uie:Toolbar>
+                <uie:Toolbar style="display: none;">
+                    <uie:ToolbarToggle focusable="false" label="JSON" name="req-json-tab" />
+                    <uie:ToolbarToggle focusable="false" label="Headers" name="req-headers-tab" />
+                </uie:Toolbar>
+                <ui:ScrollView mode="VerticalAndHorizontal">
+                    <QuickEye.RequestWatcher.CodeField multiline="true" name="req-body-field" />
+                    <ui:VisualElement name="req-headers-view">
+                        <ui:VisualElement class="header-element">
+                            <ui:TextField picking-mode="Ignore" value="Content-Type" text="Content-Type" class="header-name" />
+                            <ui:TextField picking-mode="Ignore" value="application/json" text="application/json" class="header-value" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="res-panel" class="main-panel-container">
+                <uie:Toolbar style="flex-direction: row;">
+                    <ui:Label text="Response Status" name="res-status-label" style="-unity-text-align: middle-left;" />
+                </uie:Toolbar>
+                <ui:ScrollView mode="VerticalAndHorizontal">
+                    <QuickEye.RequestWatcher.CodeField name="res-body-field" readonly="true" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="no-select-view" style="display: none; flex-grow: 1; justify-content: center; align-items: center;">
+            <ui:Label text="Nothing. Select a reqest. " style="-unity-font-style: bold; font-size: 30px; color: rgba(196, 196, 196, 0.44);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

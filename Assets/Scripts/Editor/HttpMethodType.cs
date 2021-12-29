@@ -1,6 +1,6 @@
 namespace QuickEye.RequestWatcher
 {
-    internal enum HttpReqType
+    internal enum HttpMethodType
     {
         Get,
         Put,
