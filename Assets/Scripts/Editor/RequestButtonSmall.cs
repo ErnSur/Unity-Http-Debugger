@@ -9,39 +9,25 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    public class RequestButtonBig : VisualElement
+    public class RequestButtonSmall : VisualElement
     {
-        public Action Deleted;
-        public Action Duplicated;
-
         private readonly Label typeLabel;
-        private readonly EditableLabel nameLabel;
-        private readonly Button dropdownButton;
+        private readonly Label nameLabel;
 
-        public RequestButtonBig()
+        public RequestButtonSmall()
         {
             var styleSuffix = EditorGUIUtility.isProSkin ? "Dark" : "Light";
-            var styleSheet = Resources.Load<StyleSheet>($"QuickEye/{nameof(RequestButtonBig)}-{styleSuffix}");
+            var styleSheet = Resources.Load<StyleSheet>($"QuickEye/{nameof(RequestButtonSmall)}-{styleSuffix}");
             styleSheets.Add(styleSheet);
 
+            // TODO: Truncate type value to only first 3 chars and make it uppper case
+            this.Class("sidebar-req-el");
             Add(typeLabel = new Label()
                 .Class("rbb-type")
                 .BindingPath("type"));
 
-            Add(nameLabel = new EditableLabel()
+            Add(nameLabel = new Label()
                 .Class("rbb-name"));
-            Add(dropdownButton = new Button(){text = "▼"}.Clicked(() =>
-            {
-                var menu = new GenericMenu();
-                menu.AddItem(new GUIContent("Duplicate"), false, () => Duplicated?.Invoke());
-                menu.AddSeparator("");
-                menu.AddItem(new GUIContent("Delete"), false, () => Deleted?.Invoke());
-                menu.ShowAsContext();
-            }));
-            RegisterCallback<MouseEnterEvent>(evt => { dropdownButton.ToggleDisplayStyle(true); });
-
-            RegisterCallback<MouseLeaveEvent>(evt => { dropdownButton.ToggleDisplayStyle(false); });
-            dropdownButton.ToggleDisplayStyle(false);
         }
 
         public void BindProperties(SerializedProperty typeProp, SerializedProperty nameProp)
@@ -50,7 +36,7 @@ namespace QuickEye.RequestWatcher
             nameLabel.BindProperty(nameProp);
         }
 
-        public new class UxmlFactory : UxmlFactory<RequestButtonBig, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<RequestButtonSmall, UxmlTraits>
         {
         }
 
@@ -70,8 +56,8 @@ namespace QuickEye.RequestWatcher
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
-                ve.As<RequestButtonBig>().nameLabel.value = text.GetValueFromBag(bag, cc);
-                ve.As<RequestButtonBig>().typeLabel.text = type.GetValueFromBag(bag, cc).ToString();
+                ve.As<RequestButtonSmall>().nameLabel.text = text.GetValueFromBag(bag, cc);
+                ve.As<RequestButtonSmall>().typeLabel.text = type.GetValueFromBag(bag, cc).ToString();
             }
         }
     }

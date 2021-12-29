@@ -1,0 +1,20 @@
+RequestButtonSmall > * {
+    font-size: 12px;
+}
+
+.rbb-type {
+    -unity-font-style: bold;
+    width: 28px;
+    -unity-text-align: middle-left;
+}
+
+.rbb-name {
+    flex-grow: 1;
+}
+
+RequestButtonSmall {
+    height: 18px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 4px;
+}

@@ -8,23 +8,17 @@
             </uie:Toolbar>
             <ui:VisualElement name="sidebar-editor" style="flex-grow: 1; display: flex;">
                 <uie:Toolbar>
-                    <uie:ToolbarButton text="+" name="req-list-create-button" style="width: 20px;" />
-                    <uie:ToolbarSearchField focusable="true" name="req-list-search" style="flex-shrink: 1; flex-grow: 1;" />
+                    <uie:ToolbarButton text="+" name="editor-create-button" style="width: 20px;" />
+                    <uie:ToolbarSearchField focusable="true" name="editor-searchField" style="flex-shrink: 1; flex-grow: 1;" />
                 </uie:Toolbar>
-                <ui:ListView focusable="true" name="req-list" style="flex-grow: 1;" />
+                <ui:ListView focusable="true" name="editor-list" style="flex-grow: 1;" />
             </ui:VisualElement>
-            <ui:VisualElement name="sidebar-playmode" style="flex-grow: 1; display: none;">
+            <ui:VisualElement name="sidebar-playmode" style="flex-grow: 1; display: flex;">
                 <uie:Toolbar>
-                    <uie:ToolbarButton text="Clear" name="req-list-create-button" style="width: 43px;" />
-                    <uie:ToolbarSearchField focusable="true" name="req-list-search" style="flex-shrink: 1; flex-grow: 1;" />
+                    <uie:ToolbarButton text="Clear" name="playmode-clear-button" style="width: 43px;" />
+                    <uie:ToolbarSearchField focusable="true" name="playmode-searchField" style="flex-shrink: 1; flex-grow: 1;" />
                 </uie:Toolbar>
-                <ui:ListView focusable="true" name="playmode-list" item-height="20" style="flex-grow: 1;">
-                    <ui:VisualElement style="height: 20px; padding-left: 3px; flex-direction: row;">
-                        <ui:VisualElement style="width: 16px;" />
-                        <ui:Label text="GET" class="sidebar-req-el-type" style="width: 35px; font-size: 9px; -unity-text-align: middle-left;" />
-                        <ui:Label text="Label" style="flex-grow: 1; -unity-text-align: middle-left;" />
-                    </ui:VisualElement>
-                </ui:ListView>
+                <ui:ListView focusable="true" name="playmode-list" item-height="18" style="flex-grow: 1;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="exchange-view" style="flex-direction: row; flex-grow: 1; display: flex;">

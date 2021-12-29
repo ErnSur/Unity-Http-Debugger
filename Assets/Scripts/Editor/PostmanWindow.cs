@@ -31,73 +31,65 @@ namespace QuickEye.RequestWatcher
 
         [Q("main-panel")]
         private VisualElement mainPanel;
-
         [Q("sidebar")]
         private VisualElement sidebar;
-
         [Q("editor-tab-toggle")]
         private ToolbarToggle editorTabToggle;
-
         [Q("playmode-tab-toggle")]
         private ToolbarToggle playmodeTabToggle;
-
-        [Q("req-list-create-button")]
-        private ToolbarButton reqListCreateButton;
-
-        [Q("req-list-search")]
-        private ToolbarSearchField reqListSearch;
-
-        [Q("req-list")]
-        private ListView reqList;
-
+        [Q("sidebar-editor")]
+        private VisualElement sidebarEditor;
+        [Q("editor-create-button")]
+        private ToolbarButton editorCreateButton;
+        [Q("editor-searchField")]
+        private ToolbarSearchField editorSearchField;
+        [Q("editor-list")]
+        private ListView editorList;
+        [Q("sidebar-playmode")]
+        private VisualElement sidebarPlaymode;
+        [Q("playmode-clear-button")]
+        private ToolbarButton playmodeClearButton;
+        [Q("playmode-searchField")]
+        private ToolbarSearchField playmodeSearchField;
+        [Q("playmode-list")]
+        private ListView playmodeList;
         [Q("exchange-view")]
         private VisualElement exchangeView;
-
         [Q("req-panel")]
         private VisualElement reqPanel;
-
         [Q("req-type-menu")]
         private EnumField reqTypeMenu;
-
         [Q("req-url-field")]
         private TextField reqUrlField;
-
         [Q("req-send-button")]
         private ToolbarButton reqSendButton;
-
         [Q("req-json-tab")]
         private ToolbarToggle reqJsonTab;
-
         [Q("req-headers-tab")]
         private ToolbarToggle reqHeadersTab;
-
         [Q("req-body-field")]
         private QuickEye.RequestWatcher.CodeField reqBodyField;
-
         [Q("req-headers-view")]
         private VisualElement reqHeadersView;
-
         [Q("res-panel")]
         private VisualElement resPanel;
-
         [Q("res-status-label")]
         private Label resStatusLabel;
-
         [Q("res-body-field")]
         private QuickEye.RequestWatcher.CodeField resBodyField;
-
         [Q("no-select-view")]
         private VisualElement noSelectView;
+
 
         #endregion
 
         private HttpExchange SelectedExchange =>
-            reqList.selectedIndex < 0 ? null : Datasource.requests[reqList.selectedIndex];
+            ActiveListView.selectedIndex < 0 ? null : Datasource.requests[ActiveListView.selectedIndex];
 
         private const string PrefsKey = "postmanData";
 
         [SerializeField]
-        private PostmanData data;
+        private PostmanData editorData;
 
         [SerializeField]
         private PostmanData playmodeData;
@@ -105,8 +97,10 @@ namespace QuickEye.RequestWatcher
         [SerializeField]
         private bool editorTabOpened;
 
-        private PostmanData Datasource => editorTabOpened ? data : playmodeData;
-        private string DatasourcePropName => editorTabOpened ? nameof(data) : nameof(playmodeData);
+        private ListView ActiveListView => editorTabOpened ? editorList : playmodeList;
+        
+        private PostmanData Datasource => editorTabOpened ? editorData : playmodeData;
+        private string DatasourcePropName => editorTabOpened ? nameof(editorData) : nameof(playmodeData);
 
         private SerializedProperty DatasourceRequestsProp =>
             editorTabOpened ? editorRequestsProp : playmodeRequestsProp;
@@ -119,12 +113,12 @@ namespace QuickEye.RequestWatcher
         private void LoadData()
         {
             var json = EditorPrefs.GetString(PrefsKey, JsonUtility.ToJson(new PostmanData()));
-            data = JsonUtility.FromJson<PostmanData>(json);
+            editorData = JsonUtility.FromJson<PostmanData>(json);
         }
 
         private void SaveData()
         {
-            EditorPrefs.SetString(PrefsKey, JsonUtility.ToJson(data));
+            EditorPrefs.SetString(PrefsKey, JsonUtility.ToJson(editorData));
         }
 
         private void OnEnable()
@@ -143,8 +137,6 @@ namespace QuickEye.RequestWatcher
         private void RefreshPlaymodeView(HttpExchange data)
         {
         }
-
-
         public void CreateGUI()
         {
             try
@@ -179,7 +171,7 @@ namespace QuickEye.RequestWatcher
         {
             serializedObject = new SerializedObject(this);
             editorRequestsProp =
-                serializedObject.FindProperty($"{nameof(data)}.{nameof(PostmanData.requests)}");
+                serializedObject.FindProperty($"{nameof(editorData)}.{nameof(PostmanData.requests)}");
             playmodeRequestsProp =
                 serializedObject.FindProperty($"{nameof(playmodeData)}.{nameof(PostmanData.requests)}");
         }
@@ -202,17 +194,19 @@ namespace QuickEye.RequestWatcher
 
             void Refresh()
             {
-                reqList.itemsSource = Datasource.requests;
-                reqList.Refresh();
+                ActiveListView.Refresh();
                 RefreshReqView();
             }
         }
 
         private void UpdateSelectedView()
         {
-            var hasSelection = reqList.selectedIndex != -1;
+            var hasSelection = ActiveListView.selectedIndex != -1;
             noSelectView.ToggleDisplayStyle(!hasSelection);
             exchangeView.ToggleDisplayStyle(hasSelection);
+
+            sidebarEditor.ToggleDisplayStyle(editorTabOpened);
+            sidebarPlaymode.ToggleDisplayStyle(!editorTabOpened);
         }
 
         private void RefreshReqView()
@@ -221,7 +215,7 @@ namespace QuickEye.RequestWatcher
             UpdateSelectedView();
             var propName =
                 //DatasourceRequestsProp[reqList.selectedIndex].propertyPath;
-                GetRequestPropName(reqList.selectedIndex);
+                GetRequestPropName(ActiveListView.selectedIndex);
             reqTypeMenu.bindingPath = $"{propName}.{nameof(HttpExchange.type)}";
             reqUrlField.bindingPath = $"{propName}.url";
             reqBodyField.bindingPath = $"{propName}.body";
@@ -236,20 +230,20 @@ namespace QuickEye.RequestWatcher
 
         private void InitSidebar()
         {
-            reqListCreateButton.Clicked(() =>
+            editorCreateButton.Clicked(() =>
             {
                 DatasourceRequestsProp.InsertArrayElementAtIndex(DatasourceRequestsProp.arraySize);
                 serializedObject.ApplyModifiedProperties();
-                reqList.Refresh();
+                editorList.Refresh();
             });
-            InitRequestList();
+            InitEditorList();
+            InitPlaymodeList();
         }
 
-        private void InitRequestList()
+        private void InitEditorList()
         {
-            //reqList.itemHeight = 36;
-            reqList.makeItem = () => new RequestButtonBig();
-            reqList.bindItem = (ve, index) =>
+            editorList.makeItem = () => new RequestButtonBig();
+            editorList.bindItem = (ve, index) =>
             {
                 var propName = GetRequestPropName(index);
                 var typeProp = serializedObject.FindProperty($"{propName}.type");
@@ -260,20 +254,42 @@ namespace QuickEye.RequestWatcher
                 {
                     DatasourceRequestsProp.DeleteArrayElementAtIndex(index);
                     serializedObject.ApplyModifiedProperties();
-                    reqList.Refresh();
+                    editorList.Refresh();
                     RefreshReqView();
                 };
                 button.Duplicated = () =>
                 {
                     DatasourceRequestsProp.InsertArrayElementAtIndex(index);
                     serializedObject.ApplyModifiedProperties();
-                    reqList.Refresh();
+                    editorList.Refresh();
                     RefreshReqView();
                 };
             };
-            reqList.onSelectionChanged += list => RefreshReqView();
-            reqList.itemsSource = Datasource?.requests;
-            //reqList.selectedIndex = 0;
+            editorList.onSelectionChanged += list => RefreshReqView();
+            editorList.itemsSource = editorData?.requests;
+        }
+        
+        private void InitPlaymodeList()
+        {
+            playmodeList.makeItem = () => new RequestButtonSmall();
+            playmodeList.bindItem = (ve, index) =>
+            {
+                var propName = GetRequestPropName(index);
+                var typeProp = serializedObject.FindProperty($"{propName}.type");
+                var nameProp = serializedObject.FindProperty($"{propName}.name");
+                var button = ve.As<RequestButtonSmall>();
+                button.BindProperties(typeProp,nameProp);
+            };
+            playmodeList.onSelectionChanged += list => RefreshReqView();
+            playmodeList.itemsSource = playmodeData?.requests;
+
+            playmodeClearButton.Clicked(() =>
+            {
+                playmodeRequestsProp.ClearArray();
+                serializedObject.ApplyModifiedProperties();
+                playmodeList.Refresh();
+                RefreshReqView();
+            });
         }
 
         private void InitReqSendButton()
@@ -288,17 +304,6 @@ namespace QuickEye.RequestWatcher
 
         private string GetRequestPropName(int index) =>
             $"{DatasourcePropName}.requests.Array.data[{index}]";
-
-        private (string header, string value)[] GetHeaders()
-        {
-            return reqHeadersView.Query(null, "header-element").ToList().Select(v =>
-            {
-                var headerName = v.Q<TextField>(null, "header-name").value;
-                var headerValue = v.Q<TextField>(null, "header-value").value;
-                return (headerName, headerValue);
-                Debug.Log($"MES: {headerName} : {headerValue}");
-            }).ToArray();
-        }
     }
 
     public static class FluentVisualElementExtensions
