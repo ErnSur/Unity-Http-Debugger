@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using ArteHacker.UITKEditorAid;
 using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEngine;
@@ -93,7 +92,7 @@ namespace QuickEye.RequestWatcher
         #endregion
 
         private HttpExchange SelectedExchange =>
-            reqList.selectedIndex < 0 ? null : data.requests[reqList.selectedIndex];
+            reqList.selectedIndex < 0 ? null : Datasource.requests[reqList.selectedIndex];
 
         private const string PrefsKey = "postmanData";
 
@@ -248,30 +247,29 @@ namespace QuickEye.RequestWatcher
 
         private void InitRequestList()
         {
-            var elementPrefab = reqList.Q(null, "sidebar-req-el");
-            elementPrefab.ToggleDisplayStyle(false);
-            reqList.itemHeight = 36;
-            reqList.makeItem = () =>
-            {
-                Debug.Log($"Create element");
-                var ve = new VisualElement();
-
-                ve.Class("sidebar-req-el");
-                ve.Add(new Label().Class("sidebar-req-el-type").BindingPath("type"));
-                var renameField = new EditableLabel().Class("sidebar-req-el-name");
-                ve.Add(renameField);
-                return ve;
-            };
+            //reqList.itemHeight = 36;
+            reqList.makeItem = () => new RequestButtonBig();
             reqList.bindItem = (ve, index) =>
             {
-                Debug.Log($"Bind element {index}");
                 var propName = GetRequestPropName(index);
                 var typeProp = serializedObject.FindProperty($"{propName}.type");
                 var nameProp = serializedObject.FindProperty($"{propName}.name");
-                var typeLabel = ve.Q<Label>(null, "sidebar-req-el-type");
-                typeLabel.BindProperty(typeProp);
-                var renameLabel = ve.Q<EditableLabel>(null, "sidebar-req-el-name");
-                renameLabel.BindProperty(nameProp);
+                var button = ve.As<RequestButtonBig>();
+                button.BindProperties(typeProp,nameProp);
+                button.Deleted = () =>
+                {
+                    DatasourceRequestsProp.DeleteArrayElementAtIndex(index);
+                    serializedObject.ApplyModifiedProperties();
+                    reqList.Refresh();
+                    RefreshReqView();
+                };
+                button.Duplicated = () =>
+                {
+                    DatasourceRequestsProp.InsertArrayElementAtIndex(index);
+                    serializedObject.ApplyModifiedProperties();
+                    reqList.Refresh();
+                    RefreshReqView();
+                };
             };
             reqList.onSelectionChanged += list => RefreshReqView();
             reqList.itemsSource = Datasource?.requests;
@@ -300,6 +298,14 @@ namespace QuickEye.RequestWatcher
                 return (headerName, headerValue);
                 Debug.Log($"MES: {headerName} : {headerValue}");
             }).ToArray();
+        }
+    }
+
+    public static class FluentVisualElementExtensions
+    {
+        public static T As<T>(this VisualElement ve) where T : VisualElement
+        {
+            return (T)ve;
         }
     }
 }

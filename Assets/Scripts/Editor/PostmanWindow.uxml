@@ -11,12 +11,7 @@
                     <uie:ToolbarButton text="+" name="req-list-create-button" style="width: 20px;" />
                     <uie:ToolbarSearchField focusable="true" name="req-list-search" style="flex-shrink: 1; flex-grow: 1;" />
                 </uie:Toolbar>
-                <ui:ListView focusable="true" name="req-list" style="flex-grow: 1;">
-                    <ui:VisualElement class="sidebar-req-el">
-                        <ui:Label text="GET" class="sidebar-req-el-type" />
-                        <ArteHacker.UITKEditorAid.EditableLabel value="Reqest name" class="sidebar-req-el-name" />
-                    </ui:VisualElement>
-                </ui:ListView>
+                <ui:ListView focusable="true" name="req-list" style="flex-grow: 1;" />
             </ui:VisualElement>
             <ui:VisualElement name="sidebar-playmode" style="flex-grow: 1; display: none;">
                 <uie:Toolbar>
