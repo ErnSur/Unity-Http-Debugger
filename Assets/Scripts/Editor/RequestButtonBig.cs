@@ -9,7 +9,14 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    public class RequestButtonBig : VisualElement
+    public class RequestButton : VisualElement
+    {
+        protected string FormatHttpMethodType(string value)
+        {
+            return value.Substring(0, 3).ToUpperInvariant();
+        }
+    }
+    public class RequestButtonBig : RequestButton
     {
         public Action Deleted;
         public Action Duplicated;
@@ -25,8 +32,7 @@ namespace QuickEye.RequestWatcher
             styleSheets.Add(styleSheet);
 
             Add(typeLabel = new Label()
-                .Class("rbb-type")
-                .BindingPath("type"));
+                .Class("rbb-type"));
 
             Add(nameLabel = new EditableLabel()
                 .Class("rbb-name"));
@@ -41,6 +47,11 @@ namespace QuickEye.RequestWatcher
             RegisterCallback<MouseEnterEvent>(evt => { dropdownButton.ToggleDisplayStyle(true); });
 
             RegisterCallback<MouseLeaveEvent>(evt => { dropdownButton.ToggleDisplayStyle(false); });
+            
+            typeLabel.RegisterValueChangedCallback(evt =>
+            {
+                ((INotifyValueChanged<string>)typeLabel).SetValueWithoutNotify(FormatHttpMethodType(evt.newValue)); 
+            });
             dropdownButton.ToggleDisplayStyle(false);
         }
 

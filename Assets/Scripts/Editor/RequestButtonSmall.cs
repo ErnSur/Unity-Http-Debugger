@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using ArteHacker.UITKEditorAid;
 using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -9,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    public class RequestButtonSmall : VisualElement
+    public class RequestButtonSmall : RequestButton
     {
         private readonly Label typeLabel;
         private readonly Label nameLabel;
@@ -21,10 +19,8 @@ namespace QuickEye.RequestWatcher
             styleSheets.Add(styleSheet);
 
             // TODO: Truncate type value to only first 3 chars and make it uppper case
-            this.Class("sidebar-req-el");
             Add(typeLabel = new Label()
-                .Class("rbb-type")
-                .BindingPath("type"));
+                .Class("rbb-type"));
 
             Add(nameLabel = new Label()
                 .Class("rbb-name"));
@@ -32,8 +28,12 @@ namespace QuickEye.RequestWatcher
 
         public void BindProperties(SerializedProperty typeProp, SerializedProperty nameProp)
         {
-            typeLabel.BindProperty(typeProp);
             nameLabel.BindProperty(nameProp);
+            this.TrackPropertyChange(typeProp, p =>
+            {
+                var enumName = p.enumNames[p.enumValueIndex];
+                typeLabel.text = FormatHttpMethodType(enumName);
+            });
         }
 
         public new class UxmlFactory : UxmlFactory<RequestButtonSmall, UxmlTraits>
