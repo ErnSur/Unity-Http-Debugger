@@ -13,7 +13,8 @@ namespace QuickEye.RequestWatcher
         [MenuItem("Test/PostmanWindow #&p")]
         public static void Open()
         {
-            EditorFullscreenUtility.ToggleEditorFullscreen<PostmanWindow>();
+            var wnd =EditorFullscreenUtility.ToggleEditorFullscreen<PostmanWindow>();
+            wnd.titleContent = new GUIContent("HTTP Debugger");
         }
 
         [MenuItem("Test/UI Builder Toggle Fullscreen #&b")]
@@ -132,6 +133,9 @@ namespace QuickEye.RequestWatcher
 
         private void RefreshPlaymodeView(HttpExchange data)
         {
+            playmodeData.requests.Add(data);
+            serializedObject.Update();
+            playmodeList.Refresh();
         }
         public void CreateGUI()
         {

@@ -25,7 +25,7 @@
             <ui:VisualElement name="req-panel" class="main-panel-container panel-border">
                 <uie:Toolbar style="flex-direction: row;">
                     <uie:EnumField value="Center" name="req-type-menu" />
-                    <ui:TextField picking-mode="Ignore" name="req-url-field" />
+                    <ui:TextField picking-mode="Ignore" name="req-url-field" style="flex-shrink: 1;" />
                     <uie:ToolbarButton text="Send" name="req-send-button" />
                 </uie:Toolbar>
                 <uie:Toolbar style="display: none;">

@@ -34,13 +34,15 @@ namespace QuickEye.RequestWatcher
 
         public static async Task<HttpExchange> FromHttpRequestMessage(string name, HttpRequestMessage req)
         {
-            return new HttpExchange
+            var e = new HttpExchange
             {
                 name = name,
                 url = req.RequestUri.OriginalString,
                 type = HttpMethodTypeUtil.FromHttpMethod(req.Method),
-                body = await req.Content.ReadAsStringAsync()
             };
+            if (req.Content != null)
+                e.body = new JsonFormatter(await req.Content.ReadAsStringAsync()).Format();
+            return e;
         }
 
         public static async Task<HttpExchange> FromHttpResponseMessage(string name, HttpResponseMessage res)
@@ -48,9 +50,10 @@ namespace QuickEye.RequestWatcher
             var exchange = await FromHttpRequestMessage(name, res.RequestMessage);
             exchange.lastResponse = new Response
             {
-                statusCode = res.StatusCode,
-                payload = await res.Content.ReadAsStringAsync()
+                statusCode = res.StatusCode
             };
+            if (res.Content != null)
+                exchange.lastResponse.payload = new JsonFormatter(await res.Content.ReadAsStringAsync()).Format();
             return exchange;
         }
 

@@ -48,16 +48,16 @@ namespace QuickEye.RequestWatcher
 
             RegisterCallback<MouseLeaveEvent>(evt => { dropdownButton.ToggleDisplayStyle(false); });
             
-            typeLabel.RegisterValueChangedCallback(evt =>
-            {
-                ((INotifyValueChanged<string>)typeLabel).SetValueWithoutNotify(FormatHttpMethodType(evt.newValue)); 
-            });
             dropdownButton.ToggleDisplayStyle(false);
         }
 
         public void BindProperties(SerializedProperty typeProp, SerializedProperty nameProp)
         {
-            typeLabel.BindProperty(typeProp);
+            this.TrackPropertyChange(typeProp, p =>
+            {
+                var enumName = p.enumNames[p.enumValueIndex];
+                typeLabel.text = FormatHttpMethodType(enumName);
+            });
             nameLabel.BindProperty(nameProp);
         }
 
