@@ -8,10 +8,6 @@ using UnityEditor.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    
-    //TODO: 
-    // like in insomia add dropdown button to each list element that will have delete and duplicate options
-    // you dont need to use icons for status respones, use background colors, you can also display error codes in tooltips
     public class PostmanWindow : EditorWindow
     {
         [MenuItem("Test/PostmanWindow #&p")]
@@ -44,7 +40,7 @@ namespace QuickEye.RequestWatcher
         [Q("editor-searchField")]
         private ToolbarSearchField editorSearchField;
         [Q("editor-list")]
-        private ListView editorList;
+        private ListView stashList;
         [Q("sidebar-playmode")]
         private VisualElement sidebarPlaymode;
         [Q("playmode-clear-button")]
@@ -89,23 +85,23 @@ namespace QuickEye.RequestWatcher
         private const string PrefsKey = "postmanData";
 
         [SerializeField]
-        private PostmanData editorData;
+        private PostmanData stashData;
 
         [SerializeField]
         private PostmanData playmodeData;
 
         [SerializeField]
-        private bool editorTabOpened;
+        private bool stashTabOpened;
 
-        private ListView ActiveListView => editorTabOpened ? editorList : playmodeList;
+        private ListView ActiveListView => stashTabOpened ? stashList : playmodeList;
         
-        private PostmanData Datasource => editorTabOpened ? editorData : playmodeData;
-        private string DatasourcePropName => editorTabOpened ? nameof(editorData) : nameof(playmodeData);
+        private PostmanData Datasource => stashTabOpened ? stashData : playmodeData;
+        private string DatasourcePropName => stashTabOpened ? nameof(stashData) : nameof(playmodeData);
 
         private SerializedProperty DatasourceRequestsProp =>
-            editorTabOpened ? editorRequestsProp : playmodeRequestsProp;
+            stashTabOpened ? stashRequestsProp : playmodeRequestsProp;
 
-        private SerializedProperty editorRequestsProp;
+        private SerializedProperty stashRequestsProp;
         private SerializedProperty playmodeRequestsProp;
 
         private SerializedObject serializedObject;
@@ -113,12 +109,12 @@ namespace QuickEye.RequestWatcher
         private void LoadData()
         {
             var json = EditorPrefs.GetString(PrefsKey, JsonUtility.ToJson(new PostmanData()));
-            editorData = JsonUtility.FromJson<PostmanData>(json);
+            stashData = JsonUtility.FromJson<PostmanData>(json);
         }
 
         private void SaveData()
         {
-            EditorPrefs.SetString(PrefsKey, JsonUtility.ToJson(editorData));
+            EditorPrefs.SetString(PrefsKey, JsonUtility.ToJson(stashData));
         }
 
         private void OnEnable()
@@ -170,8 +166,8 @@ namespace QuickEye.RequestWatcher
         private void RefreshSerializedObj()
         {
             serializedObject = new SerializedObject(this);
-            editorRequestsProp =
-                serializedObject.FindProperty($"{nameof(editorData)}.{nameof(PostmanData.requests)}");
+            stashRequestsProp =
+                serializedObject.FindProperty($"{nameof(stashData)}.{nameof(PostmanData.requests)}");
             playmodeRequestsProp =
                 serializedObject.FindProperty($"{nameof(playmodeData)}.{nameof(PostmanData.requests)}");
         }
@@ -181,16 +177,16 @@ namespace QuickEye.RequestWatcher
             editorTabToggle.RegisterThisValueChangedCallback(evt =>
             {
                 playmodeTabToggle.SetValueWithoutNotify(!evt.newValue);
-                editorTabOpened = true;
+                stashTabOpened = true;
                 Refresh();
             });
             playmodeTabToggle.RegisterThisValueChangedCallback(evt =>
             {
                 editorTabToggle.SetValueWithoutNotify(!evt.newValue);
-                editorTabOpened = false;
+                stashTabOpened = false;
                 Refresh();
             });
-            editorTabToggle.value = editorTabOpened;
+            editorTabToggle.value = stashTabOpened;
 
             void Refresh()
             {
@@ -205,13 +201,12 @@ namespace QuickEye.RequestWatcher
             noSelectView.ToggleDisplayStyle(!hasSelection);
             exchangeView.ToggleDisplayStyle(hasSelection);
 
-            sidebarEditor.ToggleDisplayStyle(editorTabOpened);
-            sidebarPlaymode.ToggleDisplayStyle(!editorTabOpened);
+            sidebarEditor.ToggleDisplayStyle(stashTabOpened);
+            sidebarPlaymode.ToggleDisplayStyle(!stashTabOpened);
         }
 
         private void RefreshReqView()
         {
-            Debug.Log($"Refresh Req View");
             UpdateSelectedView();
             var propName =
                 //DatasourceRequestsProp[reqList.selectedIndex].propertyPath;
@@ -234,7 +229,7 @@ namespace QuickEye.RequestWatcher
             {
                 DatasourceRequestsProp.InsertArrayElementAtIndex(DatasourceRequestsProp.arraySize);
                 serializedObject.ApplyModifiedProperties();
-                editorList.Refresh();
+                stashList.Refresh();
             });
             InitEditorList();
             InitPlaymodeList();
@@ -242,8 +237,8 @@ namespace QuickEye.RequestWatcher
 
         private void InitEditorList()
         {
-            editorList.makeItem = () => new RequestButtonBig();
-            editorList.bindItem = (ve, index) =>
+            stashList.makeItem = () => new RequestButtonBig();
+            stashList.bindItem = (ve, index) =>
             {
                 var propName = GetRequestPropName(index);
                 var typeProp = serializedObject.FindProperty($"{propName}.type");
@@ -254,19 +249,19 @@ namespace QuickEye.RequestWatcher
                 {
                     DatasourceRequestsProp.DeleteArrayElementAtIndex(index);
                     serializedObject.ApplyModifiedProperties();
-                    editorList.Refresh();
+                    stashList.Refresh();
                     RefreshReqView();
                 };
                 button.Duplicated = () =>
                 {
                     DatasourceRequestsProp.InsertArrayElementAtIndex(index);
                     serializedObject.ApplyModifiedProperties();
-                    editorList.Refresh();
+                    stashList.Refresh();
                     RefreshReqView();
                 };
             };
-            editorList.onSelectionChanged += list => RefreshReqView();
-            editorList.itemsSource = editorData?.requests;
+            stashList.onSelectionChanged += list => RefreshReqView();
+            stashList.itemsSource = stashData?.requests;
         }
         
         private void InitPlaymodeList()

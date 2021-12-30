@@ -3,7 +3,7 @@
         <Style src="PostmanWindow.uss" />
         <ui:VisualElement name="sidebar" class="main-panel-container panel-border" style="max-width: 180px; min-width: 180px;">
             <uie:Toolbar class="toolbar-tab">
-                <uie:ToolbarToggle focusable="false" label="Editor" name="editor-tab-toggle" class="toolbar-tab-toggle" />
+                <uie:ToolbarToggle focusable="false" label="Stash" name="editor-tab-toggle" value="true" class="toolbar-tab-toggle" />
                 <uie:ToolbarToggle focusable="false" label="Play Mode" name="playmode-tab-toggle" class="toolbar-tab-toggle" />
             </uie:Toolbar>
             <ui:VisualElement name="sidebar-editor" style="flex-grow: 1; display: flex;">
