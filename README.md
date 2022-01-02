@@ -1,6 +1,8 @@
 # TODO
-
-
+- Update UI-Toolkit-plus to trim double "-"
+`       Regex.Replace(input, "-+.", m => char.ToUpper(m.Value[m.Length-1]).ToString());`
+- Fix playmode clear button
+    - Add unbind method to Exchange,reqest and response views
 ## Features
 - Runtime API
     - Process Request API
@@ -13,6 +15,7 @@
 - Reqest View
     - Edit Headers
     - Edit Authentication
+
 - Response View
     - Raw/Formatted payload toggle
 
@@ -24,5 +27,8 @@
 - Mock Tab
     - request mock values (with enable toggles
 
+- Breakpoint Tab
+
 - QoL
     - If reqest url doesn't start with https or http try to add it
+    - Remove UITK Aid dependency

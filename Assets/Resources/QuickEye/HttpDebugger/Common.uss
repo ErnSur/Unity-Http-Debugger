@@ -1,0 +1,20 @@
+.panel-border {
+    border-right-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.24);
+    border-right-color: rgba(0, 0, 0, 0.24);
+    border-top-color: rgba(0, 0, 0, 0.24);
+    border-bottom-color: rgba(0, 0, 0, 0.24);
+}
+
+.nothing-selected-label {
+    -unity-font-style: bold;
+    font-size: 30px;
+    color: rgba(196, 196, 196, 0.44);
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+    white-space: normal;
+}
+
+.sidebar {
+    width: 180px;
+}

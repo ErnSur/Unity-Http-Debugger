@@ -23,9 +23,8 @@ public class SampleUsage : MonoBehaviour
             Method = HttpMethod.Get,
             RequestUri = new Uri("http://dummy.restapiexample.com/api/v1/employee/1"),
         };
-        using (var response = await client.SendAsync(request))
+        using (var response = await client.SendAsync("Get Employee",request))
         {
-            HttpClientLogger.Log("Dummy Request", response);
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadAsStringAsync();
             Debug.Log(body);

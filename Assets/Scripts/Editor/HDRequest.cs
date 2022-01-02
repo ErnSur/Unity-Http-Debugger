@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
+[assembly:InternalsVisibleTo("Sandbox.Editor")]
 namespace QuickEye.RequestWatcher
 {
     [Serializable]
     internal class PostmanData
     {
-        public List<HttpExchange> requests = new List<HttpExchange>
+        public List<HDRequest> requests = new List<HDRequest>
         {
-            new HttpExchange
+            new HDRequest
             {
             }
         };
     }
 
     [Serializable]
-    internal class HttpExchange
+    internal class HDRequest
     {
         public string name = "New Request";
         public string url = "https://";
@@ -30,11 +31,11 @@ namespace QuickEye.RequestWatcher
         [Multiline(100)]
         public string body;
 
-        public Response lastResponse;
+        public HDResponse lastResponse;
 
-        public static async Task<HttpExchange> FromHttpRequestMessage(string name, HttpRequestMessage req)
+        public static async Task<HDRequest> FromHttpRequestMessage(string name, HttpRequestMessage req)
         {
-            var e = new HttpExchange
+            var e = new HDRequest
             {
                 name = name,
                 url = req.RequestUri.OriginalString,
@@ -45,10 +46,10 @@ namespace QuickEye.RequestWatcher
             return e;
         }
 
-        public static async Task<HttpExchange> FromHttpResponseMessage(string name, HttpResponseMessage res)
+        public static async Task<HDRequest> FromHttpResponseMessage(string name, HttpResponseMessage res)
         {
             var exchange = await FromHttpRequestMessage(name, res.RequestMessage);
-            exchange.lastResponse = new Response
+            exchange.lastResponse = new HDResponse
             {
                 statusCode = res.StatusCode
             };
@@ -65,19 +66,19 @@ namespace QuickEye.RequestWatcher
             if (type == HttpMethodType.Post)
                 request.Content = new StringContent(body, Encoding.UTF8, "application/json");
             var res = await client.SendAsync(request);
-            lastResponse = new Response
+            lastResponse = new HDResponse
             {
                 statusCode = res.StatusCode,
                 payload = new JsonFormatter(await res.Content.ReadAsStringAsync()).Format()
             };
             return res;
         }
+    }
 
-        [Serializable]
-        internal class Response
-        {
-            public HttpStatusCode statusCode;
-            public string payload;
-        }
+    [Serializable]
+    internal class HDResponse
+    {
+        public HttpStatusCode statusCode;
+        public string payload;
     }
 }

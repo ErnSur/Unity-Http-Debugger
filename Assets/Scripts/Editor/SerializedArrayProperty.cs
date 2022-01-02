@@ -1,9 +1,53 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 
 namespace QuickEye.RequestWatcher
 {
+    internal class SerializedArrayPropertyFakeList :SerializedArrayProperty, IList
+    {
+        public SerializedArrayPropertyFakeList(SerializedProperty property, string relativePath = null) : base(property, relativePath)
+        {
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSynchronized { get; }
+        public object SyncRoot { get; }
+        public int Add(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int IndexOf(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Insert(int index, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsFixedSize { get; }
+        public bool IsReadOnly { get; }
+        public object this[int index] { get => base[index];
+            set => throw new NotImplementedException(); }
+    }
     public class SerializedArrayProperty : IReadOnlyList<SerializedProperty>
     {
         public SerializedProperty Property { get; }

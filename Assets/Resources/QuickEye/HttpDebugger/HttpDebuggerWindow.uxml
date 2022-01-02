@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-grow: 1;">
+        <Style src="HttpDebuggerWindow.uss" />
+        <uie:Toolbar class="toolbar-tab tab-toolbar">
+            <ui:Button text="Stash" name="stash-tab" class="tab tab--active" />
+            <ui:Button text="Play mode" name="playmode-tab" class="tab" />
+            <ui:Button text="Mock" name="mock-tab" class="tab" />
+        </uie:Toolbar>
+        <QuickEye.RequestWatcher.StashView name="stash-view" style="flex-grow: 1;" />
+        <QuickEye.RequestWatcher.PlaymodeView name="playmode-view" style="flex-grow: 1; display: none;" />
+    </ui:VisualElement>
+</ui:UXML>

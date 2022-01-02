@@ -10,7 +10,7 @@ namespace QuickEye.RequestWatcher
     {
         private const string PlaymodePrefsKey = "PostmanPlaymode";
 
-        internal static event Action<HttpExchange> ExchangeLogged;
+        internal static event Action<HDRequest> ExchangeLogged;
 
         static HttpClientLoggerEditorWrapper()
         {
@@ -20,19 +20,19 @@ namespace QuickEye.RequestWatcher
 
         private static async Task Log(string name, HttpRequestMessage message)
         {
-            var ex = await HttpExchange.FromHttpRequestMessage(name, message);
+            var ex = await HDRequest.FromHttpRequestMessage(name, message);
             ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
         }
 
         private static async Task Log(string name, HttpResponseMessage message)
         {
-            var ex = await HttpExchange.FromHttpResponseMessage(name, message);
+            var ex = await HDRequest.FromHttpResponseMessage(name, message);
             ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
         }
 
-        private static void SerializePlaymodeLog(HttpExchange exchange)
+        private static void SerializePlaymodeLog(HDRequest exchange)
         {
             var json = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new PostmanData()));
             var data = JsonUtility.FromJson<PostmanData>(json);

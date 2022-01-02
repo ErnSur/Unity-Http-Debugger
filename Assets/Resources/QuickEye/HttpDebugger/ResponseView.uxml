@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <uie:Toolbar style="flex-direction: row;">
+        <ui:Label text="Response Status" name="res-status-label" style="-unity-text-align: middle-left;" />
+    </uie:Toolbar>
+    <ui:ScrollView mode="VerticalAndHorizontal">
+        <QuickEye.RequestWatcher.CodeField name="res-body-field" readonly="true" />
+    </ui:ScrollView>
+</ui:UXML>

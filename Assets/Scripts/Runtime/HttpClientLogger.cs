@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -25,6 +26,22 @@ namespace QuickEye.RequestWatcher
         public static void Log(string name, HttpResponseMessage message)
         {
             LoggedResponse?.Invoke(name, message);
+        }
+
+        public static async Task<HttpResponseMessage> SendAsync(this HttpClient c, string id,
+            HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var result = await c.SendAsync(request, cancellationToken);
+            LoggedResponse?.Invoke(id, result);
+            return result;
+        }
+
+        public static async Task<HttpResponseMessage> SendAsync(this HttpClient c, string id,
+            HttpRequestMessage request)
+        {
+            var result = await c.SendAsync(request);
+            LoggedResponse?.Invoke(id, result);
+            return result;
         }
     }
 }
