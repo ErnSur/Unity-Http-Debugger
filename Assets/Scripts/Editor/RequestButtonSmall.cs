@@ -44,7 +44,12 @@ namespace QuickEye.RequestWatcher
         {
             rbsName.bindingPath= (nameProp);
             rbsCode.bindingPath= (statusCode);
-            //typeTracker.bindingPath = typeProp;
+            
+            this.TrackPropertyChange<int>(statusCode, v =>
+            {
+                HttpStatusCodeUtil.ToggleStatusCodeClass(rbsCode,v);
+            });
+            
             this.TrackPropertyChange<string>(typeProp, v =>
             {
                 try

@@ -6,6 +6,8 @@
     -unity-font-style: bold;
     width: 28px;
     -unity-text-align: middle-left;
+    margin-left: 3px;
+    margin-right: 2px;
 }
 
 #rbs-name {

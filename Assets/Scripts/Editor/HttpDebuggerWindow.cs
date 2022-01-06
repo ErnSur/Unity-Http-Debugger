@@ -36,8 +36,7 @@ namespace QuickEye.RequestWatcher
             }
         }
 
-        private const string StashPrefsKey = "httpdebugger.stash";
-        private const string PlaymodePrefsKey = "httpdebugger.playmode";
+        private const string StatePrefsKey = "httpdebugger.state";
 
         private VisualElement[] tabViews;
 
@@ -73,16 +72,13 @@ namespace QuickEye.RequestWatcher
 
         private void LoadData()
         {
-            var stashJson = EditorPrefs.GetString(StashPrefsKey, JsonUtility.ToJson(new PostmanData()));
-            var playmodeJson = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new PostmanData()));
-            stashData = JsonUtility.FromJson<PostmanData>(stashJson);
-            playmodeData = JsonUtility.FromJson<PostmanData>(playmodeJson);
+            var stateJson = EditorPrefs.GetString(StatePrefsKey, JsonUtility.ToJson(this));
+            JsonUtility.FromJsonOverwrite(stateJson, this);
         }
 
         private void SaveData()
         {
-            EditorPrefs.SetString(StashPrefsKey, JsonUtility.ToJson(stashData));
-            EditorPrefs.SetString(PlaymodePrefsKey, JsonUtility.ToJson(playmodeData));
+            EditorPrefs.SetString(StatePrefsKey, JsonUtility.ToJson(this));
         }
 
         private void OnEnable()
@@ -112,8 +108,8 @@ namespace QuickEye.RequestWatcher
                 var tree = HttpDebuggerResources.LoadTree<HttpDebuggerWindow>();
                 tree.CloneTree(rootVisualElement);
                 rootVisualElement.AssignQueryResults(this);
-                InitSendButton(stashView, stashData.requests);
-                InitSendButton(playmodeView, playmodeData.requests);
+                InitSendButton(stashView, stashData);
+                InitSendButton(playmodeView, playmodeData);
                 InitSaveToStashAction();
                 RefreshSerializedObj();
                 InitTabs();
@@ -138,13 +134,6 @@ namespace QuickEye.RequestWatcher
         {
             try
             {
-                mockTab.AddManipulator(new ContextualMenuManipulator(evt =>
-                {
-                    evt.menu.AppendAction("H", _ =>
-                    {
-                        Debug.Log($"MES: HELL");
-                    });
-                }));
                 var listView = playmodeView.Q<ListView>();
                 listView.bindItem += (element, i) =>
                 {
@@ -167,8 +156,11 @@ namespace QuickEye.RequestWatcher
             }
         }
 
-        private void InitSendButton<T>(T root, List<HDRequest> requestList) where T : VisualElement, IRequestListView
+        private void InitSendButton<T>(T root, PostmanData dataStore) where T : VisualElement, IRequestListView
         {
+            //Debug.Log($"Init: {requestList == stashData.requests}/{requestList == playmodeData.requests}");
+            Debug.Log($"Init: {dataStore == stashData}/{dataStore == playmodeData}");
+
             try
             {
                 var sendButton = root.Q<Button>("req-send-button");
@@ -179,14 +171,14 @@ namespace QuickEye.RequestWatcher
                     try
                     {
                         var index = root.GetSelectedIndex();
-                        var hdReq = requestList[index];
+                        Debug.Log($"MES: {index}/{dataStore == stashData}/{dataStore == playmodeData}");
+                        //Debug.Log($"MES: {index}/{requestList == stashData.requests}/{requestList == playmodeData.requests}");
+                        var hdReq = dataStore.requests[index];
                         var res = await hdReq.SendAsync();
                         var newRes = await HDRequest.FromHttpResponseMessage(hdReq.name, res);
-                        requestList[index] = newRes;
+                        dataStore.requests[index] = newRes;
                         serializedObject.UpdateIfRequiredOrScript();
                         rootVisualElement.Bind(serializedObject);
-
-                        //resView.UpdateStatusLabel((int)statusCode);
                     }
                     catch (Exception e)
                     {

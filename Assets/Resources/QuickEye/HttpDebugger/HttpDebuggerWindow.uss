@@ -1,7 +1,6 @@
 .tab {
     -unity-text-align: middle-center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.18);
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
@@ -15,17 +14,21 @@
     border-right-width: 0;
     border-top-width: 0;
     border-bottom-width: 0;
+    background-color: rgba(34, 34, 34, 0.42);
 }
 
 .tab--active {
+    border-left-color: rgb(109, 163, 255);
+    border-right-color: rgb(109, 163, 255);
+    border-top-color: rgb(109, 163, 255);
+    border-bottom-color: rgb(109, 163, 255);
     border-bottom-width: 0;
-    background-color: rgba(255, 255, 255, 0.07);
-    border-left-color: rgba(0, 0, 0, 0.28);
-    border-right-color: rgba(0, 0, 0, 0.28);
-    border-top-color: rgba(0, 0, 0, 0.28);
-    border-bottom-color: rgba(0, 0, 0, 0.28);
-    border-right-width: 1px;
-    border-left-width: 1px;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    background-color: rgb(66, 66, 66);
+    border-top-width: 0;
 }
 
 .tab-toolbar {

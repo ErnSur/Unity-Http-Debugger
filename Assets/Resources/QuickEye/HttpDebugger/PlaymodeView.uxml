@@ -3,8 +3,8 @@
         <Style src="StashView.uss" />
         <Style src="Common.uss" />
         <ui:VisualElement name="sidebar-playmode" class="sidebar panel-border">
-            <uie:Toolbar>
-                <uie:ToolbarButton text="Clear" name="playmode-clear-button" style="width: 43px;" />
+            <uie:Toolbar class="header-toolbar">
+                <uie:ToolbarButton text="Clear" name="playmode-clear-button" class="header-toolbar--button" style="width: 43px;" />
                 <uie:ToolbarSearchField focusable="true" name="playmode-searchField" style="flex-shrink: 1; flex-grow: 1;" />
             </uie:Toolbar>
             <ui:ListView focusable="true" name="playmode-list" item-height="18" style="flex-grow: 1;" />
