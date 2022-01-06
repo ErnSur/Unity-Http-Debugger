@@ -51,15 +51,14 @@ namespace QuickEye.RequestWatcher
                 resView.UpdateStatusLabel("Response Status");
         }
 
-        private bool TryGetStatusCode(out HttpStatusCode code)
+        private bool TryGetStatusCode(out int code)
         {
             try
             {
-                var values = (HttpStatusCode[])Enum.GetValues(typeof(HttpStatusCode));
-                var index = requestProperty
+                //var values = (HttpStatusCode[])Enum.GetValues(typeof(HttpStatusCode));
+                code = requestProperty
                     .FindPropertyRelative($"{nameof(HDRequest.lastResponse)}.{nameof(HDResponse.statusCode)}")
-                    .enumValueIndex;
-                code = values[index];
+                    .intValue;
                 return true;
             }
             catch (Exception e)

@@ -117,6 +117,11 @@ namespace QuickEye.RequestWatcher
                 playmodeView.Init(playmodeRequestsProp, playmodeData.requests);
 
                 rootVisualElement.Bind(serializedObject);
+                mockTab.clicked += () =>
+                {
+                    rootVisualElement.Bind(serializedObject);
+                    Debug.Log($"MES: Bind");
+                };
             }
             catch (Exception e)
             {
@@ -135,7 +140,7 @@ namespace QuickEye.RequestWatcher
                 {
                     var res = await requestList[root.GetSelectedIndex()].SendAsync();
                     var statusCode = res.StatusCode;
-                    resView.UpdateStatusLabel(statusCode);
+                    resView.UpdateStatusLabel((int)statusCode);
                 }
                 catch (Exception e)
                 {

@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using ArteHacker.UITKEditorAid;
 using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -9,30 +12,75 @@ namespace QuickEye.RequestWatcher
 {
     public class RequestButtonSmall : RequestButton
     {
-        private readonly Label typeLabel;
-        private readonly Label nameLabel;
+        [Q("rbs--code")]
+        private Label rbsCode;
+        [Q("rbs-type")]
+        private Label rbsType;
+        [Q("rbs-name")]
+        private Label rbsName;
 
+        private ValueTracker<Enum> typeTracker;
         public RequestButtonSmall()
         {
-            var styleSuffix = EditorGUIUtility.isProSkin ? "Dark" : "Light";
-            var styleSheet = Resources.Load<StyleSheet>($"QuickEye/{nameof(RequestButtonSmall)}-{styleSuffix}");
-            styleSheets.Add(styleSheet);
-
-            // TODO: Truncate type value to only first 3 chars and make it uppper case
-            Add(typeLabel = new Label()
-                .Class("rbb-type"));
-
-            Add(nameLabel = new Label()
-                .Class("rbb-name"));
+            this.InitFromUxml();
+            // Add(typeTracker = new ValueTracker<Enum>("", evt =>
+            // {
+            //     try
+            //     {
+            //         var v = evt.newValue;
+            //         
+            //         Debug.Log($"New v: {v}");
+            //         //var enumName = p.enumNames[p.enumValueIndex];
+            //         //rbsType.text = FormatHttpMethodType(enumName);
+            //     }
+            //     catch (Exception e)
+            //     {
+            //         //rbsType.text = "";
+            //     }
+            // }));
+        }
+        //TODO: Dont worry about binding too much because we need to implement search and that will fuck things over
+        public void SetBindingPaths(string typeProp, string nameProp, string statusCode)
+        {
+            Debug.Log($"Bind Properies");
+            rbsName.bindingPath= (nameProp);
+            rbsCode.bindingPath= (statusCode);
+            //typeTracker.bindingPath = typeProp;
+            this.TrackPropertyChange<string>(typeProp, v =>
+            {
+                try
+                {
+                    Debug.Log($"Val cah: {v}");
+                    //var enumName = p.enumNames[p.enumValueIndex];
+                    rbsType.text = FormatHttpMethodType(v.ToString());
+                }
+                catch (Exception e)
+                {
+                    rbsType.text = "";
+                }
+            });
         }
 
-        public void BindProperties(SerializedProperty typeProp, SerializedProperty nameProp)
+        public void BindProperties(SerializedProperty typeProp, SerializedProperty nameProp,SerializedProperty statusCode)
         {
-            nameLabel.BindProperty(nameProp);
+            Debug.Log($"Bind Properies");
+            rbsName.BindProperty(nameProp);
+            rbsCode.BindProperty(statusCode);
             this.TrackPropertyChange(typeProp, p =>
             {
-                var enumName = p.enumNames[p.enumValueIndex];
-                typeLabel.text = FormatHttpMethodType(enumName);
+                try
+                {
+                    if(p.propertyType != SerializedPropertyType.Enum || p.enumValueIndex == -1)
+                        return;
+                    
+                    Debug.Log($"MES: {p.enumValueIndex}");
+                    var enumName = p.enumNames[p.enumValueIndex];
+                    rbsType.text = FormatHttpMethodType(enumName);
+                }
+                catch (Exception e)
+                {
+                    rbsType.text = "";
+                }
             });
         }
 
@@ -56,8 +104,8 @@ namespace QuickEye.RequestWatcher
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
-                ve.As<RequestButtonSmall>().nameLabel.text = text.GetValueFromBag(bag, cc);
-                ve.As<RequestButtonSmall>().typeLabel.text = type.GetValueFromBag(bag, cc).ToString();
+                ve.As<RequestButtonSmall>().rbsName.text = text.GetValueFromBag(bag, cc);
+                ve.As<RequestButtonSmall>().rbsType.text = type.GetValueFromBag(bag, cc).ToString();
             }
         }
     }

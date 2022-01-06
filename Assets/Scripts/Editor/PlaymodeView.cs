@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Codice.Client.GameUI.Checkin;
 using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
@@ -31,7 +33,7 @@ namespace QuickEye.RequestWatcher
         public PlaymodeView()
         {
             this.InitFromUxml();
-            InitSidebar();
+            InitList();
             RefreshReqView();
         }
 
@@ -39,33 +41,30 @@ namespace QuickEye.RequestWatcher
         {
             this.requestListProp = requestListProp;
             playmodeList.itemsSource = requests;
+            this.Bind(requestListProp.serializedObject);
+
             playmodeList.Refresh();
             RefreshReqView();
         }
-
-        private void InitSidebar()
-        {
-            playmodeClearButton.Clicked(() =>
-            {
-                requestListProp.InsertArrayElementAtIndex(requestListProp.arraySize);
-                requestListProp.serializedObject.ApplyModifiedProperties();
-                playmodeList.Refresh();
-            });
-            InitList();
-        }
-
+        
         private void InitList()
         {
             playmodeList.makeItem = () => new RequestButtonSmall();
             playmodeList.bindItem = (ve, index) =>
             {
+                Debug.Log($"Bind Item {index}/{playmodeList.itemsSource.Count}");
+
                 var reqProp = requestListProp.GetArrayElementAtIndex(index);
                 var typeProp = reqProp.FindPropertyRelative(nameof(HDRequest.type));
                 var nameProp = reqProp.FindPropertyRelative(nameof(HDRequest.name));
+                var codeProp = reqProp.FindPropertyRelative(nameof(HDRequest.lastResponse))
+                    .FindPropertyRelative(nameof(HDResponse.statusCode));
                 var button = ve.As<RequestButtonSmall>();
-                button.BindProperties(typeProp, nameProp);
+                button.SetBindingPaths(typeProp.propertyPath, 
+                    nameProp.propertyPath,
+                    codeProp.propertyPath);
+                //button.Bind(requestListProp.serializedObject);
             };
-
             playmodeClearButton.Clicked(() =>
             {
                 requestListProp.ClearArray();

@@ -27,8 +27,6 @@ namespace QuickEye.RequestWatcher
         public string name = "New Request";
         public string url = "https://";
         public HttpMethodType type;
-
-        [Multiline(100)]
         public string body;
 
         public HDResponse lastResponse;
@@ -51,7 +49,7 @@ namespace QuickEye.RequestWatcher
             var exchange = await FromHttpRequestMessage(name, res.RequestMessage);
             exchange.lastResponse = new HDResponse
             {
-                statusCode = res.StatusCode
+                statusCode = (int)res.StatusCode
             };
             if (res.Content != null)
                 exchange.lastResponse.payload = new JsonFormatter(await res.Content.ReadAsStringAsync()).Format();
@@ -68,7 +66,7 @@ namespace QuickEye.RequestWatcher
             var res = await client.SendAsync(request);
             lastResponse = new HDResponse
             {
-                statusCode = res.StatusCode,
+                statusCode = (int)res.StatusCode,
                 payload = new JsonFormatter(await res.Content.ReadAsStringAsync()).Format()
             };
             return res;
@@ -78,7 +76,7 @@ namespace QuickEye.RequestWatcher
     [Serializable]
     internal class HDResponse
     {
-        public HttpStatusCode statusCode;
+        public int statusCode;
         public string payload;
     }
 }

@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-direction: row; height: 18px; align-items: center; padding-left: 4px;">
+        <Style src="/Assets/Resources/QuickEye/RequestButtonSmall-Dark.uss" />
+        <ui:Label text="cd" name="rbs--code" class="rbs-text" />
+        <ui:Label text="txt" name="rbs-type" class="rbs-text" />
+        <ui:Label text="name" name="rbs-name" class="rbs-text" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -4,5 +4,6 @@
         <ui:Button text="Update value" name="val-button" />
         <ui:Button text="Update Serj Obj" name="serObj-button" />
         <ui:Button text="Update value" name="bind-button" />
+        <QuickEye.RequestWatcher.RequestButtonSmall name="rbs" />
     </ui:VisualElement>
 </ui:UXML>

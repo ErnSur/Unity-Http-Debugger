@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using QuickEye.RequestWatcher;
@@ -9,6 +10,14 @@ using UnityEngine;
 
 public class SampleUsage : MonoBehaviour
 {
+    public HttpStatusCode code;
+
+[ContextMenu("Log")]
+    public void Test()
+    {
+        Debug.Log($"MES: {code}");
+    }
+    
     [MenuItem("Test/SendSampleReq")]
     public static void SendSampleRequest()
     {

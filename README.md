@@ -1,6 +1,4 @@
 # TODO
-- Update UI-Toolkit-plus to trim double "-"
-`       Regex.Replace(input, "-+.", m => char.ToUpper(m.Value[m.Length-1]).ToString());`
 - Fix playmode clear button
     - Add unbind method to Exchange,reqest and response views
 ## Features
@@ -20,6 +18,7 @@
     - Raw/Formatted payload toggle
 
 - Playmode Tab
+    - Change listo to Tree view with columns for name,url,response,method,time (https://dotnetanalysis.blogspot.com/2012/11/http-status-codes-tutorial.html)
     - request breakpoints (edit request before it is sent)
     - Right click request to "Save to stash"
     - Add "Clear on Play" toggle

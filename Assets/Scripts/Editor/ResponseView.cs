@@ -10,6 +10,7 @@ namespace QuickEye.RequestWatcher
     {
         [Q("res-status-label")]
         private Label resStatusLabel;
+
         [Q("res-body-field")]
         private QuickEye.RequestWatcher.CodeField resBodyField;
 
@@ -22,12 +23,13 @@ namespace QuickEye.RequestWatcher
         {
             resStatusLabel.text = text;
         }
-        
-        public void UpdateStatusLabel( HttpStatusCode statusCode)
+
+        public void UpdateStatusLabel(int statusCode)
         {
-            resStatusLabel.text = $"({(int)statusCode}) {statusCode.ToString()}";
+            var codeName = (HttpStatusCode)statusCode;
+            resStatusLabel.text = $"({statusCode}) {codeName.ToString()}";
         }
-        
+
         public void BindProperty(SerializedProperty property)
         {
             resBodyField.bindingPath = $"{property.propertyPath}.lastResponse.payload";
@@ -38,6 +40,7 @@ namespace QuickEye.RequestWatcher
         {
             resBodyField.Unbind();
         }
+
         public new class UxmlFactory : UxmlFactory<ResponseView>
         {
         }
