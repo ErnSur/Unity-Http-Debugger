@@ -42,7 +42,6 @@ namespace QuickEye.RequestWatcher
         //TODO: Dont worry about binding too much because we need to implement search and that will fuck things over
         public void SetBindingPaths(string typeProp, string nameProp, string statusCode)
         {
-            Debug.Log($"Bind Properies");
             rbsName.bindingPath= (nameProp);
             rbsCode.bindingPath= (statusCode);
             //typeTracker.bindingPath = typeProp;
@@ -50,7 +49,6 @@ namespace QuickEye.RequestWatcher
             {
                 try
                 {
-                    Debug.Log($"Val cah: {v}");
                     //var enumName = p.enumNames[p.enumValueIndex];
                     rbsType.text = FormatHttpMethodType(v.ToString());
                 }
@@ -63,7 +61,6 @@ namespace QuickEye.RequestWatcher
 
         public void BindProperties(SerializedProperty typeProp, SerializedProperty nameProp,SerializedProperty statusCode)
         {
-            Debug.Log($"Bind Properies");
             rbsName.BindProperty(nameProp);
             rbsCode.BindProperty(statusCode);
             this.TrackPropertyChange(typeProp, p =>
@@ -73,7 +70,6 @@ namespace QuickEye.RequestWatcher
                     if(p.propertyType != SerializedPropertyType.Enum || p.enumValueIndex == -1)
                         return;
                     
-                    Debug.Log($"MES: {p.enumValueIndex}");
                     var enumName = p.enumNames[p.enumValueIndex];
                     rbsType.text = FormatHttpMethodType(enumName);
                 }

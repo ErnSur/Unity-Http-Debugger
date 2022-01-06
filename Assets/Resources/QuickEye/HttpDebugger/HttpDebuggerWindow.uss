@@ -35,4 +35,5 @@
     border-top-width: 0;
     border-bottom-width: 0;
     margin-left: -1px;
+    min-height: 21px;
 }

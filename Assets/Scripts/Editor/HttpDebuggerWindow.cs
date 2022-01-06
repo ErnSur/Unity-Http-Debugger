@@ -36,7 +36,8 @@ namespace QuickEye.RequestWatcher
             }
         }
 
-        private const string PrefsKey = "postmanData";
+        private const string StashPrefsKey = "httpdebugger.stash";
+        private const string PlaymodePrefsKey = "httpdebugger.playmode";
 
         private VisualElement[] tabViews;
 
@@ -72,13 +73,16 @@ namespace QuickEye.RequestWatcher
 
         private void LoadData()
         {
-            var json = EditorPrefs.GetString(PrefsKey, JsonUtility.ToJson(new PostmanData()));
-            stashData = JsonUtility.FromJson<PostmanData>(json);
+            var stashJson = EditorPrefs.GetString(StashPrefsKey, JsonUtility.ToJson(new PostmanData()));
+            var playmodeJson = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new PostmanData()));
+            stashData = JsonUtility.FromJson<PostmanData>(stashJson);
+            playmodeData = JsonUtility.FromJson<PostmanData>(playmodeJson);
         }
 
         private void SaveData()
         {
-            EditorPrefs.SetString(PrefsKey, JsonUtility.ToJson(stashData));
+            EditorPrefs.SetString(StashPrefsKey, JsonUtility.ToJson(stashData));
+            EditorPrefs.SetString(PlaymodePrefsKey, JsonUtility.ToJson(playmodeData));
         }
 
         private void OnEnable()
@@ -109,12 +113,13 @@ namespace QuickEye.RequestWatcher
                 tree.CloneTree(rootVisualElement);
                 rootVisualElement.AssignQueryResults(this);
                 InitSendButton(stashView, stashData.requests);
-                //InitSendButton(playmodeView, playmodeData.requests);
+                InitSendButton(playmodeView, playmodeData.requests);
+                InitSaveToStashAction();
                 RefreshSerializedObj();
                 InitTabs();
 
-                stashView.Init(stashRequestsProp, stashData.requests);
-                playmodeView.Init(playmodeRequestsProp, playmodeData.requests);
+                stashView.Setup(stashRequestsProp);
+                playmodeView.Setup(playmodeRequestsProp);
 
                 rootVisualElement.Bind(serializedObject);
                 mockTab.clicked += () =>
@@ -129,28 +134,79 @@ namespace QuickEye.RequestWatcher
             }
         }
 
+        private void InitSaveToStashAction()
+        {
+            try
+            {
+                mockTab.AddManipulator(new ContextualMenuManipulator(evt =>
+                {
+                    evt.menu.AppendAction("H", _ =>
+                    {
+                        Debug.Log($"MES: HELL");
+                    });
+                }));
+                var listView = playmodeView.Q<ListView>();
+                listView.bindItem += (element, i) =>
+                {
+                    element.AddManipulator(new ContextualMenuManipulator(evt =>
+                    {
+                        evt.menu.AppendAction("Save To Stash", _ =>
+                        {
+                            var index = (int)element.userData;
+                            stashData.requests.Add(playmodeData.requests[index]);
+                            Debug.Log($"MES: HELL {index}");
+                        });
+                    }));
+                };
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Failed at InitSaveToStashAction");
+                Debug.LogException(e);
+                throw;
+            }
+        }
+
         private void InitSendButton<T>(T root, List<HDRequest> requestList) where T : VisualElement, IRequestListView
         {
-            var stashButton = root.Q<Button>("req-send-button");
-            var resView = root.Q<ResponseView>();
-            stashButton.clicked += async () =>
+            try
             {
-                resView.UpdateStatusLabel("Status: Loading...");
-                try
+                var sendButton = root.Q<Button>("req-send-button");
+                var resView = root.Q<ResponseView>();
+                sendButton.clicked += async () =>
                 {
-                    var res = await requestList[root.GetSelectedIndex()].SendAsync();
-                    var statusCode = res.StatusCode;
-                    resView.UpdateStatusLabel((int)statusCode);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogException(e);
-                    resView.UpdateStatusLabel("Failed");
-                }
+                    resView.ToggleLoadingOverlay(true);
+                    try
+                    {
+                        var index = root.GetSelectedIndex();
+                        var hdReq = requestList[index];
+                        var res = await hdReq.SendAsync();
+                        var newRes = await HDRequest.FromHttpResponseMessage(hdReq.name, res);
+                        requestList[index] = newRes;
+                        serializedObject.UpdateIfRequiredOrScript();
+                        rootVisualElement.Bind(serializedObject);
 
-                serializedObject.Update();
-                rootVisualElement.Bind(serializedObject);
-            };
+                        //resView.UpdateStatusLabel((int)statusCode);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                    finally
+                    {
+                        resView.ToggleLoadingOverlay(false);
+                    }
+
+                    serializedObject.Update();
+                    rootVisualElement.Bind(serializedObject);
+                };
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Failed at Init Send Button");
+                Debug.LogException(e);
+                throw;
+            }
         }
 
         private void RefreshSerializedObj()

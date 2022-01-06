@@ -1,14 +1,9 @@
 # TODO
-- Fix playmode clear button
-    - Add unbind method to Exchange,reqest and response views
+
 ## Features
 - Runtime API
     - Process Request API
     - Integrate UniTask?
-
-- Sidebar
-    - Search function
-    - Add response code to reqbuttonsmall
 
 - Reqest View
     - Edit Headers

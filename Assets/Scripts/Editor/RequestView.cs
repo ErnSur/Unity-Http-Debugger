@@ -27,19 +27,17 @@ namespace QuickEye.RequestWatcher
             this.InitFromUxml();
             reqTypeMenu.bindingPath = nameof(HDRequest.type);
             reqUrlField.bindingPath = nameof(HDRequest.url);
-            reqBodyField.bindingPath = nameof(HDRequest.body);
+            reqBodyField.Field.bindingPath = nameof(HDRequest.body);
             reqSendButton.clicked += () => SendButtonClicked?.Invoke();
         }
 
-        public void BindProperty(SerializedProperty property)
+        public void Bind(SerializedProperty requestProp)
         {
-            reqTypeMenu.bindingPath  = $"{property.propertyPath}.{nameof(HDRequest.type)}";
-            reqUrlField.bindingPath  = $"{property.propertyPath}.{nameof(HDRequest.url)}";
-            reqBodyField.bindingPath = $"{property.propertyPath}.{nameof(HDRequest.body)}";
+            reqTypeMenu.bindingPath  = $"{requestProp.propertyPath}.{nameof(HDRequest.type)}";
+            reqUrlField.bindingPath  = $"{requestProp.propertyPath}.{nameof(HDRequest.url)}";
+            reqBodyField.Field.bindingPath = $"{requestProp.propertyPath}.{nameof(HDRequest.body)}";
             
-            reqTypeMenu.Bind(property.serializedObject);
-            reqUrlField.Bind(property.serializedObject);
-            reqBodyField.Bind(property.serializedObject);
+            this.Bind(requestProp.serializedObject);
         }
 
 

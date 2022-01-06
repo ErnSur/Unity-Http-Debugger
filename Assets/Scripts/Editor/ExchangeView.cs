@@ -43,29 +43,8 @@ namespace QuickEye.RequestWatcher
             UpdateSelectedView();
             if (requestProperty == null)
                 return;
-            reqView.BindProperty(requestProperty);
+            reqView.Bind(requestProperty);
             resView.BindProperty(requestProperty);
-            if (TryGetStatusCode(out var statusCode))
-                resView.UpdateStatusLabel(statusCode);
-            else
-                resView.UpdateStatusLabel("Response Status");
-        }
-
-        private bool TryGetStatusCode(out int code)
-        {
-            try
-            {
-                //var values = (HttpStatusCode[])Enum.GetValues(typeof(HttpStatusCode));
-                code = requestProperty
-                    .FindPropertyRelative($"{nameof(HDRequest.lastResponse)}.{nameof(HDResponse.statusCode)}")
-                    .intValue;
-                return true;
-            }
-            catch (Exception e)
-            {
-                code = 0;
-                return false;
-            }
         }
 
         private void UpdateSelectedView()

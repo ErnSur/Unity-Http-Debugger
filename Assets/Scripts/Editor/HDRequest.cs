@@ -22,10 +22,10 @@ namespace QuickEye.RequestWatcher
     }
 
     [Serializable]
-    internal class HDRequest
+    internal struct HDRequest
     {
-        public string name = "New Request";
-        public string url = "https://";
+        public string name;
+        public string url;
         public HttpMethodType type;
         public string body;
 
@@ -47,10 +47,7 @@ namespace QuickEye.RequestWatcher
         public static async Task<HDRequest> FromHttpResponseMessage(string name, HttpResponseMessage res)
         {
             var exchange = await FromHttpRequestMessage(name, res.RequestMessage);
-            exchange.lastResponse = new HDResponse
-            {
-                statusCode = (int)res.StatusCode
-            };
+            exchange.lastResponse = new HDResponse((int)res.StatusCode);
             if (res.Content != null)
                 exchange.lastResponse.payload = new JsonFormatter(await res.Content.ReadAsStringAsync()).Format();
             return exchange;
@@ -64,19 +61,27 @@ namespace QuickEye.RequestWatcher
             if (type == HttpMethodType.Post)
                 request.Content = new StringContent(body, Encoding.UTF8, "application/json");
             var res = await client.SendAsync(request);
-            lastResponse = new HDResponse
-            {
-                statusCode = (int)res.StatusCode,
-                payload = new JsonFormatter(await res.Content.ReadAsStringAsync()).Format()
-            };
+            lastResponse = new HDResponse(statusCode: (int)res.StatusCode,
+                payload: new JsonFormatter(await res.Content.ReadAsStringAsync()).Format());
             return res;
         }
     }
 
     [Serializable]
-    internal class HDResponse
+    internal struct HDResponse
     {
         public int statusCode;
         public string payload;
+
+        public HDResponse(int statusCode) : this()
+        {
+            this.statusCode = statusCode;
+        }
+
+        public HDResponse(int statusCode, string payload)
+        {
+            this.statusCode = statusCode;
+            this.payload = payload;
+        }
     }
 }

@@ -4,7 +4,5 @@
         <ui:TextField picking-mode="Ignore" name="req-url-field" style="flex-shrink: 1; flex-grow: 1;" />
         <uie:ToolbarButton text="Send" name="req-send-button" style="-unity-text-align: middle-center; max-width: 60px; min-width: 47px;" />
     </uie:Toolbar>
-    <ui:ScrollView mode="VerticalAndHorizontal" style="flex-grow: 1;">
-        <QuickEye.RequestWatcher.CodeField multiline="true" name="req-body-field" />
-    </ui:ScrollView>
+    <QuickEye.RequestWatcher.CodeField multiline="true" name="req-body-field" />
 </ui:UXML>

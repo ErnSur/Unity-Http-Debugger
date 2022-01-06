@@ -1,54 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEditor;
 
 namespace QuickEye.RequestWatcher
 {
-    internal class SerializedArrayPropertyFakeList :SerializedArrayProperty, IList
-    {
-        public SerializedArrayPropertyFakeList(SerializedProperty property, string relativePath = null) : base(property, relativePath)
-        {
-        }
-
-        public void CopyTo(Array array, int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsSynchronized { get; }
-        public object SyncRoot { get; }
-        public int Add(object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Contains(object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int IndexOf(object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Insert(int index, object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsFixedSize { get; }
-        public bool IsReadOnly { get; }
-        public object this[int index] { get => base[index];
-            set => throw new NotImplementedException(); }
-    }
-    public class SerializedArrayProperty : IReadOnlyList<SerializedProperty>
+    public class SerializedArrayProperty : IReadOnlyList<SerializedProperty>, IList
     {
         public SerializedProperty Property { get; }
         public string RelativePath { get; }
@@ -72,9 +30,69 @@ namespace QuickEye.RequestWatcher
             return GetEnumerator();
         }
 
+        int IList.Add(object value)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Clear() => Property.ClearArray();
+        bool IList.Contains(object value)
+        {
+            return ((IList)this).IndexOf(value) != -1;
+        }
+
+        int IList.IndexOf(object value)
+        {
+            if (value is SerializedProperty prop)
+            {
+                return IndexOf(prop);
+            }
+            return -1;
+        }
+
+        public int IndexOf(SerializedProperty prop)
+        {
+            if (IsArrayElement(prop.propertyPath))
+            {
+                return GetElementIndex(prop.propertyPath);
+            }
+            return -1;
+        }
+
+        private bool IsArrayElement(string propPath)
+        {
+            var re = Regex.Escape(Property.propertyPath) +
+                     @"\.Array\.data\[\d+\]$";
+            return Regex.IsMatch(propPath, re);
+        }
+        private static int GetElementIndex(string propPath)
+        {
+            var match =Regex.Match(propPath, @"data\[\d+\]$");
+            var index = match.Value.Substring("data[".Length);
+            index = index.Remove(index.Length-1,1);
+            return int.Parse(index);
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IList.Remove(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICollection.CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
 
         public int Count => Property.arraySize;
+
+        bool ICollection.IsSynchronized => false;
+
+        object ICollection.SyncRoot { get; } = new object();
 
         public void Add() => Insert(Count);
 
@@ -86,6 +104,16 @@ namespace QuickEye.RequestWatcher
         public void RemoveAt(int index)
         {
             Property.DeleteArrayElementAtIndex(index);
+        }
+
+        bool IList.IsFixedSize => false;
+
+        bool IList.IsReadOnly => true;
+
+        object IList.this[int index]
+        {
+            get => this[index];
+            set => throw new NotImplementedException();
         }
 
         public SerializedProperty this[int index] => GetPropertyAtIndex(index);

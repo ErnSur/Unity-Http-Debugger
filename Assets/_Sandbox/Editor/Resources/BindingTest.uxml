@@ -1,9 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:VisualElement style="flex-grow: 1;">
-        <ui:ListView focusable="true" name="list" style="flex-grow: 1;" />
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:ListView focusable="true" name="list" style="flex-grow: 1; display: flex;" />
+        </ui:VisualElement>
         <ui:Button text="Update value" name="val-button" />
         <ui:Button text="Update Serj Obj" name="serObj-button" />
         <ui:Button text="Update value" name="bind-button" />
         <QuickEye.RequestWatcher.RequestButtonSmall name="rbs" />
+        <QuickEye.RequestWatcher.CodeField name="code" />
     </ui:VisualElement>
 </ui:UXML>

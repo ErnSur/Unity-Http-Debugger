@@ -16,11 +16,6 @@ public class BindingTest : EditorWindow
         BindingTest wnd = GetWindow<BindingTest>();
         wnd.titleContent = new GUIContent("BindingTest");
     }
-
-    [SerializeField]
-    private VisualTreeAsset tree;
-    [Q("rbs")]
-    private QuickEye.RequestWatcher.RequestButtonSmall rbs;
     [Q("list")]
     private ListView list;
     [Q("val-button")]
@@ -29,15 +24,17 @@ public class BindingTest : EditorWindow
     private Button serObjButton;
     [Q("bind-button")]
     private Button bindButton;
-
-
+    [Q("rbs")]
+    private QuickEye.RequestWatcher.RequestButtonSmall rbs;
+    [Q("code")]
+    private QuickEye.RequestWatcher.CodeField code;
 
 
     [SerializeField]
     private HDRequest sampleReq;
 
     [SerializeField]
-    private HDRequest[] reqList;
+    private List<HDRequest> reqList = new List<HDRequest>();
     
     private SerializedObject serObj;
     private SerializedProperty serProp;
@@ -49,11 +46,15 @@ public class BindingTest : EditorWindow
 
         rbs.SetBindingPaths("sampleReq.type","sampleReq.name","sampleReq.lastResponse.statusCode");
 
+        code.Field.bindingPath = "sampleReq.body";
         SetupList();
-
+        //SetupPlayList();
+        
         SetupButtons();
-        //root.Bind(serObj);
+        root.Bind(serObj);
+        Debug.Log($"Create UI Finished");
     }
+    
 
     private void SetupList()
     {
@@ -61,6 +62,7 @@ public class BindingTest : EditorWindow
         list.makeItem = () => new RequestButtonSmall();
         list.bindItem = (ve, index) =>
         {
+            Debug.Log($"Bind Item: {index}/{listProp.arraySize}");
             var reqProp = listProp.GetArrayElementAtIndex(index);
             var typeProp = reqProp.FindPropertyRelative(nameof(HDRequest.type));
             var nameProp = reqProp.FindPropertyRelative(nameof(HDRequest.name));
@@ -70,6 +72,7 @@ public class BindingTest : EditorWindow
             button.SetBindingPaths(typeProp.propertyPath, 
                 nameProp.propertyPath,
                 codeProp.propertyPath);
+            button.Unbind();
             button.Bind(listProp.serializedObject);
         };
         list.itemsSource = reqList;
@@ -90,7 +93,7 @@ public class BindingTest : EditorWindow
     {
         // Each editor window contains a root VisualElement object
         VisualElement root = rootVisualElement;
-        //tree = Resources.Load<VisualTreeAsset>("BindingTest");
+        var tree = Resources.Load<VisualTreeAsset>("BindingTest");
         tree.CloneTree(root);
         root.AssignQueryResults(this);
         return root;

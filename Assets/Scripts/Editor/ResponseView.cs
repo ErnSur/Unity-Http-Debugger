@@ -10,35 +10,28 @@ namespace QuickEye.RequestWatcher
     {
         [Q("res-status-label")]
         private Label resStatusLabel;
-
         [Q("res-body-field")]
         private QuickEye.RequestWatcher.CodeField resBodyField;
+        [Q("loading-overlay")]
+        private Label loadingOverlay;
+
 
         public ResponseView()
         {
             this.InitFromUxml();
+            ToggleLoadingOverlay(false);
         }
 
-        public void UpdateStatusLabel(string text)
+        public void ToggleLoadingOverlay(bool value)
         {
-            resStatusLabel.text = text;
-        }
-
-        public void UpdateStatusLabel(int statusCode)
-        {
-            var codeName = (HttpStatusCode)statusCode;
-            resStatusLabel.text = $"({statusCode}) {codeName.ToString()}";
+            loadingOverlay.ToggleDisplayStyle(value);
         }
 
         public void BindProperty(SerializedProperty property)
         {
-            resBodyField.bindingPath = $"{property.propertyPath}.lastResponse.payload";
-            resBodyField.Bind(property.serializedObject);
-        }
-
-        public void Unbind()
-        {
-            resBodyField.Unbind();
+            resBodyField.Field.bindingPath = $"{property.propertyPath}.lastResponse.payload";
+            resStatusLabel.bindingPath = $"{property.propertyPath}.lastResponse.statusCode";
+            this.Bind(property.serializedObject);
         }
 
         public new class UxmlFactory : UxmlFactory<ResponseView>

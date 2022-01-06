@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <QuickEye.RequestWatcher.RequestButtonSmall type="Options">
-        <Style src="Scripts/Editor/Resources/QuickEye/RequestButtonSmall-Dark.uss" />
-    </QuickEye.RequestWatcher.RequestButtonSmall>
-    <QuickEye.RequestWatcher.RequestButtonSmall>
-        <Style src="Scripts/Editor/Resources/QuickEye/RequestButtonSmall-Dark.uss" />
-    </QuickEye.RequestWatcher.RequestButtonSmall>
-</ui:UXML>

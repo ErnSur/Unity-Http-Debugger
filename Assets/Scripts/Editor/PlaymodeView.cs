@@ -1,9 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
-using Codice.Client.GameUI.Checkin;
+using System.Linq;
 using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
@@ -26,53 +26,83 @@ namespace QuickEye.RequestWatcher
         private QuickEye.RequestWatcher.ExchangeView exchangeView;
 
         private SerializedProperty requestListProp;
+        private SerializedArrayProperty requestListPropList;
 
-        private SerializedProperty SelectedReq =>
-            playmodeList.selectedIndex < 0 ? null : requestListProp.GetArrayElementAtIndex(playmodeList.selectedIndex);
+        private SerializedProperty SelectedReq => playmodeList.selectedItem as SerializedProperty;
+
+        private List<SerializedProperty> searchResult;
 
         public PlaymodeView()
         {
             this.InitFromUxml();
             InitList();
+            InitSearchField();
             RefreshReqView();
         }
 
-        public void Init(SerializedProperty requestListProp, List<HDRequest> requests)
+        private void InitSearchField()
+        {
+            playmodeSearchField.RegisterValueChangedCallback(evt =>
+            {
+                if (string.IsNullOrWhiteSpace(evt.newValue))
+                {
+                    Setup(requestListPropList);
+                    return;
+                }
+
+                searchResult = (from prop in requestListPropList
+                    let name = prop.FindPropertyRelative("name").stringValue
+                    where name.ToLower().Contains(evt.newValue.ToLower())
+                    select prop).ToList();
+
+                Setup(searchResult);
+            });
+        }
+
+        public void Setup(SerializedProperty requestListProp)
         {
             this.requestListProp = requestListProp;
-            playmodeList.itemsSource = requests;
+            requestListPropList = new SerializedArrayProperty(requestListProp);
+            Setup(requestListPropList);
+        }
+
+        private void Setup(IList propList)
+        {
+            playmodeList.itemsSource = propList;
             this.Bind(requestListProp.serializedObject);
 
             playmodeList.Refresh();
             RefreshReqView();
         }
-        
+
         private void InitList()
         {
             playmodeList.makeItem = () => new RequestButtonSmall();
             playmodeList.bindItem = (ve, index) =>
             {
-                Debug.Log($"Bind Item {index}/{playmodeList.itemsSource.Count}");
-
-                var reqProp = requestListProp.GetArrayElementAtIndex(index);
+                var reqProp = (SerializedProperty)playmodeList.itemsSource[index];
+                ve.userData = requestListPropList.IndexOf(reqProp);
                 var typeProp = reqProp.FindPropertyRelative(nameof(HDRequest.type));
                 var nameProp = reqProp.FindPropertyRelative(nameof(HDRequest.name));
                 var codeProp = reqProp.FindPropertyRelative(nameof(HDRequest.lastResponse))
                     .FindPropertyRelative(nameof(HDResponse.statusCode));
                 var button = ve.As<RequestButtonSmall>();
-                button.SetBindingPaths(typeProp.propertyPath, 
+                button.SetBindingPaths(typeProp.propertyPath,
                     nameProp.propertyPath,
                     codeProp.propertyPath);
-                //button.Bind(requestListProp.serializedObject);
+                button.Unbind();
+                button.Bind(requestListProp.serializedObject);
             };
+
+            playmodeList.onSelectionChanged += _ => RefreshReqView();
+
             playmodeClearButton.Clicked(() =>
             {
-                requestListProp.ClearArray();
-                requestListProp.serializedObject.ApplyModifiedProperties();
+                requestListProp?.ClearArray();
+                requestListProp?.serializedObject.ApplyModifiedProperties();
                 playmodeList.Refresh();
                 RefreshReqView();
             });
-            playmodeList.onSelectionChanged += list => RefreshReqView();
         }
 
         public void Refresh()
@@ -92,7 +122,7 @@ namespace QuickEye.RequestWatcher
 
         public int GetSelectedIndex()
         {
-            return playmodeList.selectedIndex;
+            return SelectedReq != null ? requestListPropList.IndexOf(SelectedReq) : -1;
         }
     }
 }

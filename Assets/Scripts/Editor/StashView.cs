@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -21,36 +23,52 @@ namespace QuickEye.RequestWatcher
         private QuickEye.RequestWatcher.ExchangeView exchangeView;
 
         private SerializedProperty requestListProp;
+        private SerializedArrayProperty requestListPropList;
 
-        private SerializedProperty SelectedReq =>
-            stashList.selectedIndex < 0 ? null : requestListProp.GetArrayElementAtIndex(stashList.selectedIndex);
-        
+        private SerializedProperty SelectedReq =>stashList.selectedItem as SerializedProperty;
+        private List<SerializedProperty> searchResult;
+
         public StashView()
         {
             this.InitFromUxml();
-            InitSidebar();
+            InitList();
+            InitSearchField();
             RefreshReqView();
         }
+        
+        private void InitSearchField()
+        {
+            stashSearchField.RegisterValueChangedCallback(evt =>
+            {
+                if (string.IsNullOrWhiteSpace(evt.newValue))
+                {
+                    Setup(requestListPropList);
+                    return;
+                }
 
-        public void Init(SerializedProperty requestListProp, List<HDRequest> requests)
+                searchResult = (from prop in requestListPropList
+                    let name = prop.FindPropertyRelative("name").stringValue
+                    where name.ToLower().Contains(evt.newValue.ToLower())
+                    select prop).ToList();
+
+                Setup(searchResult);
+            });
+        }
+
+        public void Setup(SerializedProperty requestListProp)
         {
             this.requestListProp = requestListProp;
-            stashList.itemsSource = requests;
+            requestListPropList = new SerializedArrayProperty(requestListProp);
+            Setup(requestListPropList);
+        }
+
+        private void Setup(IList propList)
+        {
+            stashList.itemsSource = propList;
             this.Bind(requestListProp.serializedObject);
 
             stashList.Refresh();
             RefreshReqView();
-        }
-
-        private void InitSidebar()
-        {
-            stashCreateButton.Clicked(() =>
-            {
-                requestListProp.InsertArrayElementAtIndex(requestListProp.arraySize);
-                requestListProp.serializedObject.ApplyModifiedProperties();
-                stashList.Refresh();
-            });
-            InitList();
         }
 
         private void InitList()
@@ -58,7 +76,7 @@ namespace QuickEye.RequestWatcher
             stashList.makeItem = () => new RequestButtonBig();
             stashList.bindItem = (ve, index) =>
             {
-                var reqProp = requestListProp.GetArrayElementAtIndex(index);
+                var reqProp = (SerializedProperty)stashList.itemsSource[index];
                 var typeProp = reqProp.FindPropertyRelative(nameof(HDRequest.type));
                 var nameProp = reqProp.FindPropertyRelative(nameof(HDRequest.name));
                 var button = ve.As<RequestButtonBig>();
@@ -79,6 +97,19 @@ namespace QuickEye.RequestWatcher
                 };
             };
             stashList.onSelectionChanged += list => RefreshReqView();
+            
+            stashCreateButton.Clicked(() =>
+            {
+                var prop = SelectedReq;
+                Debug.Log($"Array: {requestListProp.propertyPath}");
+                Debug.Log($"Elelemt: {prop.propertyPath}");
+                
+                return;
+                
+                requestListProp.InsertArrayElementAtIndex(requestListProp.arraySize);
+                requestListProp.serializedObject.ApplyModifiedProperties();
+                stashList.Refresh();
+            });
         }
 
         public void RefreshReqView()
@@ -89,7 +120,7 @@ namespace QuickEye.RequestWatcher
 
         public int GetSelectedIndex()
         {
-            return stashList.selectedIndex;
+            return SelectedReq != null ? requestListPropList.IndexOf(SelectedReq) : -1;
         }
     }
 }
