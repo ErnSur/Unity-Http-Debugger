@@ -100,12 +100,6 @@ namespace QuickEye.RequestWatcher
             
             stashCreateButton.Clicked(() =>
             {
-                var prop = SelectedReq;
-                Debug.Log($"Array: {requestListProp.propertyPath}");
-                Debug.Log($"Elelemt: {prop.propertyPath}");
-                
-                return;
-                
                 requestListProp.InsertArrayElementAtIndex(requestListProp.arraySize);
                 requestListProp.serializedObject.ApplyModifiedProperties();
                 stashList.Refresh();
