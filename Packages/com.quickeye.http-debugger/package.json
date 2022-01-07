@@ -1,0 +1,7 @@
+{
+    "name": "com.quickeye.http-debugger",
+    "displayName": "HTTP Debugger",
+    "version": "0.1.0",
+    "author": "Quick Eye",
+    "type": "library"
+  }

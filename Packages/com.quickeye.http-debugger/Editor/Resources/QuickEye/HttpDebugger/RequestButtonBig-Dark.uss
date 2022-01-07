@@ -1,0 +1,42 @@
+RequestButtonBig {
+    height: 36px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 11px;
+}
+
+RequestButtonBig > * {
+    font-size: 15px;
+}
+
+.rbb-type {
+    -unity-font-style: bold;
+    width: 42px;
+}
+
+RequestButtonBig > Button {
+    -unity-font-style: bold;
+    background-color: rgba(108, 108, 108, 0);
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 17px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    font-size: 11px;
+}
+
+.rbb-name {
+    flex-grow: 1;
+}
+
+RequestButtonBig > Button:hover {
+    color: rgba(255, 255, 255, 0.58);
+}

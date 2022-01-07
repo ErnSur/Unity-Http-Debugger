@@ -1,0 +1,91 @@
+:root {
+    --toolbar-color: rgba(0, 0, 0, 0);
+}
+
+.panel-border {
+    border-right-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.24);
+    border-right-color: rgba(0, 0, 0, 0.24);
+    border-top-color: rgba(0, 0, 0, 0.24);
+    border-bottom-color: rgba(0, 0, 0, 0.24);
+}
+
+.nothing-selected-label {
+    -unity-font-style: bold;
+    font-size: 30px;
+    color: rgba(196, 196, 196, 0.44);
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+    white-space: normal;
+}
+
+.sidebar {
+    width: 180px;
+}
+
+.header-toolbar {
+    height: 25px;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.3);
+    border-right-color: rgba(0, 0, 0, 0.3);
+    border-top-color: rgba(0, 0, 0, 0.3);
+    border-bottom-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.05);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.header-toolbar--button {
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgba(0, 0, 0, 0.31);
+    border-right-color: rgba(0, 0, 0, 0.31);
+    border-top-color: rgba(0, 0, 0, 0.31);
+    border-bottom-color: rgba(0, 0, 0, 0.31);
+    background-color: rgba(94, 94, 94, 0.18);
+    -unity-text-align: middle-left;
+}
+
+.status-code {
+    background-color: rgb(0, 0, 0);
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.status-code-100 {
+    background-color: rgb(36, 166, 186);
+}
+
+.status-code-200 {
+    background-color: rgb(98, 156, 30);
+}
+
+.status-code-300 {
+    background-color: rgb(186, 36, 122);
+}
+
+.status-code-400 {
+    background-color: rgb(197, 113, 2);
+}
+
+.status-code-500 {
+    background-color: rgb(236, 54, 2);
+}

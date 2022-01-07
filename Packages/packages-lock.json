@@ -7,6 +7,12 @@
       "dependencies": {},
       "hash": "b851c766bb9c9fe51e45995c16ec409a7c066367"
     },
+    "com.quickeye.http-debugger": {
+      "version": "file:com.quickeye.http-debugger",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.quickeye.ui-toolkit-plus": {
       "version": "https://github.com/ErnSur/UI-Toolkit-Plus.git",
       "depth": 0,
