@@ -1,3 +1,4 @@
+
 .codeField-scrollView--container {
     flex-direction: row;
 }
@@ -15,8 +16,12 @@
 }
 
 #codeField-lineNumber--label {
-    -unity-font: resource('QuickEye/HttpDebugger/RobotoMono-Regular');
+    -unity-font: var(--code-font);
     color: rgb(89, 89, 89);
     -unity-text-align: middle-right;
     margin-left: 5px;
+}
+
+#codeField--input {
+    -unity-font: var(--code-font);
 }

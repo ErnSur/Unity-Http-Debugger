@@ -1,0 +1,31 @@
+﻿.tab {
+    -unity-text-align: middle-center;
+    justify-content: center;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-color: rgba(34, 34, 34, 0.42);
+    flex-direction: row;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.tab--active {
+    border-left-color: rgb(109, 163, 255);
+    border-right-color: rgb(109, 163, 255);
+    border-top-color: rgb(109, 163, 255);
+    border-bottom-color: rgb(109, 163, 255);
+    border-bottom-width: 0;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    /*background-color: rgb(255, 0, 0);*/
+    background-color: rgb(66, 66, 66);
+    border-top-width: 0;
+}

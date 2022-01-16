@@ -4,6 +4,7 @@
 - Runtime API
     - Process Request API
     - Integrate UniTask?
+    - If you’re using the HttpClient class another option is to pass a custom message handler to it’s constructor
 
 - Editor
     - Serialize data outside EditorPrefs, so that two different project dont share the same data
@@ -39,3 +40,6 @@
     - If reqest url doesn't start with https or http try to add it
     - Remove UITK Aid dependency
     - Fix performance issue when Playmode has bigger dataset
+
+## References
+- Fiddler https://imgur.com/SF40wep

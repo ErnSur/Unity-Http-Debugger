@@ -93,7 +93,7 @@ namespace QuickEye.RequestWatcher
                 button.Unbind();
                 button.Bind(requestListProp.serializedObject);
             };
-
+            
             playmodeList.onSelectionChanged += _ => RefreshReqView();
 
             playmodeClearButton.Clicked(() =>

@@ -10,22 +10,34 @@ namespace QuickEye.RequestWatcher
         private const string BaseDir = "QuickEye/HttpDebugger/";
         private const string CommonStyle = BaseDir + "Common";
 
+        // In Unity 2019 Loading USS files form resources for some reason created unpredictable results
+        // try returning Resources load here to compare 
+        private static T LoadAsset<T>(string resourcesRelativePath) where T : Object
+        {
+            var baseResourcesPath = "Packages/com.quickeye.http-debugger/Editor/Resources/";
+            var extension = typeof(T) == typeof(StyleSheet) ? ".uss" : ".uxml";
+            return AssetDatabase.LoadAssetAtPath<T>(
+                $"{baseResourcesPath}{resourcesRelativePath}{extension}");
+        }
+
         public static bool TryLoadTree<T>(out VisualTreeAsset tree)
         {
-            tree = Resources.Load<VisualTreeAsset>(BaseDir + typeof(T).Name);
+            tree = LoadAsset<VisualTreeAsset>(BaseDir + typeof(T).Name);
             return tree != null;
         }
 
         private static bool TryLoadThemeStyle<T>(out StyleSheet styleSheet) where T : VisualElement
         {
             var styleSuffix = EditorGUIUtility.isProSkin ? "Dark" : "Light";
-            styleSheet = Resources.Load<StyleSheet>($"{BaseDir}{typeof(T).Name}-{styleSuffix}");
+            styleSheet = LoadAsset<StyleSheet>($"{BaseDir}{typeof(T).Name}-{styleSuffix}");
             return styleSheet != null;
         }
 
         private static bool TryLoadStyle<T>(out StyleSheet styleSheet) where T : VisualElement
         {
-            styleSheet = Resources.Load<StyleSheet>($"{BaseDir}{typeof(T).Name}");
+            styleSheet = LoadAsset<StyleSheet>($"{BaseDir}{typeof(T).Name}");
+            if (typeof(T) == typeof(Tab) && styleSheet == null)
+                Debug.Log($"TryLoad Style: {typeof(T).Name} / is null = {styleSheet == null}");
             return styleSheet != null;
         }
 
@@ -38,10 +50,10 @@ namespace QuickEye.RequestWatcher
             }
 
             ve.styleSheets.Add(Resources.Load<StyleSheet>(CommonStyle));
-            
+
             if (TryLoadThemeStyle<T>(out var themeStyleSheet))
                 ve.styleSheets.Add(themeStyleSheet);
-            
+
             if (TryLoadStyle<T>(out var styleSheet))
                 ve.styleSheets.Add(styleSheet);
         }

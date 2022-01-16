@@ -5,7 +5,19 @@
         <ui:TextField picking-mode="Ignore" name="req-url-field" style="flex-shrink: 1; flex-grow: 1;" />
         <uie:ToolbarButton text="Send" name="req-send-button" class="header-toolbar--button" style="-unity-text-align: middle-center; max-width: 60px; min-width: 47px;" />
     </uie:Toolbar>
+    <QuickEye.RequestWatcher.TabGroup style="flex-direction: row;">
+        <Style src="Common.uss" />
+        <QuickEye.RequestWatcher.Tab name="body-tab" text="Body" />
+        <QuickEye.RequestWatcher.TabDropdown text="Auth" name="auth-tab">
+            <ui:Label />
+        </QuickEye.RequestWatcher.TabDropdown>
+        <QuickEye.RequestWatcher.Tab name="headers-tab" text="Headers" />
+    </QuickEye.RequestWatcher.TabGroup>
     <QuickEye.RequestWatcher.CodeField multiline="true" name="req-body-field">
         <Style src="Common.uss" />
     </QuickEye.RequestWatcher.CodeField>
+    <ui:VisualElement name="headers-view" style="flex-grow: 1;">
+        <Style src="Common.uss" />
+        <ui:Label text="Label" />
+    </ui:VisualElement>
 </ui:UXML>

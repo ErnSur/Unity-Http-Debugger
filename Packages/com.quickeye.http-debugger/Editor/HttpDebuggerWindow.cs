@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
+using System.Net.Http;
 using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEngine;
@@ -12,21 +11,20 @@ namespace QuickEye.RequestWatcher
 {
     public class HttpDebuggerWindow : EditorWindow
     {
-        [MenuItem("Test/PostmanWindow #&p")]
+        [MenuItem("Window/Http Debugger #&p")]
         public static void Open()
         {
             var wnd = EditorFullscreenUtility.ToggleEditorFullscreen<HttpDebuggerWindow>();
             wnd.titleContent = new GUIContent("HTTP Debugger");
         }
 
-        [MenuItem("Test/UI Builder Toggle Fullscreen #&b")]
+        [MenuItem("Window/UI Builder Toggle Fullscreen #&b")]
         public static void ToggleUIBuilderFullScreen()
         {
             EditorFullscreenUtility.ToggleEditorFullscreen(
                 Type.GetType("Unity.UI.Builder.Builder, UnityEditor.UIBuilderModule"));
         }
 
-        [MenuItem("Test/Print enum")]
         public static void PrintEnum()
         {
             var values = Enum.GetValues(typeof(HttpStatusCode));
@@ -41,20 +39,19 @@ namespace QuickEye.RequestWatcher
         private VisualElement[] tabViews;
 
         [Q("stash-tab")]
-        private Button stashTab;
+        private QuickEye.RequestWatcher.Tab stashTab;
 
         [Q("playmode-tab")]
-        private Button playmodeTab;
+        private QuickEye.RequestWatcher.Tab playmodeTab;
 
         [Q("mock-tab")]
-        private Button mockTab;
+        private QuickEye.RequestWatcher.Tab mockTab;
 
         [Q("stash-view")]
         private QuickEye.RequestWatcher.StashView stashView;
 
         [Q("playmode-view")]
         private QuickEye.RequestWatcher.PlaymodeView playmodeView;
-
 
         [SerializeField]
         private PostmanData stashData;
@@ -63,7 +60,7 @@ namespace QuickEye.RequestWatcher
         private PostmanData playmodeData;
 
         [SerializeField]
-        private int tabOpened;
+        private int tabOpen;
 
         private SerializedProperty stashRequestsProp;
         private SerializedProperty playmodeRequestsProp;
@@ -96,6 +93,9 @@ namespace QuickEye.RequestWatcher
         private void RefreshPlaymodeView(HDRequest data)
         {
             playmodeData.requests.Add(data);
+            if (serializedObject == null)
+                return;
+            // TODO: when window was docked but not active we wont get serObj, when making it active again we reed to do this refresh
             serializedObject.Update();
             rootVisualElement.Bind(serializedObject);
             playmodeView.Refresh();
@@ -142,8 +142,7 @@ namespace QuickEye.RequestWatcher
                         evt.menu.AppendAction("Save To Stash", _ =>
                         {
                             var index = (int)element.userData;
-                            stashData.requests.Add(playmodeData.requests[index]);
-                            Debug.Log($"MES: HELL {index}");
+                            stashData.requests.Add(playmodeData.requests[index].Clone());
                         });
                     }));
                 };
@@ -169,9 +168,12 @@ namespace QuickEye.RequestWatcher
                     {
                         var index = root.GetSelectedIndex();
                         var hdReq = dataStore.requests[index];
-                        var res = await hdReq.SendAsync();
-                        var newRes = await HDRequest.FromHttpResponseMessage(hdReq.name, res);
-                        dataStore.requests[index] = newRes;
+                        using (var res = await hdReq.SendAsync())
+                        {
+                            var newReq = await HDRequest.FromHttpResponseMessage(hdReq.name, res);
+                            dataStore.requests[index] = newReq;
+                        }
+
                         serializedObject.UpdateIfRequiredOrScript();
                         rootVisualElement.Bind(serializedObject);
                     }
@@ -207,35 +209,47 @@ namespace QuickEye.RequestWatcher
 
         private void InitTabs()
         {
-            var tabs = new (VisualElement tab, VisualElement view)[]
+            var tabs = new[]
             {
-                (stashTab, stashView),
-                (playmodeTab, playmodeView)
+                stashTab,
+                playmodeTab
             };
 
+            stashTab.TabContent = stashView;
+            playmodeTab.TabContent = playmodeView;
             for (var i = 0; i < tabs.Length; i++)
             {
+                var tab = tabs[i];
                 var index = i;
-                var (tab, view) = tabs[index];
-                tab.Clicked(() => OnTabClicked(index));
+                tab.clicked += () => tabOpen = index;
             }
 
-            RefreshTabState();
+            tabs[tabOpen].value = true;
+        }
+    }
 
-            void OnTabClicked(int index)
-            {
-                tabOpened = index;
-                RefreshTabState();
-            }
+    class Test
+    {
+        [MenuItem("Test/SendSampleReq")]
+        public static void SendSampleRequest()
+        {
+            SendRequestAsync();
+        }
 
-            void RefreshTabState()
+        private static async void SendRequestAsync()
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
             {
-                for (var y = 0; y < tabs.Length; y++)
-                {
-                    var (tab, view) = tabs[y];
-                    tab.EnableInClassList("tab--active", y == tabOpened);
-                    view.ToggleDisplayStyle(y == tabOpened);
-                }
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("http://dummy.restapiexample.com/api/v1/employee/1"),
+            };
+            request.Headers.Add("X-CustomHeader", "Dupa");
+            using (var response = await client.SendAsync($"Employee", request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                Debug.Log(body);
             }
         }
     }

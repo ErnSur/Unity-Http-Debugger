@@ -8,6 +8,11 @@ namespace QuickEye.RequestWatcher
         private readonly IndentWriter _writer = new IndentWriter();
         private readonly StringBuilder _currentLine = new StringBuilder();
         private bool _quoted;
+
+        public static string Format(string json)
+        {
+            return new JsonFormatter(json).Format();
+        }
  
         public JsonFormatter(string json)
         {

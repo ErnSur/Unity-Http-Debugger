@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -13,16 +12,30 @@ namespace QuickEye.RequestWatcher
         private Label resStatusLabel;
 
         [Q("res-body-field")]
-        private QuickEye.RequestWatcher.CodeField resBodyField;
+        private CodeField resBodyField;
 
         [Q("loading-overlay")]
         private Label loadingOverlay;
 
+        [Q("body-tab")]
+        private Tab bodyTab;
+
+        [Q("headers-tab")]
+        private Tab headersTab;
+
+        [Q("cookie-tab")]
+        private Tab cookieTab;
+
+        [Q("headers-view")]
+        private VisualElement headersView;
 
         public ResponseView()
         {
             this.InitResources();
             ToggleLoadingOverlay(false);
+            bodyTab.TabContent = resBodyField;
+            headersTab.TabContent = headersView;
+            headersTab.value = true;
         }
 
         public void ToggleLoadingOverlay(bool value)
@@ -41,9 +54,10 @@ namespace QuickEye.RequestWatcher
                 if (isDefined)
                     message += $" {(HttpStatusCode2)v}";
                 resStatusLabel.text = message;
-                HttpStatusCodeUtil.ToggleStatusCodeClass(resStatusLabel,v);
+                HttpStatusCodeUtil.ToggleStatusCodeClass(resStatusLabel, v);
             });
-            //resStatusLabel.bindingPath = $"{property.propertyPath}.lastResponse.statusCode";
+
+            headersView.Q<Label>().bindingPath = $"{property.propertyPath}.lastResponse.headers";
             this.Bind(property.serializedObject);
         }
 

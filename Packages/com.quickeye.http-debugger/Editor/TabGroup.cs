@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
-using UnityEditor.UIElements;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    internal class TabGroup : Toolbar
+    internal class TabGroup : VisualElement
     {
-        
-        
-        public string[] tabNames;
+        public TabGroup()
+        {
+            this.InitResources();
+        }
+
+        private class UxmlFactory : UxmlFactory<TabGroup>
+        {
+        }
     }
 }

@@ -4,7 +4,7 @@
         <QuickEye.RequestWatcher.RequestView name="req-view" class="panel-border main-panel-container" style="flex-basis: 1px; flex-grow: 1;" />
         <QuickEye.RequestWatcher.ResponseView name="res-view" style="flex-grow: 1; flex-basis: 1px;" />
     </ui:VisualElement>
-    <ui:Label text="Nothing. Select a reqest. " name="no-select-view" class="nothing-selected-label">
+    <ui:Label text="Nothing. Select a reqest. " name="no-select-view" class="nothing-selected-label" style="display: none;">
         <Style src="Common.uss" />
     </ui:Label>
 </ui:UXML>

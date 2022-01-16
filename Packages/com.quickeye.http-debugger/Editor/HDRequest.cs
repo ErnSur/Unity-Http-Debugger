@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,25 +15,29 @@ using UnityEngine.Networking;
 namespace QuickEye.RequestWatcher
 {
     [Serializable]
-    internal class PostmanData
+    internal class HDRequest
     {
-        public List<HDRequest> requests = new List<HDRequest>
-        {
-            new HDRequest
-            {
-            }
-        };
-    }
-
-    [Serializable]
-    internal struct HDRequest
-    {
+        private static HttpClient client = new HttpClient();
         public string name;
         public string url;
         public HttpMethodType type;
         public string body;
+        public string headers;
 
         public HDResponse lastResponse;
+
+        public async Task<HttpResponseMessage> SendAsync()
+        {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var request = new HttpRequestMessage(type.ToHttpMethod(), url);
+
+            if (type == HttpMethodType.Post)
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+            var res = await client.SendAsync(request);
+            return res;
+        }
 
         public static async Task<HDRequest> FromHttpRequestMessage(string name, HttpRequestMessage req)
         {
@@ -41,67 +46,57 @@ namespace QuickEye.RequestWatcher
                 name = name,
                 url = req.RequestUri.OriginalString,
                 type = HttpMethodTypeUtil.FromHttpMethod(req.Method),
+                headers = HeadersToString(req.Content.Headers)
             };
             if (req.Content != null)
-                e.body = new JsonFormatter(await req.Content.ReadAsStringAsync()).Format();
+                e.body = JsonFormatter.Format(await req.Content.ReadAsStringAsync());
             return e;
         }
 
         public static async Task<HDRequest> FromHttpResponseMessage(string name, HttpResponseMessage res)
         {
-            var exchange = await FromHttpRequestMessage(name, res.RequestMessage);
-            exchange.lastResponse = new HDResponse((int)res.StatusCode);
+            var hdRequest = await FromHttpRequestMessage(name, res.RequestMessage);
+            hdRequest.lastResponse = new HDResponse((int)res.StatusCode);
             if (res.Content != null)
-                exchange.lastResponse.payload = new JsonFormatter(await res.Content.ReadAsStringAsync()).Format();
-            return exchange;
+                hdRequest.lastResponse.payload = JsonFormatter.Format(await res.Content.ReadAsStringAsync());
+            hdRequest.lastResponse.headers = HeadersToString(res.Content?.Headers);
+            return hdRequest;
         }
 
         public static HDRequest FromUnityRequest(string name, UnityWebRequest req)
         {
-            var exchange = new HDRequest
+            var hdRequest = new HDRequest
             {
                 name = name,
                 url = req.url,
                 type = HttpMethodTypeUtil.FromString(req.method),
             };
             var textPayload = Encoding.UTF8.GetString(req.uploadHandler.data);
-            exchange.body = new JsonFormatter(textPayload).Format();
-
-            exchange.lastResponse = new HDResponse((int)req.responseCode);
+            hdRequest.body = new JsonFormatter(textPayload).Format();
+            //hdRequest.headers = req.GetRequestHeader()
+            hdRequest.lastResponse = new HDResponse((int)req.responseCode);
+            hdRequest.lastResponse.headers = string.Join("\n",
+                req.GetResponseHeaders().Select(kvp => $"{kvp.Key} :: {kvp.Value}").ToArray());
             if (req.downloadHandler.text != null)
-                exchange.lastResponse.payload = new JsonFormatter(req.downloadHandler.text).Format();
-            return exchange;
+                hdRequest.lastResponse.payload = new JsonFormatter(req.downloadHandler.text).Format();
+
+            return hdRequest;
         }
 
-        public async Task<HttpResponseMessage> SendAsync()
+        private static string HeadersToString(HttpHeaders headers)
         {
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var request = new HttpRequestMessage(type.ToHttpMethod(), url);
-            if (type == HttpMethodType.Post)
-                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
-            var res = await client.SendAsync(request);
-            lastResponse = new HDResponse(statusCode: (int)res.StatusCode,
-                payload: new JsonFormatter(await res.Content.ReadAsStringAsync()).Format());
-            return res;
-        }
-    }
-
-    [Serializable]
-    internal struct HDResponse
-    {
-        public int statusCode;
-        public string payload;
-
-        public HDResponse(int statusCode) : this()
-        {
-            this.statusCode = statusCode;
+            var headersKvps = headers.Select(kvp => $"{kvp.Key} :: {ArrayToString(kvp.Value)}").ToArray();
+            return string.Join("\n", headersKvps);
         }
 
-        public HDResponse(int statusCode, string payload)
+        private static string ArrayToString(IEnumerable<string> enumerable)
         {
-            this.statusCode = statusCode;
-            this.payload = payload;
+            return string.Join("; ", enumerable.ToArray());
+        }
+
+        public HDRequest Clone()
+        {
+            return JsonUtility.FromJson<HDRequest>(JsonUtility.ToJson(this));
         }
     }
 }
