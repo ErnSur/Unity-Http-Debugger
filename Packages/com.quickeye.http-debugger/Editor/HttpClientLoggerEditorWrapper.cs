@@ -22,6 +22,8 @@ namespace QuickEye.RequestWatcher
 
         private static async Task Log(string name, HttpRequestMessage message)
         {
+            if (message == null)
+                return;
             var ex = await HDRequest.FromHttpRequestMessage(name, message);
             ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
@@ -29,6 +31,8 @@ namespace QuickEye.RequestWatcher
         
         private static void Log(string name, UnityWebRequest message)
         {
+            if (message == null)
+                return;
             var ex =  HDRequest.FromUnityRequest(name, message);
             ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
@@ -36,6 +40,8 @@ namespace QuickEye.RequestWatcher
 
         private static async Task Log(string name, HttpResponseMessage message)
         {
+            if (message == null)
+                return;
             var ex = await HDRequest.FromHttpResponseMessage(name, message);
             ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);

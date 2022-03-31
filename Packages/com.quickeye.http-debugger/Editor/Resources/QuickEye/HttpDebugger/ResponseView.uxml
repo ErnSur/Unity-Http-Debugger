@@ -2,7 +2,7 @@
     <uie:Toolbar class="header-toolbar" style="flex-direction: row; padding-left: 4px;">
         <Style src="ResponseView.uss" />
         <Style src="Common.uss" />
-        <ui:Label name="res-status-label" text="200 ok" class="status-code" style="-unity-text-align: middle-left; margin-top: 1px; margin-bottom: 1px;" />
+        <ui:Label name="res-status-label" text="200 ok" class="status-code" style="-unity-text-align: middle-left; margin-top: 2px; margin-bottom: 2px;" />
     </uie:Toolbar>
     <QuickEye.RequestWatcher.TabGroup style="flex-direction: row;">
         <Style src="ResponseView.uss" />
@@ -18,9 +18,9 @@
     <ui:VisualElement name="headers-view" style="flex-grow: 1;">
         <Style src="ResponseView.uss" />
         <Style src="Common.uss" />
-        <ui:Label text="Label" />
+        <ui:Label text="Label" style="font-size: 19px;" />
     </ui:VisualElement>
-    <ui:Label text="Loading..." name="loading-overlay" style="-unity-text-align: middle-center; flex-grow: 1; font-size: 56px; -unity-font-style: normal; top: 0; position: absolute; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.33); color: rgba(196, 196, 196, 0.24); display: none;">
+    <ui:Label text="Loading..." name="loading-overlay" style="-unity-text-align: middle-center; flex-grow: 1; font-size: 20px; -unity-font-style: normal; top: 0; position: absolute; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.33); color: rgba(196, 196, 196, 0.24); display: none;">
         <Style src="ResponseView.uss" />
         <Style src="Common.uss" />
     </ui:Label>

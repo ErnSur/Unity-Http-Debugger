@@ -35,7 +35,7 @@ namespace QuickEye.RequestWatcher
             ToggleLoadingOverlay(false);
             bodyTab.TabContent = resBodyField;
             headersTab.TabContent = headersView;
-            headersTab.value = true;
+            bodyTab.value = true;
         }
 
         public void ToggleLoadingOverlay(bool value)

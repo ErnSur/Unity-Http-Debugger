@@ -12,12 +12,12 @@ public class SampleUsage : MonoBehaviour
 {
     public HttpStatusCode code;
 
-[ContextMenu("Log")]
+    [ContextMenu("Log")]
     public void Test()
     {
         Debug.Log($"MES: {code}");
     }
-    
+
     [MenuItem("Test/SendSampleReq")]
     public static void SendSampleRequest()
     {
@@ -32,7 +32,7 @@ public class SampleUsage : MonoBehaviour
             Method = HttpMethod.Get,
             RequestUri = new Uri("http://dummy.restapiexample.com/api/v1/employee/1"),
         };
-        using (var response = await client.SendAsync($"Employee",request))
+        using (var response = await client.SendAsync($"Employee", request))
         {
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadAsStringAsync();

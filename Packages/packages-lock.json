@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.artehacker.uitkeditoraid": {
-      "version": "https://github.com/OscarAbraham/UITKEditorAid.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "b851c766bb9c9fe51e45995c16ec409a7c066367"
-    },
     "com.quickeye.http-debugger": {
       "version": "file:com.quickeye.http-debugger",
       "depth": 0,
@@ -21,7 +14,7 @@
       "hash": "9353f5312341f3d2fc26336128facfb82f8f2a5b"
     },
     "com.unity.collab-proxy": {
-      "version": "1.14.4",
+      "version": "1.14.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {},

@@ -41,12 +41,15 @@ namespace QuickEye.RequestWatcher
 
         public static async Task<HDRequest> FromHttpRequestMessage(string name, HttpRequestMessage req)
         {
+            var url = req.RequestUri.OriginalString;
+            var type = HttpMethodTypeUtil.FromHttpMethod(req.Method);
+            var headers = HeadersToString(req.Content?.Headers);
             var e = new HDRequest
             {
                 name = name,
-                url = req.RequestUri.OriginalString,
-                type = HttpMethodTypeUtil.FromHttpMethod(req.Method),
-                headers = HeadersToString(req.Content.Headers)
+                url = url,
+                type = type,
+                headers = headers
             };
             if (req.Content != null)
                 e.body = JsonFormatter.Format(await req.Content.ReadAsStringAsync());
@@ -85,6 +88,8 @@ namespace QuickEye.RequestWatcher
 
         private static string HeadersToString(HttpHeaders headers)
         {
+            if (headers == null)
+                return "";
             var headersKvps = headers.Select(kvp => $"{kvp.Key} :: {ArrayToString(kvp.Value)}").ToArray();
             return string.Join("\n", headersKvps);
         }
