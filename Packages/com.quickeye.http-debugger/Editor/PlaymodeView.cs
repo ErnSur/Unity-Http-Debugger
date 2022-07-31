@@ -71,7 +71,7 @@ namespace QuickEye.RequestWatcher
             playmodeList.itemsSource = propList;
             this.Bind(requestListProp.serializedObject);
 
-            playmodeList.Refresh();
+            playmodeList.Rebuild();
             RefreshReqView();
         }
 
@@ -94,20 +94,20 @@ namespace QuickEye.RequestWatcher
                 button.Bind(requestListProp.serializedObject);
             };
             
-            playmodeList.onSelectionChanged += _ => RefreshReqView();
+            playmodeList.onSelectionChange += _ => RefreshReqView();
 
             playmodeClearButton.Clicked(() =>
             {
                 requestListProp?.ClearArray();
                 requestListProp?.serializedObject.ApplyModifiedProperties();
-                playmodeList.Refresh();
+                playmodeList.Rebuild();
                 RefreshReqView();
             });
         }
 
         public void Refresh()
         {
-            playmodeList.Refresh();
+            playmodeList.Rebuild();
             RefreshReqView();
         }
 

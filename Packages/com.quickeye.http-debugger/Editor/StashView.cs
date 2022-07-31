@@ -67,7 +67,7 @@ namespace QuickEye.RequestWatcher
             stashList.itemsSource = propList;
             this.Bind(requestListProp.serializedObject);
 
-            stashList.Refresh();
+            stashList.Rebuild();
             RefreshReqView();
         }
 
@@ -85,24 +85,24 @@ namespace QuickEye.RequestWatcher
                 {
                     requestListProp.DeleteArrayElementAtIndex(index);
                     requestListProp.serializedObject.ApplyModifiedProperties();
-                    stashList.Refresh();
+                    stashList.Rebuild();
                     RefreshReqView();
                 };
                 button.Duplicated = () =>
                 {
                     requestListProp.InsertArrayElementAtIndex(index);
                     requestListProp.serializedObject.ApplyModifiedProperties();
-                    stashList.Refresh();
+                    stashList.Rebuild();
                     RefreshReqView();
                 };
             };
-            stashList.onSelectionChanged += list => RefreshReqView();
+            stashList.onSelectionChange += _ => RefreshReqView();
             
             stashCreateButton.Clicked(() =>
             {
                 requestListProp.InsertArrayElementAtIndex(requestListProp.arraySize);
                 requestListProp.serializedObject.ApplyModifiedProperties();
-                stashList.Refresh();
+                stashList.Rebuild();
             });
         }
 
