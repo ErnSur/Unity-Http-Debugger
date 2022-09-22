@@ -6,28 +6,40 @@ namespace QuickEye.RequestWatcher
 {
     public class CodeField : VisualElement
     {
-        [Q("VisualElement")]
-        private VisualElement VisualElement;
-
-        [Q("codeField-lineNumber--label")]
+        public TextField Field => codeFieldInput;
         private Label codeFieldLineNumberLabel;
-
-        [Q("codeField--input")]
-        private TextField textField;
-
-        public TextField Field => textField;
-
+        private TextField codeFieldInput;
         public CodeField()
         {
             this.InitResources();
+            CreateTree();
+            codeFieldInput.RegisterCallback<InputEvent>(_ => RefreshCodeLines());
+            codeFieldInput.RegisterValueChangedCallback(_ => RefreshCodeLines());
+        }
+
+        private void CreateTree()
+        {
+            var scrollView = new ScrollView();
+            scrollView.AddToClassList("common-variables");
+            scrollView.AddToClassList("codeField-container");
+            var container = new VisualElement();
+            container.AddToClassList("codeField-scrollView--container");
+            codeFieldLineNumberLabel = new Label();
+            codeFieldLineNumberLabel.name = "codeField-lineNumber--label";
+            codeFieldInput = new TextField();
+            codeFieldInput.name = "codeField--input";
+            codeFieldInput.style.flexGrow = 1;
+            codeFieldInput.multiline = true;
             
-            textField.RegisterCallback<InputEvent>(_ => RefreshCodeLines());
-            textField.RegisterValueChangedCallback(_ => RefreshCodeLines());
+            Add(scrollView);
+            scrollView.Add(container);
+            container.Insert(0,codeFieldLineNumberLabel);
+            container.Add(codeFieldInput);
         }
 
         private void RefreshCodeLines()
         {
-            var lineCount = textField.text.Count(x => x == '\n') + 1;
+            var lineCount = codeFieldInput.text.Count(x => x == '\n') + 1;
             string lineNumbersText = "";
             for (int i = 1; i <= lineCount; ++i)
             {
