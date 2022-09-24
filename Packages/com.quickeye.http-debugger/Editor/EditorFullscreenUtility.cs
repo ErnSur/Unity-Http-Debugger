@@ -8,6 +8,14 @@ namespace QuickEye.RequestWatcher
     internal static class EditorFullscreenUtility
     {
         private static Type prevWindowType;
+        
+        [MenuItem("Window/UI Builder Toggle Fullscreen #&b")]
+        public static void ToggleUIBuilderFullScreen()
+        {
+            ToggleEditorFullscreen(
+                Type.GetType("Unity.UI.Builder.Builder, UnityEditor.UIBuilderModule"));
+        }
+
 
         public static EditorWindow ToggleEditorFullscreen<T>() where T : EditorWindow
         {

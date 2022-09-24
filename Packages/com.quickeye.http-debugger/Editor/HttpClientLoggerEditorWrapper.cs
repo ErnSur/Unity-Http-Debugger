@@ -49,8 +49,8 @@ namespace QuickEye.RequestWatcher
 
         private static void SerializePlaymodeLog(HDRequest exchange)
         {
-            var json = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new PostmanData()));
-            var data = JsonUtility.FromJson<PostmanData>(json);
+            var json = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new RequestCollection()));
+            var data = JsonUtility.FromJson<RequestCollection>(json);
             data.requests.Add(exchange);
             EditorPrefs.SetString(PlaymodePrefsKey, JsonUtility.ToJson(data));
         }

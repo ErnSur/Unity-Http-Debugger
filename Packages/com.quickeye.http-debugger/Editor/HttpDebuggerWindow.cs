@@ -9,7 +9,7 @@ using UnityEditor.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    public class HttpDebuggerWindow : EditorWindow
+    public partial class HttpDebuggerWindow : EditorWindow
     {
         [MenuItem("Window/Http Debugger #&p")]
         public static void Open()
@@ -17,47 +17,16 @@ namespace QuickEye.RequestWatcher
             var wnd = EditorFullscreenUtility.ToggleEditorFullscreen<HttpDebuggerWindow>();
             wnd.titleContent = new GUIContent("HTTP Debugger");
         }
-
-        [MenuItem("Window/UI Builder Toggle Fullscreen #&b")]
-        public static void ToggleUIBuilderFullScreen()
-        {
-            EditorFullscreenUtility.ToggleEditorFullscreen(
-                Type.GetType("Unity.UI.Builder.Builder, UnityEditor.UIBuilderModule"));
-        }
-
-        public static void PrintEnum()
-        {
-            var values = Enum.GetValues(typeof(HttpStatusCode));
-            foreach (var value in values)
-            {
-                Debug.Log($"{value.ToString()}, ({(int)value})");
-            }
-        }
-
+        
         private const string StatePrefsKey = "httpdebugger.state";
 
         private VisualElement[] tabViews;
 
-        [Q("stash-tab")]
-        private QuickEye.RequestWatcher.Tab stashTab;
-
-        [Q("playmode-tab")]
-        private QuickEye.RequestWatcher.Tab playmodeTab;
-
-        [Q("mock-tab")]
-        private QuickEye.RequestWatcher.Tab mockTab;
-
-        [Q("stash-view")]
-        private QuickEye.RequestWatcher.StashView stashView;
-
-        [Q("playmode-view")]
-        private QuickEye.RequestWatcher.PlaymodeView playmodeView;
+        [SerializeField]
+        private RequestCollection stashData;
 
         [SerializeField]
-        private PostmanData stashData;
-
-        [SerializeField]
-        private PostmanData playmodeData;
+        private RequestCollection playmodeData;
 
         [SerializeField]
         private int tabOpen;
@@ -107,7 +76,7 @@ namespace QuickEye.RequestWatcher
             {
                 HttpDebuggerResources.TryLoadTree<HttpDebuggerWindow>(out var tree);
                 tree.CloneTree(rootVisualElement);
-                rootVisualElement.AssignQueryResults(this);
+                AssignQueryResults(rootVisualElement);
                 InitSendButton(stashView, stashData);
                 InitSendButton(playmodeView, playmodeData);
                 InitSaveToStashAction();
@@ -155,7 +124,7 @@ namespace QuickEye.RequestWatcher
             }
         }
 
-        private void InitSendButton<T>(T root, PostmanData dataStore) where T : VisualElement, IRequestListView
+        private void InitSendButton<T>(T root, RequestCollection dataStore) where T : VisualElement, IRequestListView
         {
             try
             {
@@ -202,9 +171,9 @@ namespace QuickEye.RequestWatcher
         {
             serializedObject = new SerializedObject(this);
             stashRequestsProp =
-                serializedObject.FindProperty($"{nameof(stashData)}.{nameof(PostmanData.requests)}");
+                serializedObject.FindProperty($"{nameof(stashData)}.{nameof(RequestCollection.requests)}");
             playmodeRequestsProp =
-                serializedObject.FindProperty($"{nameof(playmodeData)}.{nameof(PostmanData.requests)}");
+                serializedObject.FindProperty($"{nameof(playmodeData)}.{nameof(RequestCollection.requests)}");
         }
 
         private void InitTabs()

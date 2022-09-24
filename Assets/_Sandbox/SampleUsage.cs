@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using UnityEditor;
@@ -31,7 +30,7 @@ namespace QuickEye.RequestWatcher.LoggingSample
         
         private static async void SendRequestAsync(CancellationToken cancellationToken = default)
         {
-            var client = new HttpClient(new LogMessageHandler(null,"Employee"));
+            var client = new HttpClient();
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
@@ -39,7 +38,7 @@ namespace QuickEye.RequestWatcher.LoggingSample
             };
             
             
-            using (var response = await client.SendAsync(request, cancellationToken))
+            using (var response = await client.SendAsync("Sample Get Request",request, cancellationToken))
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();

@@ -9,9 +9,7 @@ namespace QuickEye.RequestWatcher
     {
         private const string BaseDir = "QuickEye/HttpDebugger/";
         private const string CommonStyle = BaseDir + "Common";
-
-        // In Unity 2019 Loading USS files form resources for some reason created unpredictable results
-        // try returning Resources load here to compare 
+        
         private static T LoadAsset<T>(string resourcesRelativePath) where T : Object
         {
             var baseResourcesPath = "Packages/com.quickeye.http-debugger/Editor/Resources/";

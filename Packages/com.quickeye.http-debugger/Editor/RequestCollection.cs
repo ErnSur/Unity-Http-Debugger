@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace QuickEye.RequestWatcher
 {
     [Serializable]
-    internal class PostmanData
+    internal class RequestCollection
     {
         public List<HDRequest> requests = new List<HDRequest>
         {
