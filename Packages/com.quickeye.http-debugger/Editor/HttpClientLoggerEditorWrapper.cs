@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 
 namespace QuickEye.RequestWatcher
 {
+    [InitializeOnLoad]
     public static class HttpClientLoggerEditorWrapper
     {
         private const string PlaymodePrefsKey = "PostmanPlaymode";
@@ -52,6 +53,7 @@ namespace QuickEye.RequestWatcher
             var json = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new RequestCollection()));
             var data = JsonUtility.FromJson<RequestCollection>(json);
             data.requests.Add(exchange);
+            HttpDebuggerDatabase.Instance.playmodeRequests.Add(exchange);
             EditorPrefs.SetString(PlaymodePrefsKey, JsonUtility.ToJson(data));
         }
     }

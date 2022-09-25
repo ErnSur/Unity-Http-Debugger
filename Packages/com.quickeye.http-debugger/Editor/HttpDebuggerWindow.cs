@@ -11,7 +11,7 @@ namespace QuickEye.RequestWatcher
 {
     public partial class HttpDebuggerWindow : EditorWindow
     {
-        [MenuItem("Window/Http Debugger #&p")]
+        [MenuItem("Window/Http Debugger/All-In-One #&p")]
         public static void Open()
         {
             var wnd = EditorFullscreenUtility.ToggleEditorFullscreen<HttpDebuggerWindow>();
