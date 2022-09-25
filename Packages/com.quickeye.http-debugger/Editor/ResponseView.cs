@@ -6,32 +6,13 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    internal class ResponseView : VisualElement
+    internal partial class ResponseView
     {
-        [Q("res-status-label")]
-        private Label resStatusLabel;
-
-        [Q("res-body-field")]
-        private CodeField resBodyField;
-
-        [Q("loading-overlay")]
-        private Label loadingOverlay;
-
-        [Q("body-tab")]
-        private Tab bodyTab;
-
-        [Q("headers-tab")]
-        private Tab headersTab;
-
-        [Q("cookie-tab")]
-        private Tab cookieTab;
-
-        [Q("headers-view")]
-        private VisualElement headersView;
-
-        public ResponseView()
+        private VisualElement _root;
+        public ResponseView(VisualElement root)
         {
-            this.InitResources();
+            _root = root;
+            AssignQueryResults(root);
             ToggleLoadingOverlay(false);
             bodyTab.TabContent = resBodyField;
             headersTab.TabContent = headersView;
@@ -43,11 +24,13 @@ namespace QuickEye.RequestWatcher
             loadingOverlay.ToggleDisplayStyle(value);
         }
 
-        public void BindProperty(SerializedProperty property)
+        public void Setup(SerializedProperty responseProperty)
         {
-            resBodyField.Field.bindingPath = $"{property.propertyPath}.lastResponse.payload";
-            this.TrackPropertyChange<int>($"{property.propertyPath}.lastResponse.statusCode", v =>
+            
+            resBodyField.Field.BindProperty(responseProperty.FindPropertyRelative(nameof(HDResponse.payload)));
+            _root.TrackPropertyChange(responseProperty.FindPropertyRelative(nameof(HDResponse.statusCode)), prop =>
             {
+                var v = prop.intValue;
                 var isDefined = Enum.IsDefined(typeof(HttpStatusCode2), v);
 
                 var message = $"{v}";
@@ -57,12 +40,7 @@ namespace QuickEye.RequestWatcher
                 HttpStatusCodeUtil.ToggleStatusCodeClass(resStatusLabel, v);
             });
 
-            headersView.Q<Label>().bindingPath = $"{property.propertyPath}.lastResponse.headers";
-            this.Bind(property.serializedObject);
-        }
-
-        public new class UxmlFactory : UxmlFactory<ResponseView>
-        {
+            headersView.Q<Label>().BindProperty(responseProperty.FindPropertyRelative(nameof(HDResponse.headers)));
         }
     }
 }

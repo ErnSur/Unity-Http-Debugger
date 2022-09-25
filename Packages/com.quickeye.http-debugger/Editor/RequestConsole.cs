@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
@@ -23,6 +25,11 @@ namespace QuickEye.RequestWatcher
 
             urlCol.makeCell = () => new UrlCell();
             urlCol.bindCell = (element, i) => ((UrlCell)element).Setup(_source[i].url);
+
+            requestList.selectionChanged += selection =>
+            {
+                HttpExchangeInspectorWindow.Open(selection.FirstOrDefault() as HDRequest);
+            };
             HttpClientLoggerEditorWrapper.ExchangeLogged += _ => requestList.Rebuild();
         }
 

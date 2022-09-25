@@ -54,11 +54,13 @@ namespace QuickEye.RequestWatcher
             text = url;
         }
     }
-    
+
     internal class IdCell : Label
     {
         public IdCell()
         {
+            AddToClassList("cell-text");
+
             AddToClassList("id-cell");
         }
 

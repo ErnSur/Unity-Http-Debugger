@@ -7,58 +7,36 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    internal class RequestView : VisualElement
+    internal partial class RequestView
     {
         public Action SendButtonClicked;
 
-        [Q("req-type-menu")]
-        private EnumField reqTypeMenu;
-
-        [Q("req-url-field")]
-        private TextField reqUrlField;
-
-        [Q("req-send-button")]
-        private ToolbarButton reqSendButton;
-
-        [Q("req-body-field")]
-        private QuickEye.RequestWatcher.CodeField reqBodyField;
-
-        [Q("body-tab")]
-        private QuickEye.RequestWatcher.Tab bodyTab;
-
-        [Q("auth-tab")]
-        private QuickEye.RequestWatcher.TabDropdown authTab;
-
-        [Q("headers-tab")]
-        private QuickEye.RequestWatcher.Tab headersTab;
-
-        [Q("headers-view")]
-        private VisualElement headersView;
-
-
-        public RequestView()
+        public RequestView(VisualElement root)
         {
-            this.InitResources();
-            reqTypeMenu.bindingPath = nameof(HDRequest.type);
-            reqUrlField.bindingPath = nameof(HDRequest.url);
-            reqBodyField.Field.bindingPath = nameof(HDRequest.body);
+            AssignQueryResults(root);
             reqSendButton.clicked += () => SendButtonClicked?.Invoke();
             InitTabs();
-            InitHeadersView();
         }
 
-        private void InitHeadersView()
+        public void Setup(HDRequest request)
         {
+            if (request is null)
+                return;
+            reqTypeMenu.Init(HttpMethodType.Get);
+            reqTypeMenu.value = request.type;
+            reqUrlField.value = request.url;
+            reqBodyField.Field.value = request.body;
+            headersView.Q<Label>().text = request.headers;
         }
 
-        public void Bind(SerializedProperty requestProp)
+        public void Setup(SerializedProperty requestProperty)
         {
-            reqTypeMenu.bindingPath = $"{requestProp.propertyPath}.{nameof(HDRequest.type)}";
-            reqUrlField.bindingPath = $"{requestProp.propertyPath}.{nameof(HDRequest.url)}";
-            reqBodyField.Field.bindingPath = $"{requestProp.propertyPath}.{nameof(HDRequest.body)}";
-            headersView.Q<Label>().bindingPath = $"{requestProp.propertyPath}.{nameof(HDRequest.headers)}";
-
-            this.Bind(requestProp.serializedObject);
+            if (requestProperty is null)
+                return;
+            reqTypeMenu.BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.type)));
+            reqUrlField.BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.url)));
+            reqBodyField.Field.BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.body)));
+            headersView.Q<Label>().BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.headers)));
         }
 
         private void InitTabs()
@@ -84,11 +62,6 @@ namespace QuickEye.RequestWatcher
             };
 
             bodyTab.value = true;
-        }
-
-
-        public new class UxmlFactory : UxmlFactory<RequestView>
-        {
         }
     }
 }

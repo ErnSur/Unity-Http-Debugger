@@ -1,10 +1,8 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
     <ui:VisualElement name="exchange-view" style="flex-direction: row; flex-grow: 1; display: flex;">
-        <Style src="Common.uss" />
         <QuickEye.RequestWatcher.RequestView name="req-view" class="panel-border main-panel-container" style="flex-basis: 1px; flex-grow: 1;" />
         <QuickEye.RequestWatcher.ResponseView name="res-view" style="flex-grow: 1; flex-basis: 1px;" />
     </ui:VisualElement>
-    <ui:Label text="Nothing. Select a reqest. " name="no-select-view" class="nothing-selected-label" style="display: none;">
-        <Style src="Common.uss" />
-    </ui:Label>
+    <ui:Label text="Nothing. Select a reqest. " name="no-select-view" class="nothing-selected-label" style="display: none;" />
 </ui:UXML>

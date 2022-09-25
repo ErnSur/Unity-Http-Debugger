@@ -43,8 +43,8 @@ namespace QuickEye.RequestWatcher
             UpdateSelectedView();
             if (requestProperty == null)
                 return;
-            reqView.Bind(requestProperty);
-            resView.BindProperty(requestProperty);
+            //reqView.Bind(requestProperty);
+            resView.Setup(requestProperty);
         }
 
         private void UpdateSelectedView()

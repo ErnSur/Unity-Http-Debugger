@@ -129,7 +129,7 @@ namespace QuickEye.RequestWatcher
             try
             {
                 var sendButton = root.Q<Button>("req-send-button");
-                var resView = root.Q<ResponseView>();
+                var resView = new ResponseView(root.Q<TemplateContainer>("response-view"));
                 sendButton.clicked += async () =>
                 {
                     resView.ToggleLoadingOverlay(true);

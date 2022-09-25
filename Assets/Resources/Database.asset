@@ -30,7 +30,7 @@ MonoBehaviour:
         2022 14:39:31 GMT'
   - name: Sample Get Request
     url: http://dummy.restapiexample.com/api/v1/employee/1
-    type: 0
+    type: 1
     body: 
     headers: 
     lastResponse:
@@ -45,7 +45,7 @@ MonoBehaviour:
         2022 14:39:36 GMT'
   - name: Sample Get Request
     url: http://dummy.restapiexample.com/api/v1/employee/1
-    type: 0
+    type: 2
     body: 
     headers: 
     lastResponse:
@@ -60,7 +60,7 @@ MonoBehaviour:
         2022 14:39:38 GMT'
   - name: Sample Get Request
     url: http://dummy.restapiexample.com/api/v1/employee/1
-    type: 0
+    type: 3
     body: 
     headers: 
     lastResponse:
@@ -75,7 +75,7 @@ MonoBehaviour:
         2022 14:39:39 GMT'
   - name: Sample Get Request
     url: http://dummy.restapiexample.com/api/v1/employee/1
-    type: 0
+    type: 4
     body: 
     headers: 
     lastResponse:
@@ -90,7 +90,7 @@ MonoBehaviour:
         2022 14:39:40 GMT'
   - name: Sample Get Request
     url: http://dummy.restapiexample.com/api/v1/employee/1
-    type: 0
+    type: 5
     body: 
     headers: 
     lastResponse:
