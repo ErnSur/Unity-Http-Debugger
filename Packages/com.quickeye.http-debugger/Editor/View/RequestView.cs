@@ -9,11 +9,16 @@ namespace QuickEye.RequestWatcher
 {
     internal partial class RequestView
     {
-        public Action SendButtonClicked;
+        public event Action SendButtonClicked;
+        public event Action RequestAwaitStarted;
+        public event Action<HDResponse> RequestAwaitEnded;
+
+        private HDRequest target;
 
         public RequestView(VisualElement root)
         {
             AssignQueryResults(root);
+            reqSendButton.clicked += OnSendButtonClick;
             reqSendButton.clicked += () => SendButtonClicked?.Invoke();
             InitTabs();
         }
@@ -22,6 +27,7 @@ namespace QuickEye.RequestWatcher
         {
             if (request is null)
                 return;
+            target = request;
             reqTypeMenu.Init(HttpMethodType.Get);
             reqTypeMenu.value = request.type;
             reqUrlField.value = request.url;
@@ -33,6 +39,7 @@ namespace QuickEye.RequestWatcher
         {
             if (requestProperty is null)
                 return;
+            target = (HDRequest)requestProperty.boxedValue;
             reqTypeMenu.BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.type)));
             reqUrlField.BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.url)));
             reqBodyField.Field.BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.body)));
@@ -62,6 +69,24 @@ namespace QuickEye.RequestWatcher
             };
 
             bodyTab.value = true;
+        }
+
+        private async void OnSendButtonClick()
+        {
+            RequestAwaitStarted?.Invoke();
+            try
+            {
+                using var res = await target.SendAsync();
+                var newReq = await HDRequest.FromHttpResponseMessage(target.name, res);
+                Debug.Log($"$MES$: {newReq.lastResponse.statusCode}");
+                RequestAwaitEnded?.Invoke(newReq.lastResponse);
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"URL: {target.url}");
+                Debug.LogException(e);
+                RequestAwaitEnded?.Invoke(null);
+            }
         }
     }
 }

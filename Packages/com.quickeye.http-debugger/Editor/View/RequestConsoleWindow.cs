@@ -8,15 +8,14 @@ namespace QuickEye.RequestWatcher
         [MenuItem("Window/Http Debugger/Request Console")]
         public static void Open() => Open<RequestConsoleWindow>("Request Console");
 
-        [SerializeField]
-        private HttpDebuggerDatabase _database;
+        private Database _database;
 
         private RequestConsole _requestConsole;
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            _database = HttpDebuggerDatabase.Instance;
+            _database = Database.Instance;
             _requestConsole = new RequestConsole(rootVisualElement);
             _requestConsole.Setup(_database.playmodeRequests);
         }

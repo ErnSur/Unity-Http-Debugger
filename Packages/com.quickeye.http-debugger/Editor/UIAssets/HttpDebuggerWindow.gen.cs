@@ -13,7 +13,7 @@ namespace QuickEye.RequestWatcher
         private QuickEye.RequestWatcher.Tab playmodeTab;
         private QuickEye.RequestWatcher.Tab mockTab;
         private QuickEye.RequestWatcher.StashView stashView;
-        private QuickEye.RequestWatcher.PlaymodeView playmodeView;
+        private VisualElement playmodeView;
     
         protected void AssignQueryResults(VisualElement root)
         {
@@ -21,7 +21,6 @@ namespace QuickEye.RequestWatcher
             playmodeTab = root.Q<QuickEye.RequestWatcher.Tab>("playmode-tab");
             mockTab = root.Q<QuickEye.RequestWatcher.Tab>("mock-tab");
             stashView = root.Q<QuickEye.RequestWatcher.StashView>("stash-view");
-            playmodeView = root.Q<QuickEye.RequestWatcher.PlaymodeView>("playmode-view");
         }
     }
 }

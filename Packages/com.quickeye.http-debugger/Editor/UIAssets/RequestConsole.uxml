@@ -1,11 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/RequestConsole.style.uss?fileID=7433441132597879392&amp;guid=779eec097141c469d95b186e741bd9cf&amp;type=3#RequestConsole.style" />
+    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/UIAssets/RequestConsole.style.uss?fileID=7433441132597879392&amp;guid=779eec097141c469d95b186e741bd9cf&amp;type=3#RequestConsole.style" />
     <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
     <uie:Toolbar>
-        <uie:ToolbarButton tabindex="-1" text="Clear" display-tooltip-when-elided="true" style="width: 43px; -unity-text-align: middle-left;" />
-        <uie:ToolbarMenu tabindex="-1" display-tooltip-when-elided="true" style="width: 20px;" />
+        <uie:ToolbarButton tabindex="-1" text="Clear" display-tooltip-when-elided="true" name="clear-button" style="width: 43px; -unity-text-align: middle-left; border-left-width: 0; min-width: 43px;" />
+        <uie:ToolbarMenu tabindex="-1" display-tooltip-when-elided="true" style="width: 20px; display: none;" />
         <uie:ToolbarSpacer style="flex-grow: 1;" />
-        <uie:ToolbarSearchField focusable="true" />
+        <uie:ToolbarSearchField focusable="true" style="flex-shrink: 1;" />
     </uie:Toolbar>
     <ui:MultiColumnListView fixed-item-height="22" horizontal-scrolling="true" name="request-list" style="flex-grow: 1;">
         <ui:Columns>

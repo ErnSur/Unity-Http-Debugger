@@ -8,11 +8,12 @@ namespace QuickEye.RequestWatcher
     {
         [SerializeField]
         private VisualTreeAsset _treeAsset;
-        
-        protected static void Open<T>(string title) where T : EditorWindow
+
+        protected static T Open<T>(string title) where T : EditorWindow
         {
             var wnd = GetWindow<T>();
             wnd.titleContent = new GUIContent(title);
+            return wnd;
         }
 
         protected virtual void OnEnable()

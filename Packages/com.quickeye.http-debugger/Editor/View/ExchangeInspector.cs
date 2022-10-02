@@ -4,17 +4,17 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    internal partial class HttpExchangeInspector
+    internal partial class ExchangeInspector
     {
         private (HDRequest obj, SerializedProperty prop) target;
-        private RequestView _requestViewController;
-        private ResponseView _responseViewController;
+        private readonly RequestView _requestViewController;
+        private readonly ResponseView _responseViewController;
 
-        public HttpExchangeInspector(VisualElement root)
+        public ExchangeInspector(VisualElement root)
         {
             AssignQueryResults(root);
-            _requestViewController = new RequestView(requestView);
-            _responseViewController = new ResponseView(responseView);
+            _requestViewController = new RequestView(requestViewRoot);
+            _responseViewController = new ResponseView(responseViewRoot);
             exchangePane.fixedPaneIndex = 1;
             exchangePane.fixedPaneInitialDimension = 400;
         }

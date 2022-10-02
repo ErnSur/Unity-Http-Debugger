@@ -7,18 +7,18 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    partial class HttpExchangeInspector
+    partial class ExchangeInspector
     {
         private TwoPaneSplitView exchangePane;
-        private TemplateContainer requestView;
-        private TemplateContainer responseView;
+        private TemplateContainer requestViewRoot;
+        private TemplateContainer responseViewRoot;
         private Label noSelectView;
     
         protected void AssignQueryResults(VisualElement root)
         {
             exchangePane = root.Q<TwoPaneSplitView>("exchange-pane");
-            requestView = root.Q<TemplateContainer>("request-view");
-            responseView = root.Q<TemplateContainer>("response-view");
+            requestViewRoot = root.Q<TemplateContainer>("request-view-root");
+            responseViewRoot = root.Q<TemplateContainer>("response-view-root");
             noSelectView = root.Q<Label>("no-select-view");
         }
     }

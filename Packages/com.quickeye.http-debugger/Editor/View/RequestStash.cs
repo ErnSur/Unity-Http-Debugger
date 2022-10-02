@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -9,50 +9,24 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    internal class StashView : VisualElement,IRequestListView
+    internal partial class RequestStash
     {
-        [Q("sidebar")]
-        private VisualElement sidebar;
-        [Q("stash-create--button")]
-        private ToolbarButton stashCreateButton;
-        [Q("stash--search-field")]
-        private ToolbarSearchField stashSearchField;
-        [Q("stash--list")]
-        private ListView stashList;
-        [Q("exchange-view")]
-        private QuickEye.RequestWatcher.ExchangeInspector exchangeView;
+        private VisualElement _root;
+        public event Action<SerializedProperty> SelectionChanged;
 
         private SerializedProperty requestListProp;
         private SerializedArrayProperty requestListPropList;
 
-        private SerializedProperty SelectedReq =>stashList.selectedItem as SerializedProperty;
+        private SerializedProperty SelectedReq => stashList.selectedItem as SerializedProperty;
         private List<SerializedProperty> searchResult;
 
-        public StashView()
+        public RequestStash(VisualElement root)
         {
-            this.InitResources();
+            _root = root;
+            AssignQueryResults(root);
             InitList();
             InitSearchField();
-            RefreshReqView();
-        }
-        
-        private void InitSearchField()
-        {
-            stashSearchField.RegisterValueChangedCallback(evt =>
-            {
-                if (string.IsNullOrWhiteSpace(evt.newValue))
-                {
-                    Setup(requestListPropList);
-                    return;
-                }
-
-                searchResult = (from prop in requestListPropList
-                    let name = prop.FindPropertyRelative("name").stringValue
-                    where name.ToLower().Contains(evt.newValue.ToLower())
-                    select prop).ToList();
-
-                Setup(searchResult);
-            });
+            
         }
 
         public void Setup(SerializedProperty requestListProp)
@@ -65,10 +39,29 @@ namespace QuickEye.RequestWatcher
         private void Setup(IList propList)
         {
             stashList.itemsSource = propList;
-            this.Bind(requestListProp.serializedObject);
+            _root.Bind(requestListProp.serializedObject);
 
             stashList.Rebuild();
-            RefreshReqView();
+            //RefreshReqView();
+        }
+
+        private void InitSearchField()
+        {
+            searchField.RegisterValueChangedCallback(evt =>
+            {
+                if (string.IsNullOrWhiteSpace(evt.newValue))
+                {
+                    Setup(requestListPropList);
+                    return;
+                }
+
+                searchResult = (from prop in requestListPropList
+                    let name = prop.FindPropertyRelative(nameof(HDRequest.name)).stringValue
+                    where name.ToLower().Contains(evt.newValue.ToLower())
+                    select prop).ToList();
+
+                Setup(searchResult);
+            });
         }
 
         private void InitList()
@@ -96,21 +89,24 @@ namespace QuickEye.RequestWatcher
                     RefreshReqView();
                 };
             };
-            stashList.onSelectionChange += _ => RefreshReqView();
-            
-            stashCreateButton.Clicked(() =>
+            stashList.selectionChanged += _ =>
+            {
+                Debug.Log($"selection changed");
+                RefreshReqView();
+            };
+
+            createButton.clicked += () =>
             {
                 requestListProp.InsertArrayElementAtIndex(requestListProp.arraySize);
                 requestListProp.serializedObject.ApplyModifiedProperties();
                 stashList.Rebuild();
-            });
+            };
         }
 
         public void RefreshReqView()
         {
-            exchangeView.Setup(SelectedReq);
+            ExchangeInspectorWindow.Open(SelectedReq);
         }
-        private class UxmlFactory : UxmlFactory<StashView>{}
 
         public int GetSelectedIndex()
         {

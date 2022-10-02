@@ -67,7 +67,7 @@ namespace QuickEye.RequestWatcher
             // TODO: when window was docked but not active we wont get serObj, when making it active again we reed to do this refresh
             serializedObject.Update();
             rootVisualElement.Bind(serializedObject);
-            playmodeView.Refresh();
+            //playmodeView.Refresh();
         }
 
         public void CreateGUI()
@@ -78,13 +78,13 @@ namespace QuickEye.RequestWatcher
                 tree.CloneTree(rootVisualElement);
                 AssignQueryResults(rootVisualElement);
                 InitSendButton(stashView, stashData);
-                InitSendButton(playmodeView, playmodeData);
+              //  InitSendButton(playmodeView, playmodeData);
                 InitSaveToStashAction();
                 RefreshSerializedObj();
                 InitTabs();
 
                 stashView.Setup(stashRequestsProp);
-                playmodeView.Setup(playmodeRequestsProp);
+               // playmodeView.Setup(playmodeRequestsProp);
 
                 rootVisualElement.Bind(serializedObject);
                 mockTab.clicked += () =>

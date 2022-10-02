@@ -26,8 +26,8 @@ namespace QuickEye.RequestWatcher
             if (message == null)
                 return;
             var ex = await HDRequest.FromHttpRequestMessage(name, message);
-            ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
+            ExchangeLogged?.Invoke(ex);
         }
         
         private static void Log(string name, UnityWebRequest message)
@@ -35,8 +35,8 @@ namespace QuickEye.RequestWatcher
             if (message == null)
                 return;
             var ex =  HDRequest.FromUnityRequest(name, message);
-            ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
+            ExchangeLogged?.Invoke(ex);
         }
 
         private static async Task Log(string name, HttpResponseMessage message)
@@ -44,8 +44,8 @@ namespace QuickEye.RequestWatcher
             if (message == null)
                 return;
             var ex = await HDRequest.FromHttpResponseMessage(name, message);
-            ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
+            ExchangeLogged?.Invoke(ex);
         }
 
         private static void SerializePlaymodeLog(HDRequest exchange)
@@ -53,7 +53,7 @@ namespace QuickEye.RequestWatcher
             var json = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new RequestCollection()));
             var data = JsonUtility.FromJson<RequestCollection>(json);
             data.requests.Add(exchange);
-            HttpDebuggerDatabase.Instance.playmodeRequests.Add(exchange);
+            Database.Instance.playmodeRequests.Add(exchange);
             EditorPrefs.SetString(PlaymodePrefsKey, JsonUtility.ToJson(data));
         }
     }

@@ -12,6 +12,7 @@ namespace QuickEye.RequestWatcher.LoggingSample
         private float requestInterval;
 
         private float _remainingTimeToRequest;
+        private static int _logIndex = -1;
 
         private void Update()
         {
@@ -36,13 +37,18 @@ namespace QuickEye.RequestWatcher.LoggingSample
                 Method = HttpMethod.Get,
                 RequestUri = new Uri("http://dummy.restapiexample.com/api/v1/employee/1"),
             };
-            
-            
-            using (var response = await client.SendAsync("Sample Get Request",request, cancellationToken))
+
+            _logIndex = ++_logIndex % 3;
+            using (var response = await client.SendAsync($"Req {_logIndex}",request, cancellationToken))
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
             }
+        }
+
+        private static int Repeat(int value, int maxValue)
+        {
+            return value % maxValue;
         }
     }
 }

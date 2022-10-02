@@ -99,11 +99,13 @@ namespace QuickEye.RequestWatcher
         public void Insert(int index)
         {
             Property.InsertArrayElementAtIndex(index);
+            Property.serializedObject.ApplyModifiedProperties();
         }
 
         public void RemoveAt(int index)
         {
             Property.DeleteArrayElementAtIndex(index);
+            Property.serializedObject.ApplyModifiedProperties();
         }
 
         bool IList.IsFixedSize => false;
