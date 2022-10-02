@@ -10,13 +10,14 @@ namespace QuickEye.RequestWatcher
 
         private Database _database;
 
-        private RequestConsole _requestConsole;
+        [SerializeField]
+        private RequestConsole _requestConsole = new RequestConsole();
 
         protected override void OnEnable()
         {
             base.OnEnable();
             _database = Database.Instance;
-            _requestConsole = new RequestConsole(rootVisualElement);
+            _requestConsole.Init(rootVisualElement);
             _requestConsole.Setup(_database.playmodeRequests);
         }
     }

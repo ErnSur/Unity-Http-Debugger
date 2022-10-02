@@ -1,15 +1,36 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
+    [Serializable]
     internal partial class RequestConsole
     {
         private List<HDRequest> _source;
+        [SerializeField]
+        private bool clearOnPlay;
 
-        public RequestConsole(VisualElement root)
+        public RequestConsole()
+        {
+            EditorApplication.playModeStateChanged += PlayModeChanged;
+        }
+
+        private void PlayModeChanged(PlayModeStateChange newState)
+        {
+            if(clearOnPlay && newState == PlayModeStateChange.EnteredPlayMode)
+                ClearConsole();
+        }
+
+        private void ClearConsole()
+        {
+            _source.Clear();
+            requestList.Rebuild();
+        }
+        
+        public void Init(VisualElement root)
         {
             AssignQueryResults(root);
             InitColumns();
@@ -25,20 +46,26 @@ namespace QuickEye.RequestWatcher
                     autoScroll = true;
 
                 requestList.Rebuild();
-                if (autoScroll) 
+                if (autoScroll)
                     requestList.ScrollToItem(-1);
             };
         }
-
+        
         private void InitClearButton()
         {
-            clearButton.clicked += () =>
+            SetupDropdownMenu();
+            clearButton.clicked += ClearConsole;
+        }
+
+        private void SetupDropdownMenu()
+        {
+            var menu = new GenericMenu();
+            menu.AddItem(new GUIContent("Clear on Play"), clearOnPlay, () =>
             {
-                _source.Clear();
-                //     requestListProp?.serializedObject.ApplyModifiedProperties();
-                requestList.Rebuild();
-                //     RefreshReqView();
-            };
+                clearOnPlay = !clearOnPlay;
+                SetupDropdownMenu();
+            });
+            clearButton.DropdownMenu = menu;
         }
 
         private void InitColumns()
@@ -49,8 +76,7 @@ namespace QuickEye.RequestWatcher
 
             methodCol.makeCell = () => new MethodCell();
             methodCol.bindCell = (element, i) => ((MethodCell)element).Setup(_source[i].type.ToString());
-
-
+            
             idCol.makeCell = () => new IdCell();
             idCol.bindCell = (element, i) => ((IdCell)element).Setup(_source[i].name);
 

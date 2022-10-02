@@ -20,9 +20,9 @@ Http request logging tool for Unity.
     - integrated into inspector?
 
 3. Finish Request Console
-  - Clear button
   - search functionality
-  - Clear on Play option
+  - ~~Clear button~~
+  - ~~Clear on Play option~~
 
 4. Design datastore
   - How and where to serialize playmode request logs

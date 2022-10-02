@@ -47,3 +47,10 @@
     background-color: rgba(0, 0, 0, 0);
     color: rgb(109, 158, 255);
 }
+
+#clear-button {
+    -unity-text-align: middle-left;
+    border-left-width: 0;
+    min-width: 43px;
+    left: 0;
+}
