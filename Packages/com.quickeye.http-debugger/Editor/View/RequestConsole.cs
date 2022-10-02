@@ -1,17 +1,39 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
+    internal class RequestFilter
+    {
+        public string result;
+        public string method;
+        public string id;
+        public string url;
+
+        public RequestFilter(string filterString)
+        {
+            
+        }
+        
+    }
     [Serializable]
     internal partial class RequestConsole
     {
         private List<HDRequest> _source;
+        private List<HDRequest> _filteredSource = new List<HDRequest>();
+
         [SerializeField]
         private bool clearOnPlay;
+
+        [SerializeField]
+        private string _searchText;
+
+        private List<HDRequest> Source => string.IsNullOrWhiteSpace(_searchText) ? _source : _filteredSource;
+
 
         public RequestConsole()
         {
@@ -20,7 +42,7 @@ namespace QuickEye.RequestWatcher
 
         private void PlayModeChanged(PlayModeStateChange newState)
         {
-            if(clearOnPlay && newState == PlayModeStateChange.EnteredPlayMode)
+            if (clearOnPlay && newState == PlayModeStateChange.EnteredPlayMode)
                 ClearConsole();
         }
 
@@ -29,12 +51,13 @@ namespace QuickEye.RequestWatcher
             _source.Clear();
             requestList.Rebuild();
         }
-        
+
         public void Init(VisualElement root)
         {
             AssignQueryResults(root);
             InitColumns();
             InitClearButton();
+            InitSearchField();
 
             requestList.selectionChanged += selection => { ExchangeInspectorWindow.Open(requestList.selectedIndex); };
 
@@ -50,7 +73,37 @@ namespace QuickEye.RequestWatcher
                     requestList.ScrollToItem(-1);
             };
         }
-        
+
+        private void InitSearchField()
+        {
+            searchField.tooltip = "Search filters:\n\"res:\" search by status code\n\"met:\" search by method\n\"id:\" search by id";
+            searchField.value = _searchText;
+            searchField.RegisterValueChangedCallback(evt =>
+            {
+                _searchText = evt.newValue;
+                FilterAndRefresh();
+            });
+        }
+
+        private void FilterSource(string searchText)
+        {
+            _searchText = searchText;
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                _filteredSource.Clear();
+                return;
+            }
+
+            _filteredSource = FilterInterpreter.Filter(_source,_searchText).ToList();
+        }
+
+        private void FilterAndRefresh()
+        {
+            FilterSource(_searchText);
+            requestList.itemsSource = Source;
+            requestList.Rebuild();
+        }
+
         private void InitClearButton()
         {
             SetupDropdownMenu();
@@ -72,22 +125,22 @@ namespace QuickEye.RequestWatcher
         {
             resultCol.makeCell = () => new StatusCodeCell();
             resultCol.bindCell = (element, i) =>
-                ((StatusCodeCell)element).Setup(_source[i].lastResponse?.statusCode ?? 0);
+                ((StatusCodeCell)element).Setup(Source[i].lastResponse?.statusCode ?? 0);
 
             methodCol.makeCell = () => new MethodCell();
-            methodCol.bindCell = (element, i) => ((MethodCell)element).Setup(_source[i].type.ToString());
-            
+            methodCol.bindCell = (element, i) => ((MethodCell)element).Setup(Source[i].type.ToString());
+
             idCol.makeCell = () => new IdCell();
-            idCol.bindCell = (element, i) => ((IdCell)element).Setup(_source[i].name);
+            idCol.bindCell = (element, i) => ((IdCell)element).Setup(Source[i].name);
 
             urlCol.makeCell = () => new UrlCell();
-            urlCol.bindCell = (element, i) => ((UrlCell)element).Setup(_source[i].url);
+            urlCol.bindCell = (element, i) => ((UrlCell)element).Setup(Source[i].url);
         }
 
         public void Setup(List<HDRequest> itemSource)
         {
-            requestList.itemsSource = _source = itemSource;
-            requestList.Rebuild();
+            _source = itemSource;
+            FilterAndRefresh();
         }
     }
 }

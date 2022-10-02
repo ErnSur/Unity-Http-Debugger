@@ -10,6 +10,7 @@ namespace QuickEye.RequestWatcher
     partial class RequestConsole
     {
         private QuickEye.RequestWatcher.DropdownButton clearButton;
+        private UnityEditor.UIElements.ToolbarSearchField searchField;
         private MultiColumnListView requestList;
         private Column timeCol;
         private Column resultCol;
@@ -20,6 +21,7 @@ namespace QuickEye.RequestWatcher
         protected void AssignQueryResults(VisualElement root)
         {
             clearButton = root.Q<QuickEye.RequestWatcher.DropdownButton>("clear-button");
+            searchField = root.Q<UnityEditor.UIElements.ToolbarSearchField>("search-field");
             requestList = root.Q<MultiColumnListView>("request-list");
             timeCol = requestList.columns["time-col"];
             resultCol = requestList.columns["result-col"];

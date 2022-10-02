@@ -4,7 +4,7 @@
     <uie:Toolbar>
         <QuickEye.RequestWatcher.DropdownButton tabindex="-1" focusable="false" text="Clear" name="clear-button" class="clear-button" />
         <uie:ToolbarSpacer style="flex-grow: 1;" />
-        <uie:ToolbarSearchField focusable="true" style="flex-shrink: 1;" />
+        <uie:ToolbarSearchField focusable="true" name="search-field" style="flex-shrink: 1;" />
     </uie:Toolbar>
     <ui:MultiColumnListView fixed-item-height="22" horizontal-scrolling="true" name="request-list" style="flex-grow: 1;">
         <ui:Columns>
