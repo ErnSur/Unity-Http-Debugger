@@ -20,7 +20,8 @@ Http request logging tool for Unity.
     - integrated into inspector?
 
 3. Finish Request Console
-  - search functionality
+  - ~~filter by status and id~~
+  - ~~search functionality~~
   - ~~Clear button~~
   - ~~Clear on Play option~~
 

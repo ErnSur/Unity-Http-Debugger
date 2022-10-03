@@ -24,17 +24,15 @@ namespace QuickEye.RequestWatcher
                 //   - Maybe treat space as token
                 //   - if previous token was space and the new one is another text literal then join them with spaces
                 //   - if not then it is treated as spacer
-                new TokenDefinition(TokenType.QuotedTextLiteral, @"(?:"")(.+?)(?:"")", 1),
+                //new TokenDefinition(TokenType.QuotedTextLiteral, @"(?:"")(.+?)(?:"")", 1),
                 new TokenDefinition(TokenType.TextLiteral, @"(?::)(.+?)(?:,|\z|\n)", 2),
                 //new TokenDefinition(TokenType.NumericLiteral, "-?\\d+", 2),
-                new TokenDefinition(TokenType.Comma, ",", 1)
+                new TokenDefinition(TokenType.Comma, ",", 1),
             };
         }
 
         public static IEnumerable<HDRequest> Filter(ICollection<HDRequest> requests, string query)
         {
-            var qi = new FilterInterpreter();
-
             var currentStatement = TokenType.NotDefined;
 
             var selectors = new List<Func<HDRequest, bool>>();
@@ -71,7 +69,7 @@ namespace QuickEye.RequestWatcher
                                 selectors.Add(r => r.url.ToLower().Contains(token.Value.ToLower()));
                                 break;
                             case TokenType.IdStatement:
-                                selectors.Add(r => r.name.ToLower().Contains(token.Value.ToLower()));
+                                selectors.Add(r => FilterByName(r,token.Value));
                                 break;
                         }
 
@@ -81,9 +79,14 @@ namespace QuickEye.RequestWatcher
                 }
             }
 
-            //if (lowestTokenIndex != int.MaxValue)
-            //  Debug.Log($"DerP: {query[..lowestTokenIndex]}");
+            if (currentStatement == TokenType.NotDefined)
+                return requests.Where(r => FilterByName(r, query));
             return requests.Where(p => selectors.All(s => s(p)));
+        }
+
+        private static bool FilterByName(HDRequest request, string name)
+        {
+            return request.name.ToLower().Contains(name.ToLower());
         }
         
         private static List<TokenMatch> GetTokenMatches(string query)

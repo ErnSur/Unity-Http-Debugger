@@ -7,19 +7,6 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    internal class RequestFilter
-    {
-        public string result;
-        public string method;
-        public string id;
-        public string url;
-
-        public RequestFilter(string filterString)
-        {
-            
-        }
-        
-    }
     [Serializable]
     internal partial class RequestConsole
     {
@@ -76,7 +63,7 @@ namespace QuickEye.RequestWatcher
 
         private void InitSearchField()
         {
-            searchField.tooltip = "Search filters:\n\"res:\" search by status code\n\"met:\" search by method\n\"id:\" search by id";
+            searchField.tooltip = "Search filters:\n\"res:\" by status code\n\"met:\" by method\n\"id:\" by id\n\"url:\" by url";
             searchField.value = _searchText;
             searchField.RegisterValueChangedCallback(evt =>
             {
