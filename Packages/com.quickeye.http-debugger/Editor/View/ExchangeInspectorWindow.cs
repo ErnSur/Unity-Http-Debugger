@@ -1,53 +1,90 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    public class ExchangeInspectorWindow : VisualElementWindow
+    // TODO: support selection of multiple request at one time with locked inspectors
+    // create new Scriptable object for each request and destroy it in editor OnDestroy/onselection change
+    [CustomEditor(typeof(ScriptableRequest))]
+    internal class ExchangeInspectorWindow : Editor
     {
-        [MenuItem("Window/Http Debugger/Http Exchange Inspector")]
-        public static ExchangeInspectorWindow Open() => Open<ExchangeInspectorWindow>("Exchange Inspector");
-
-        internal static void OpenNew(HDRequest request)
+        public static void Open()
         {
-            var newWindow = CreateInstance<ExchangeInspectorWindow>();
-            newWindow.titleContent = new GUIContent(request.name);
-            newWindow.position = new Rect(newWindow.position) { size = new Vector2(600, 500) };
-            newWindow.Controller.Setup(request);
-            newWindow.ShowModalUtility();
+            var sr = ScriptableRequest.Instance;
+            Selection.activeObject = sr;
         }
+        public static void Select(HDRequest request, bool readOnly = false)
+        {
+            var sr = ScriptableRequest.Instance;
+            Selection.activeObject = sr;
+            sr.request = request;
+            sr.isReadOnly = readOnly;
+        }
+        private ExchangeInspector _inspectorController;
+        private VisualElement _fullWindowRoot;
+        private ScriptableRequest Target => (ScriptableRequest)target;
+        private bool _isReadOnly;
+
+        public override VisualElement CreateInspectorGUI()
+        {
+            var root = GetRoot();
+            InitViewController();
+            return root;
+        }
+
+        private void OnDestroy()
+        {
+            Debug.Log($"Destroyed Editor");
+            // Destroy scriptable object here
+        }
+
+        private void InitViewController()
+        {
+            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
+                "Packages/com.quickeye.http-debugger/Editor/UIAssets/ExchangeInspector.uxml");
+            uxml.CloneTree(_fullWindowRoot);
+            _inspectorController = new ExchangeInspector(_fullWindowRoot);
+            Debug.Log($"readonly {_isReadOnly}");
+            _inspectorController.Setup(serializedObject.FindProperty("request"), _isReadOnly);
+        }
+
+        private VisualElement GetRoot()
+        {
+            var root = new VisualElement();
+            root.name = "======ROOT===";
+            _fullWindowRoot = new VisualElement();
+            StretchVe(_fullWindowRoot);
+
+            root.RegisterCallback<AttachToPanelEvent>(evt =>
+            {
+                var fullParent = evt.destinationPanel.visualTree.Q(null, "unity-inspector-main-container");
+                fullParent.Add(_fullWindowRoot);
+            });
+            root.RegisterCallback<DetachFromPanelEvent>(evt => { _fullWindowRoot.RemoveFromHierarchy(); });
+            return root;
+        }
+
+        private static void StretchVe(VisualElement ve)
+        {
+            ve.style.position = Position.Absolute;
+            ve.style.bottom = ve.style.top = ve.style.left = ve.style.right = 0;
+        }
+
+        public override bool UseDefaultMargins() => false;
+        protected override void OnHeaderGUI() { }
         
-        public static void Open(SerializedProperty property)
+        internal class ScriptableRequest : SingletonScriptableObject<ScriptableRequest>
         {
-            var window = Open();
-
-            window.Controller.Setup(property);
-        }
-
-        internal static void Open(HDRequest request) { }
-
-        private static void Open(int playmodeRequestIndex)
-        {
-            var prop = new SerializedObject(Database.Instance);
-            var requestProp = prop.FindProperty(nameof(Database.playmodeRequests))
-                .GetArrayElementAtIndex(playmodeRequestIndex);
-            Open(requestProp);
-        }
-
-        [SerializeField]
-        private Database _database;
-
-        private ExchangeInspector inspector;
-        internal ExchangeInspector Controller => inspector;
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            minSize = new Vector2(500, 400);
-            _database = Database.Instance;
-            inspector = new ExchangeInspector(rootVisualElement);
-            //inspector.Setup(_database.playmodeRequests);
+            public HDRequest request;
+            public bool isReadOnly;
+            private void OnValidate()
+            {
+                // Save request
+                // in case of stash item, save to disk
+                // playmode, nothing
+            }
         }
     }
 }

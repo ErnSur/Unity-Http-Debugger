@@ -11,14 +11,14 @@ namespace QuickEye.RequestWatcher
 {
     internal partial class RequestStash
     {
-        private VisualElement _root;
         public event Action<SerializedProperty> SelectionChanged;
 
-        private SerializedProperty requestListProp;
-        private SerializedArrayProperty requestListPropList;
+        private readonly VisualElement _root;
+        private SerializedProperty _requestListProp;
+        private SerializedArrayProperty _requestListPropList;
+        private List<SerializedProperty> _searchResult;
 
         private SerializedProperty SelectedReq => stashList.selectedItem as SerializedProperty;
-        private List<SerializedProperty> searchResult;
 
         public RequestStash(VisualElement root)
         {
@@ -26,23 +26,21 @@ namespace QuickEye.RequestWatcher
             AssignQueryResults(root);
             InitList();
             InitSearchField();
-            
         }
 
         public void Setup(SerializedProperty requestListProp)
         {
-            this.requestListProp = requestListProp;
-            requestListPropList = new SerializedArrayProperty(requestListProp);
-            Setup(requestListPropList);
+            _requestListProp = requestListProp;
+            _requestListPropList = new SerializedArrayProperty(requestListProp);
+            Setup(_requestListPropList);
         }
 
         private void Setup(IList propList)
         {
             stashList.itemsSource = propList;
-            _root.Bind(requestListProp.serializedObject);
+            _root.Bind(_requestListProp.serializedObject);
 
             stashList.Rebuild();
-            //RefreshReqView();
         }
 
         private void InitSearchField()
@@ -51,16 +49,16 @@ namespace QuickEye.RequestWatcher
             {
                 if (string.IsNullOrWhiteSpace(evt.newValue))
                 {
-                    Setup(requestListPropList);
+                    Setup(_requestListPropList);
                     return;
                 }
 
-                searchResult = (from prop in requestListPropList
+                _searchResult = (from prop in _requestListPropList
                     let name = prop.FindPropertyRelative(nameof(HDRequest.name)).stringValue
                     where name.ToLower().Contains(evt.newValue.ToLower())
                     select prop).ToList();
 
-                Setup(searchResult);
+                Setup(_searchResult);
             });
         }
 
@@ -76,41 +74,31 @@ namespace QuickEye.RequestWatcher
                 button.BindProperties(typeProp, nameProp);
                 button.Deleted = () =>
                 {
-                    requestListProp.DeleteArrayElementAtIndex(index);
-                    requestListProp.serializedObject.ApplyModifiedProperties();
+                    _requestListProp.DeleteArrayElementAtIndex(index);
+                    _requestListProp.serializedObject.ApplyModifiedProperties();
                     stashList.Rebuild();
-                    RefreshReqView();
+                    //RefreshReqView();
                 };
                 button.Duplicated = () =>
                 {
-                    requestListProp.InsertArrayElementAtIndex(index);
-                    requestListProp.serializedObject.ApplyModifiedProperties();
+                    _requestListProp.InsertArrayElementAtIndex(index);
+                    _requestListProp.serializedObject.ApplyModifiedProperties();
                     stashList.Rebuild();
-                    RefreshReqView();
+                    //RefreshReqView();
                 };
             };
-            stashList.selectionChanged += _ =>
+            stashList.selectionChanged += selection =>
             {
-                Debug.Log($"selection changed");
-                RefreshReqView();
+                SelectionChanged?.Invoke(((SerializedProperty)selection.FirstOrDefault()));
+                //RefreshReqView();
             };
 
             createButton.clicked += () =>
             {
-                requestListProp.InsertArrayElementAtIndex(requestListProp.arraySize);
-                requestListProp.serializedObject.ApplyModifiedProperties();
+                _requestListProp.InsertArrayElementAtIndex(_requestListProp.arraySize);
+                _requestListProp.serializedObject.ApplyModifiedProperties();
                 stashList.Rebuild();
             };
-        }
-
-        public void RefreshReqView()
-        {
-            ExchangeInspectorWindow.Open(SelectedReq);
-        }
-
-        public int GetSelectedIndex()
-        {
-            return SelectedReq != null ? requestListPropList.IndexOf(SelectedReq) : -1;
         }
     }
 }

@@ -4,7 +4,6 @@ namespace QuickEye.RequestWatcher
 {
     public class RequestStashWindow : VisualElementWindow
     {
-        [MenuItem("Window/Http Debugger/Request Stash")]
         public static void Open() => Open<RequestStashWindow>("Request Stash");
 
         private Database _database;
@@ -17,6 +16,7 @@ namespace QuickEye.RequestWatcher
             _database = Database.Instance;
             _requestStash = new RequestStash(rootVisualElement);
             _requestStash.Setup(new SerializedObject(_database).FindProperty(nameof(Database.stash)));
+            _requestStash.SelectionChanged += property => ExchangeInspectorWindow.Select((HDRequest)property.boxedValue);
         }
     }
 }
