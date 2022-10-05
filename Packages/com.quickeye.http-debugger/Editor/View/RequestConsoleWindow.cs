@@ -16,7 +16,7 @@ namespace QuickEye.RequestWatcher
         {
             base.OnEnable();
             
-            _database = Database.Instance;
+            _database = Database.instance;
             requestConsole.Init(rootVisualElement);
             requestConsole.Setup(_database.playmodeRequests);
             requestConsole.ItemsChosen += requests =>

@@ -53,7 +53,7 @@ namespace QuickEye.RequestWatcher
             var json = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new RequestCollection()));
             var data = JsonUtility.FromJson<RequestCollection>(json);
             data.requests.Add(exchange);
-            Database.Instance.playmodeRequests.Add(exchange);
+            Database.instance.playmodeRequests.Add(exchange);
             EditorPrefs.SetString(PlaymodePrefsKey, JsonUtility.ToJson(data));
         }
     }

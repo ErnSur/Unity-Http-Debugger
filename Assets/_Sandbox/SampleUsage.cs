@@ -28,7 +28,7 @@ namespace QuickEye.RequestWatcher.LoggingSample
         {
             SendRequestAsync();
         }
-        
+
         private static async void SendRequestAsync(CancellationToken cancellationToken = default)
         {
             var client = new HttpClient();
@@ -39,7 +39,7 @@ namespace QuickEye.RequestWatcher.LoggingSample
             };
 
             _logIndex = ++_logIndex % 3;
-            using (var response = await client.SendAsync($"Req {_logIndex}",request, cancellationToken))
+            using (var response = await client.SendAsync($"Req {_logIndex}", request, cancellationToken))
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();

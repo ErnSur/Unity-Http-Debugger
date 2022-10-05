@@ -13,7 +13,7 @@ namespace QuickEye.RequestWatcher
         protected override void OnEnable()
         {
             base.OnEnable();
-            _database = Database.Instance;
+            _database = Database.instance;
             _requestStash = new RequestStash(rootVisualElement);
             _requestStash.Setup(new SerializedObject(_database).FindProperty(nameof(Database.stash)));
             _requestStash.SelectionChanged += property => ExchangeInspectorWindow.Select((HDRequest)property.boxedValue);
