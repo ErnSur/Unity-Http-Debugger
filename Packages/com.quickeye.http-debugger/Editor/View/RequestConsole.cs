@@ -10,6 +10,7 @@ namespace QuickEye.RequestWatcher
     [Serializable]
     internal partial class RequestConsole
     {
+        public event Action<IEnumerable<HDRequest>> ItemsChosen; 
         private List<HDRequest> _source;
         private List<HDRequest> _filteredSource = new List<HDRequest>();
 
@@ -46,8 +47,10 @@ namespace QuickEye.RequestWatcher
             InitClearButton();
             InitSearchField();
 
-            requestList.selectionChanged += selection => { ExchangeInspectorWindow.Open(requestList.selectedIndex); };
-
+            requestList.itemsChosen += items =>
+            {
+                ItemsChosen?.Invoke(items.Cast<HDRequest>());
+            };
             HttpClientLoggerEditorWrapper.ExchangeLogged += _ =>
             {
                 var autoScroll = false;

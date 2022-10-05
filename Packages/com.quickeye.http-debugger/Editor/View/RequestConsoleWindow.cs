@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,6 +20,10 @@ namespace QuickEye.RequestWatcher
             _database = Database.Instance;
             _requestConsole.Init(rootVisualElement);
             _requestConsole.Setup(_database.playmodeRequests);
+            _requestConsole.ItemsChosen += requests =>
+            {
+                ScriptableRequest.Select(requests.FirstOrDefault());
+            };
         }
     }
 }

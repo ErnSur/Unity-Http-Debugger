@@ -17,6 +17,13 @@ namespace QuickEye.RequestWatcher
             _responseViewController = new ResponseView(responseViewRoot);
             exchangePane.fixedPaneIndex = 1;
             exchangePane.fixedPaneInitialDimension = 400;
+            exchangePane.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                exchangePane.orientation = evt.newRect.width < 500
+                    ? TwoPaneSplitViewOrientation.Vertical
+                    : TwoPaneSplitViewOrientation.Horizontal;
+            });
+            RefreshReqView();
         }
 
         public void Setup(HDRequest request)

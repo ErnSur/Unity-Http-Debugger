@@ -17,10 +17,17 @@ namespace QuickEye.RequestWatcher
             newWindow.Controller.Setup(request);
             newWindow.ShowModalUtility();
         }
+        
+        public static void Open(SerializedProperty property)
+        {
+            var window = Open();
+
+            window.Controller.Setup(property);
+        }
 
         internal static void Open(HDRequest request) { }
 
-        public static void Open(int playmodeRequestIndex)
+        private static void Open(int playmodeRequestIndex)
         {
             var prop = new SerializedObject(Database.Instance);
             var requestProp = prop.FindProperty(nameof(Database.playmodeRequests))
@@ -37,17 +44,10 @@ namespace QuickEye.RequestWatcher
         protected override void OnEnable()
         {
             base.OnEnable();
+            minSize = new Vector2(500, 400);
             _database = Database.Instance;
             inspector = new ExchangeInspector(rootVisualElement);
             //inspector.Setup(_database.playmodeRequests);
-        }
-
-
-        public static void Open(SerializedProperty property)
-        {
-            var window = Open();
-
-            window.Controller.Setup(property);
         }
     }
 }
