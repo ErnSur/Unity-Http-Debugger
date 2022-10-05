@@ -10,8 +10,6 @@ namespace QuickEye.RequestWatcher
     [InitializeOnLoad]
     public static class HttpClientLoggerEditorWrapper
     {
-        private const string PlaymodePrefsKey = "PostmanPlaymode";
-
         internal static event Action<HDRequest> ExchangeLogged;
 
         static HttpClientLoggerEditorWrapper()
@@ -50,11 +48,7 @@ namespace QuickEye.RequestWatcher
 
         private static void SerializePlaymodeLog(HDRequest exchange)
         {
-            var json = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new RequestCollection()));
-            var data = JsonUtility.FromJson<RequestCollection>(json);
-            data.requests.Add(exchange);
             Database.instance.playmodeRequests.Add(exchange);
-            EditorPrefs.SetString(PlaymodePrefsKey, JsonUtility.ToJson(data));
         }
     }
 }
