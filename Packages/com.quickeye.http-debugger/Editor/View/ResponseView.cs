@@ -18,6 +18,14 @@ namespace QuickEye.RequestWatcher
             headersTab.TabContent = headersView;
             bodyTab.value = true;
         }
+        
+        public void ToggleReadOnlyMode(bool value)
+        {
+            foreach (var textField in _root.Query<TextField>().Build())
+            {
+                textField.isReadOnly = value;
+            }
+        }
 
         public void ToggleLoadingOverlay(bool value)
         {

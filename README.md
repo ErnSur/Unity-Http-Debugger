@@ -16,8 +16,8 @@ Http request logging tool for Unity.
 1. Finish Exchange inspector
   - ~~nothing selected view~~
   - ~~Wrap request into a scriptable object and use inspector window~~
-  - Inspect playmode logs
-    - read only mode: copy data but not overwrite
+  - ~~Inspect playmode logs~~
+    - ~~read only mode: copy data but not overwrite~~
   - inspect stash requests
     - edit and serialize
   - send button working

@@ -22,7 +22,7 @@ namespace QuickEye.RequestWatcher
             _requestConsole.Setup(_database.playmodeRequests);
             _requestConsole.ItemsChosen += requests =>
             {
-                ScriptableRequest.Select(requests.FirstOrDefault());
+                ScriptableRequest.Select(requests.FirstOrDefault(),true);
             };
         }
     }

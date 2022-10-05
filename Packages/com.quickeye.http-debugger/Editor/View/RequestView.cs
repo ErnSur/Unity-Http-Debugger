@@ -12,15 +12,26 @@ namespace QuickEye.RequestWatcher
         public event Action SendButtonClicked;
         public event Action RequestAwaitStarted;
         public event Action<HDResponse> RequestAwaitEnded;
-
+        private readonly VisualElement _root;
         private HDRequest target;
 
         public RequestView(VisualElement root)
         {
+            _root = root;
             AssignQueryResults(root);
             reqSendButton.clicked += OnSendButtonClick;
             reqSendButton.clicked += () => SendButtonClicked?.Invoke();
             InitTabs();
+        }
+
+        public void ToggleReadOnlyMode(bool value)
+        {
+            reqSendButton.ToggleDisplayStyle(!value);
+            reqTypeMenu.SetEnabled(!value);
+            foreach (var textField in _root.Query<TextField>().Build())
+            {
+                textField.isReadOnly = value;
+            }
         }
 
         public void Setup(HDRequest request)

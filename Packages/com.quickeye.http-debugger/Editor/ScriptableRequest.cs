@@ -9,14 +9,17 @@ namespace QuickEye.RequestWatcher
     {
         [MenuItem("Test/Scriptable Request")]
         public static void Select() => Selection.activeObject = Instance;
-        public static void Select(HDRequest request)
+        public static void Select(HDRequest request, bool readOnly = false)
         {
             Selection.activeObject = Instance;
             Instance.request = request;
+            Instance.isReadOnly = readOnly;
         }
 
         [SerializeField]
         private HDRequest request;
+
+        public bool isReadOnly;
 
         private void OnValidate()
         {

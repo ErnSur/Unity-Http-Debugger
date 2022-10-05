@@ -9,6 +9,8 @@ namespace QuickEye.RequestWatcher
     {
         private ExchangeInspector _inspectorController;
         private VisualElement _fullWindowRoot;
+        private ScriptableRequest Target => (ScriptableRequest)target;
+        private bool IsReadOnly => Target.isReadOnly;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -20,10 +22,10 @@ namespace QuickEye.RequestWatcher
         private void InitViewController()
         {
             var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                    "Packages/com.quickeye.http-debugger/Editor/UIAssets/ExchangeInspector.uxml");
+                "Packages/com.quickeye.http-debugger/Editor/UIAssets/ExchangeInspector.uxml");
             uxml.CloneTree(_fullWindowRoot);
             _inspectorController = new ExchangeInspector(_fullWindowRoot);
-            _inspectorController.Setup(serializedObject.FindProperty("request"));
+            _inspectorController.Setup(serializedObject.FindProperty("request"), IsReadOnly);
         }
 
         private VisualElement GetRoot()
@@ -38,10 +40,7 @@ namespace QuickEye.RequestWatcher
                 var fullParent = evt.destinationPanel.visualTree.Q(null, "unity-inspector-main-container");
                 fullParent.Add(_fullWindowRoot);
             });
-            root.RegisterCallback<DetachFromPanelEvent>(evt =>
-            {
-                _fullWindowRoot.RemoveFromHierarchy();
-            });
+            root.RegisterCallback<DetachFromPanelEvent>(evt => { _fullWindowRoot.RemoveFromHierarchy(); });
             return root;
         }
 
