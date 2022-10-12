@@ -9,7 +9,7 @@ namespace QuickEye.RequestWatcher.LoggingSample
     public class SampleUsage : MonoBehaviour
     {
         [SerializeField]
-        private float requestInterval;
+        private float requestInterval=3;
 
         private float _remainingTimeToRequest;
         private static int _logIndex = -1;

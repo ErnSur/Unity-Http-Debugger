@@ -7,7 +7,7 @@ namespace QuickEye.RequestWatcher
     {
         public static void Open() => Open<RequestConsoleWindow>("Request Console");
 
-        private Database _database;
+        private RequestConsoleDatabase _database;
 
         [SerializeField]
         private RequestConsole requestConsole = new RequestConsole();
@@ -16,9 +16,9 @@ namespace QuickEye.RequestWatcher
         {
             base.OnEnable();
             
-            _database = Database.instance;
+            _database = RequestConsoleDatabase.instance;
             requestConsole.Init(rootVisualElement);
-            requestConsole.Setup(_database.playmodeRequests);
+            requestConsole.Setup(_database.requests);
             requestConsole.ItemsChosen += requests =>
             {
                 ExchangeInspectorWindow.Select(requests.FirstOrDefault(),true);

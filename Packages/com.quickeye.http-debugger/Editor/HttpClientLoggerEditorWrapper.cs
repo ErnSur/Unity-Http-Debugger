@@ -48,7 +48,8 @@ namespace QuickEye.RequestWatcher
 
         private static void SerializePlaymodeLog(HDRequest exchange)
         {
-            Database.instance.playmodeRequests.Add(exchange);
+            RequestConsoleDatabase.instance.requests.Add(exchange);
+            RequestConsoleDatabase.instance.Save();
         }
     }
 }

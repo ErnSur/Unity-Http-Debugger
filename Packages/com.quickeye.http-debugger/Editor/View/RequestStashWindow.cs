@@ -6,16 +6,16 @@ namespace QuickEye.RequestWatcher
     {
         public static void Open() => Open<RequestStashWindow>("Request Stash");
 
-        private Database _database;
+        private StashDatabase _stashDatabase;
 
         private RequestStash _requestStash;
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            _database = Database.instance;
+            _stashDatabase = StashDatabase.instance;
             _requestStash = new RequestStash(rootVisualElement);
-            _requestStash.Setup(new SerializedObject(_database).FindProperty(nameof(Database.stash)));
+            _requestStash.Setup(new SerializedObject(_stashDatabase).FindProperty(nameof(StashDatabase.requests)));
             _requestStash.SelectionChanged += property => ExchangeInspectorWindow.Select((HDRequest)property.boxedValue);
         }
     }

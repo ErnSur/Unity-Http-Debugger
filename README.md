@@ -27,8 +27,8 @@ Http request logging tool for Unity.
     - integrate into inspector? 
 
 3. Design UX for
-  - Inspeting playmode requests
-    - Wrap request into a scriptable object and use original inspector
+  - ~~Inspeting playmode requests~~
+    - ~~Wrap request into a scriptable object and use original inspector~~
 
 4. Finish Request Console
   - ~~filter by status and id~~
@@ -36,6 +36,7 @@ Http request logging tool for Unity.
   - ~~Clear button~~
   - ~~Clear on Play option~~
   - Saving playmode requests to stash
+  - Write logs to log file in a readable format, do not serialize HDRequests unless for editor persistant state
 
 5. Design datastore
   - How and where to serialize playmode request logs
