@@ -34,7 +34,7 @@ RequestButtonBig > Button {
 }
 
 .rbb-name {
-    flex-grow: 1;
+    flex-shrink: 1;
 }
 
 RequestButtonBig > Button:hover {
