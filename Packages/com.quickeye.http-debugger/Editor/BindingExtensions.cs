@@ -12,6 +12,8 @@ namespace QuickEye.RequestWatcher
         public static void TrackPropertyChange(this VisualElement ve, SerializedProperty sp,
             Action<SerializedProperty> callback)
         {
+            if (sp == null)
+                return;
             var bindingTarget = new Label();
             bindingTarget.RegisterValueChangedCallback(OnValueChange);
             ve.RegisterCallback<AttachToPanelEvent>(InitValue);

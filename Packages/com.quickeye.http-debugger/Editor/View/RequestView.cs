@@ -34,27 +34,27 @@ namespace QuickEye.RequestWatcher
             }
         }
 
-        public void Setup(HDRequest request)
-        {
-            if (request is null)
-                return;
-            target = request;
-            reqTypeMenu.Init(HttpMethodType.Get);
-            reqTypeMenu.value = request.type;
-            reqUrlField.value = request.url;
-            reqBodyField.Field.value = request.body;
-            headersView.Q<Label>().text = request.headers;
-        }
+        // public void Setup(HDRequest request)
+        // {
+        //     if (request is null)
+        //         return;
+        //     target = request;
+        //     reqTypeMenu.Init(HttpMethodType.Get);
+        //     reqTypeMenu.value = request.type;
+        //     reqUrlField.value = request.url;
+        //     reqBodyField.Field.value = request.body;
+        //     headersView.Q<Label>().text = request.headers;
+        // }
 
-        public void Setup(SerializedProperty requestProperty)
+        public void Setup(SerializedObject serializedObject)
         {
-            if (requestProperty is null)
+            if (serializedObject is null)
                 return;
-            target = (HDRequest)requestProperty.boxedValue;
-            reqTypeMenu.BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.type)));
-            reqUrlField.BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.url)));
-            reqBodyField.Field.BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.body)));
-            headersView.Q<Label>().BindProperty(requestProperty.FindPropertyRelative(nameof(HDRequest.headers)));
+            target = (HDRequest)serializedObject.targetObject;
+            reqTypeMenu.BindProperty(serializedObject.FindProperty(nameof(HDRequest.type)));
+            reqUrlField.BindProperty(serializedObject.FindProperty(nameof(HDRequest.url)));
+            reqBodyField.Field.BindProperty(serializedObject.FindProperty(nameof(HDRequest.body)));
+            headersView.Q<Label>().BindProperty(serializedObject.FindProperty(nameof(HDRequest.headers)));
         }
 
         private void InitTabs()

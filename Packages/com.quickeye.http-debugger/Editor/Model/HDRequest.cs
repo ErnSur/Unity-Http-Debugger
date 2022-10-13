@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Networking;
 
 [assembly: InternalsVisibleTo("Sandbox.Editor")]
@@ -13,26 +14,43 @@ using UnityEngine.Networking;
 namespace QuickEye.RequestWatcher
 {
     [Serializable]
-    internal class HDRequest
+    internal class HDRequest : ScriptableObject, IDisposable
     {
-        private static HttpClient client = new HttpClient();
-        public string name;
+        private static HttpClient _client = new HttpClient();
+
+        private static HideFlags flags;
+        //public string name;
         public string url;
         public HttpMethodType type;
         public string body;
         public string headers;
         public HDResponse lastResponse;
+        public bool isReadOnly;
+
+        private HDRequest() { }
+
+        public static HDRequest Create(string name, string url, HttpMethodType type, string body, string headers)
+        {
+            var i = CreateInstance<HDRequest>();
+            i.hideFlags = HideFlags.DontSaveInEditor;
+            i.name = name;
+            i.url = url;
+            i.type = type;
+            i.body = body;
+            i.headers = headers;
+            return i;
+        }
 
         public async Task<HttpResponseMessage> SendAsync()
         {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var request = new HttpRequestMessage(type.ToHttpMethod(), url);
 
             if (type == HttpMethodType.Post)
                 request.Content = new StringContent(body, Encoding.UTF8, "application/json");
-            var res = await client.SendAsync(request);
+            var res = await _client.SendAsync(request);
             return res;
         }
 
@@ -41,13 +59,7 @@ namespace QuickEye.RequestWatcher
             var url = req.RequestUri.OriginalString;
             var type = HttpMethodTypeUtil.FromHttpMethod(req.Method);
             var headers = HeadersToString(req.Content?.Headers);
-            var e = new HDRequest
-            {
-                name = name,
-                url = url,
-                type = type,
-                headers = headers
-            };
+            var e = Create(name, url, type, null, headers);
             if (req.Content != null)
                 e.body = JsonFormatter.Format(await req.Content.ReadAsStringAsync());
             return e;
@@ -55,7 +67,7 @@ namespace QuickEye.RequestWatcher
 
         public static async Task<HDRequest> FromHttpResponseMessage(string name, HttpResponseMessage res)
         {
-            var hdRequest = await FromHttpRequestMessage(name, res.RequestMessage);
+             var hdRequest = await FromHttpRequestMessage(name, res.RequestMessage);
             hdRequest.lastResponse = new HDResponse((int)res.StatusCode);
             if (res.Content != null)
                 hdRequest.lastResponse.payload = JsonFormatter.Format(await res.Content.ReadAsStringAsync());
@@ -65,12 +77,7 @@ namespace QuickEye.RequestWatcher
 
         public static HDRequest FromUnityRequest(string name, UnityWebRequest req)
         {
-            var hdRequest = new HDRequest
-            {
-                name = name,
-                url = req.url,
-                type = HttpMethodTypeUtil.FromString(req.method),
-            };
+            var hdRequest = Create(name, req.url, HttpMethodTypeUtil.FromString(req.method), null, null);
             var textPayload = Encoding.UTF8.GetString(req.uploadHandler.data);
             hdRequest.body = new JsonFormatter(textPayload).Format();
             //hdRequest.headers = req.GetRequestHeader()
@@ -94,6 +101,11 @@ namespace QuickEye.RequestWatcher
         private static string ArrayToString(IEnumerable<string> enumerable)
         {
             return string.Join("; ", enumerable.ToArray());
+        }
+
+        public void Dispose()
+        {
+            DestroyImmediate(this);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -11,9 +12,9 @@ namespace QuickEye.RequestWatcher
     [Serializable]
     internal partial class RequestConsole
     {
-        public event Action<IEnumerable<HDRequest>> ItemsChosen; 
-        private List<HDRequest> _source;
-        private List<HDRequest> _filteredSource = new List<HDRequest>();
+        public event Action<IEnumerable<HDRequest>> ItemsChosen;
+        private RequestList _source;
+        private RequestList _filteredSource = new RequestList();
 
         [SerializeField]
         private bool clearOnPlay;
@@ -21,7 +22,7 @@ namespace QuickEye.RequestWatcher
         [SerializeField]
         private string _searchText;
 
-        private List<HDRequest> Source => string.IsNullOrWhiteSpace(_searchText) ? _source : _filteredSource;
+        private RequestList Source => string.IsNullOrWhiteSpace(_searchText) ? _source : _filteredSource;
 
 
         public RequestConsole()
@@ -53,10 +54,7 @@ namespace QuickEye.RequestWatcher
             InitClearButton();
             InitSearchField();
 
-            requestList.itemsChosen += items =>
-            {
-                ItemsChosen?.Invoke(items.Cast<HDRequest>());
-            };
+            requestList.itemsChosen += items => { ItemsChosen?.Invoke(items.Cast<HDRequest>()); };
             HttpClientLoggerEditorWrapper.ExchangeLogged += _ =>
             {
                 var autoScroll = false;
@@ -72,7 +70,8 @@ namespace QuickEye.RequestWatcher
 
         private void InitSearchField()
         {
-            searchField.tooltip = "Search filters:\n\"res:\" by status code\n\"met:\" by method\n\"id:\" by id\n\"url:\" by url";
+            searchField.tooltip =
+                "Search filters:\n\"res:\" by status code\n\"met:\" by method\n\"id:\" by id\n\"url:\" by url";
             searchField.value = _searchText;
             searchField.RegisterValueChangedCallback(evt =>
             {
@@ -90,7 +89,7 @@ namespace QuickEye.RequestWatcher
                 return;
             }
 
-            _filteredSource = FilterInterpreter.Filter(_source,_searchText).ToList();
+            _filteredSource = new RequestList(FilterInterpreter.Filter(_source, _searchText));
         }
 
         private void FilterAndRefresh()
@@ -133,7 +132,7 @@ namespace QuickEye.RequestWatcher
             urlCol.bindCell = (element, i) => ((UrlCell)element).Setup(Source[i].url);
         }
 
-        public void Setup(List<HDRequest> itemSource)
+        public void Setup(RequestList itemSource)
         {
             _source = itemSource;
             FilterAndRefresh();

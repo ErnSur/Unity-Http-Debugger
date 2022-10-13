@@ -6,7 +6,7 @@ namespace QuickEye.RequestWatcher
 {
     internal partial class ExchangeInspector
     {
-        private (HDRequest obj, SerializedProperty prop) target;
+        private SerializedObject _target;
         private readonly RequestView _requestViewController;
         private readonly ResponseView _responseViewController;
         private VisualElement _root;
@@ -27,17 +27,11 @@ namespace QuickEye.RequestWatcher
             });
             RefreshReqView();
         }
-
-        public void Setup(HDRequest request)
+        
+        public void Setup(SerializedObject serializedObject)
         {
-            target = (request, null);
-            RefreshReqView();
-        }
-
-        public void Setup(SerializedProperty requestProperty, bool readOnly = false)
-        {
-            ToggleReadOnlyMode(readOnly);
-            target = (null, requestProperty);
+            ToggleReadOnlyMode(serializedObject.FindProperty(nameof(HDRequest.isReadOnly)).boolValue);
+            _target = serializedObject;
             RefreshReqView();
         }
 
@@ -50,18 +44,18 @@ namespace QuickEye.RequestWatcher
         private void RefreshReqView()
         {
             UpdateSelectedView();
-            if (target == (null, null))
+            if (_target ==  null)
                 return;
-            _requestViewController.Setup(target.obj);
-            _requestViewController.Setup(target.prop);
-            _responseViewController.Setup(target.prop?.FindPropertyRelative(nameof(HDRequest.lastResponse)));
+            _requestViewController.Setup(_target);
+            _responseViewController.Setup(_target.FindProperty(nameof(HDRequest.lastResponse)));
         }
 
         private void UpdateSelectedView()
         {
-            var hasSelection = target != (null, null);
+            var hasSelection = _target != null;
             noSelectView.ToggleDisplayStyle(!hasSelection);
             exchangePane.ToggleDisplayStyle(hasSelection);
         }
+
     }
 }

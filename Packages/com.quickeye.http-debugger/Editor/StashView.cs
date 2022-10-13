@@ -108,7 +108,7 @@ namespace QuickEye.RequestWatcher
 
         public void RefreshReqView()
         {
-            exchangeView.Setup(SelectedReq);
+            exchangeView.Setup(new SerializedObject(SelectedReq.objectReferenceValue));
         }
         private class UxmlFactory : UxmlFactory<StashView>{}
 
