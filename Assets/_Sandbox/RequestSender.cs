@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace QuickEye.RequestWatcher.LoggingSample
 {
-    public class SampleUsage : MonoBehaviour
+    public class RequestSender : MonoBehaviour
     {
         [SerializeField]
         private float requestInterval=3;

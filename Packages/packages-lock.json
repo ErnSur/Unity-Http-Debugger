@@ -11,7 +11,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ed4d7866846c9e9ea0f521e2cc283bfdb2b9e56f"
+      "hash": "d102d6ee1176b5984a956999da0d7a8b7e225d1c"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
@@ -73,7 +73,7 @@
       }
     },
     "com.unity.test-framework": {
-      "version": "1.1.31",
+      "version": "1.1.33",
       "depth": 0,
       "source": "registry",
       "dependencies": {
