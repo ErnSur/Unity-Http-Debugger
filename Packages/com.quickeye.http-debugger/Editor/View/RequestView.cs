@@ -59,24 +59,17 @@ namespace QuickEye.RequestWatcher
 
         private void InitTabs()
         {
-            var tabs = new[]
-            {
-                bodyTab,
-                authTab,
-                headersTab
-            };
-
             bodyTab.TabContent = reqBodyField;
             headersTab.TabContent = headersView;
             authTab.BeforeMenuShow += menu =>
             {
-                menu.AddItem(new GUIContent("Basic Auth"), false, null);
-                menu.AddItem(new GUIContent("Digest Auth"), false, null);
-                menu.AddItem(new GUIContent("OAuth 1.0"), false, null);
-                menu.AddItem(new GUIContent("OAuth 2.0"), false, null);
-                menu.AddItem(new GUIContent("Bearer Token"), false, null);
+                menu.AddItem("Basic Auth", false, null);
+                menu.AddItem("Digest Auth", false, null);
+                menu.AddItem("OAuth 1.0", false, null);
+                menu.AddItem("OAuth 2.0", false, null);
+                menu.AddItem("Bearer Token", false, null);
                 menu.AddSeparator("");
-                menu.AddItem(new GUIContent("No Authentication"), true, null);
+                menu.AddItem("No Authentication", true, null);
             };
 
             bodyTab.value = true;

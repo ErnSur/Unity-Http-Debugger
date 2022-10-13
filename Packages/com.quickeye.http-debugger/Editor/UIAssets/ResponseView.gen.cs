@@ -10,9 +10,9 @@ namespace QuickEye.RequestWatcher
     partial class ResponseView
     {
         private Label resStatusLabel;
-        private QuickEye.RequestWatcher.Tab bodyTab;
-        private QuickEye.RequestWatcher.Tab headersTab;
-        private QuickEye.RequestWatcher.Tab cookieTab;
+        private QuickEye.UIToolkit.Tab bodyTab;
+        private QuickEye.UIToolkit.Tab headersTab;
+        private QuickEye.UIToolkit.Tab cookieTab;
         private QuickEye.RequestWatcher.CodeField resBodyField;
         private VisualElement headersView;
         private Label loadingOverlay;
@@ -20,9 +20,9 @@ namespace QuickEye.RequestWatcher
         protected void AssignQueryResults(VisualElement root)
         {
             resStatusLabel = root.Q<Label>("res-status-label");
-            bodyTab = root.Q<QuickEye.RequestWatcher.Tab>("body-tab");
-            headersTab = root.Q<QuickEye.RequestWatcher.Tab>("headers-tab");
-            cookieTab = root.Q<QuickEye.RequestWatcher.Tab>("cookie-tab");
+            bodyTab = root.Q<QuickEye.UIToolkit.Tab>("body-tab");
+            headersTab = root.Q<QuickEye.UIToolkit.Tab>("headers-tab");
+            cookieTab = root.Q<QuickEye.UIToolkit.Tab>("cookie-tab");
             resBodyField = root.Q<QuickEye.RequestWatcher.CodeField>("res-body-field");
             headersView = root.Q<VisualElement>("headers-view");
             loadingOverlay = root.Q<Label>("loading-overlay");

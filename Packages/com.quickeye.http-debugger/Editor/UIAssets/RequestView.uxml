@@ -5,13 +5,13 @@
         <ui:TextField picking-mode="Ignore" name="req-url-field" style="flex-shrink: 1; flex-grow: 1;" />
         <uie:ToolbarButton text="Send" name="req-send-button" class="header-toolbar--button" style="-unity-text-align: middle-center; max-width: 60px; min-width: 47px;" />
     </uie:Toolbar>
-    <QuickEye.RequestWatcher.TabGroup style="flex-direction: row;">
-        <QuickEye.RequestWatcher.Tab name="body-tab" text="Body" />
-        <QuickEye.RequestWatcher.TabDropdown text="Auth" name="auth-tab">
+    <QuickEye.UIToolkit.TabGroup style="flex-direction: row;">
+        <QuickEye.UIToolkit.Tab name="body-tab" text="Body" />
+        <QuickEye.UIToolkit.TabDropdown text="Auth" name="auth-tab">
             <ui:Label />
-        </QuickEye.RequestWatcher.TabDropdown>
-        <QuickEye.RequestWatcher.Tab name="headers-tab" text="Headers" />
-    </QuickEye.RequestWatcher.TabGroup>
+        </QuickEye.UIToolkit.TabDropdown>
+        <QuickEye.UIToolkit.Tab name="headers-tab" text="Headers" />
+    </QuickEye.UIToolkit.TabGroup>
     <QuickEye.RequestWatcher.CodeField multiline="true" name="req-body-field" />
     <ui:VisualElement name="headers-view" style="flex-grow: 1;">
         <ui:Label text="Label" />

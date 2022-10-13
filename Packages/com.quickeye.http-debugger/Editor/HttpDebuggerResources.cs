@@ -34,8 +34,6 @@ namespace QuickEye.RequestWatcher
         private static bool TryLoadStyle<T>(out StyleSheet styleSheet) where T : VisualElement
         {
             styleSheet = LoadAsset<StyleSheet>($"{BaseDir}{typeof(T).Name}");
-            if (typeof(T) == typeof(Tab) && styleSheet == null)
-                Debug.Log($"TryLoad Style: {typeof(T).Name} / is null = {styleSheet == null}");
             return styleSheet != null;
         }
 

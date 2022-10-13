@@ -12,9 +12,9 @@ namespace QuickEye.RequestWatcher
         private EnumField reqTypeMenu;
         private TextField reqUrlField;
         private UnityEditor.UIElements.ToolbarButton reqSendButton;
-        private QuickEye.RequestWatcher.Tab bodyTab;
-        private QuickEye.RequestWatcher.TabDropdown authTab;
-        private QuickEye.RequestWatcher.Tab headersTab;
+        private QuickEye.UIToolkit.Tab bodyTab;
+        private QuickEye.UIToolkit.TabDropdown authTab;
+        private QuickEye.UIToolkit.Tab headersTab;
         private QuickEye.RequestWatcher.CodeField reqBodyField;
         private VisualElement headersView;
     
@@ -23,9 +23,9 @@ namespace QuickEye.RequestWatcher
             reqTypeMenu = root.Q<EnumField>("req-type-menu");
             reqUrlField = root.Q<TextField>("req-url-field");
             reqSendButton = root.Q<UnityEditor.UIElements.ToolbarButton>("req-send-button");
-            bodyTab = root.Q<QuickEye.RequestWatcher.Tab>("body-tab");
-            authTab = root.Q<QuickEye.RequestWatcher.TabDropdown>("auth-tab");
-            headersTab = root.Q<QuickEye.RequestWatcher.Tab>("headers-tab");
+            bodyTab = root.Q<QuickEye.UIToolkit.Tab>("body-tab");
+            authTab = root.Q<QuickEye.UIToolkit.TabDropdown>("auth-tab");
+            headersTab = root.Q<QuickEye.UIToolkit.Tab>("headers-tab");
             reqBodyField = root.Q<QuickEye.RequestWatcher.CodeField>("req-body-field");
             headersView = root.Q<VisualElement>("headers-view");
         }
