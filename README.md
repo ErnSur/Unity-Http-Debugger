@@ -2,6 +2,7 @@
 ![](Documentation~/EditorWindow.jpg)
 HTTP request logging tool for Unity. 
 
+> Supported in Unity 2022+ (may be backported at the later stages of the project)
 ## Features
 
 ### Runtime Extensions
@@ -22,29 +23,29 @@ HTTP request logging tool for Unity.
 > Open from context menu: _Http Debugger/Stash_
 - Go back to your saved requests to run and or edit them
  
-# TODO
+## TODO
 
-## Priorities
+### Priorities
 - Add/polish features that can't be replaced with external apps like Postman
   - request logging
   - breakpoints
   - fast request/response edit/inspect
 
-## Features
+### Features
 > listed in priority order
 
-### Request Console
+#### Request Console
 - Write logs to file in a readable format, do not serialize HDRequests unless for editor persistent state
 - request breakpoints (edit request before it is sent)
 - Add stack trace
   - Double-click to open script
 - Categories- Add req IDs to categories and filter logs by them
 
-### Misc
+#### Misc
 - Mock responses
     - Window where you can toggle a mock response for requests with specific IDs
 
-### Exchange inspector
+#### Exchange inspector
 - Add Header with request ID and time?
 - "Format" Button for body
 - Support more than JSON body
@@ -60,12 +61,12 @@ HTTP request logging tool for Unity.
   - XML Response formatter
 - If the request URL doesn't start with HTTPS or HTTP try to add it (very low priority)
 
-### Stash View
+#### Stash View
 > nothing right now.
 > Stash view is less important right now as Postman does it 100 times better
 > It is better to focus on features unique to this tool
 
-### All-in-One window
+#### All-in-One window
 - create an editor window that contains all views like it was at the beginning of the project
 
 ## Open Problems
