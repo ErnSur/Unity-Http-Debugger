@@ -32,10 +32,34 @@ namespace QuickEye.RequestWatcher
 
         public void Setup(RequestList requestList)
         {
+            UnregisterListEvents(_requestList);
             _requestList = requestList;
+            RegisterListEvents(_requestList);
+
             SetupList(requestList);
         }
 
+        private void RegisterListEvents(RequestList requestList)
+        {
+            requestList.Added += OnRequestListModification;
+            requestList.Removed += OnRequestListModification;
+            requestList.AfterClear += stashList.Rebuild;
+        }
+
+        private void UnregisterListEvents(RequestList requestList)
+        {
+            if (requestList == null)
+                return;
+            requestList.Added -= OnRequestListModification;
+            requestList.Removed -= OnRequestListModification;
+            requestList.AfterClear -= stashList.Rebuild;
+        }
+
+        private void OnRequestListModification(HDRequest obj)
+        {
+            stashList.Rebuild();
+        }
+        
         private void SetupList(IList propList)
         {
             stashList.itemsSource = propList;
@@ -92,7 +116,7 @@ namespace QuickEye.RequestWatcher
 
             createButton.clicked += () =>
             {
-                _requestList.Add(HDRequest.Create("New Request",null,HttpMethodType.Get,"{ }",null));
+                _requestList.Add(HDRequest.Create("New Request", null, HttpMethodType.Get, "{ }", null));
                 stashList.Rebuild();
             };
         }

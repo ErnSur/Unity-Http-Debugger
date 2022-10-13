@@ -36,7 +36,7 @@ Http request logging tool for Unity.
   - ~~search functionality~~
   - ~~Clear button~~
   - ~~Clear on Play option~~
-  - Saving playmode requests to stash
+  - ~~Saving playmode requests to stash~~
   - Write logs to log file in a readable format, do not serialize HDRequests unless for editor persistant state
 
 5. Design datastore

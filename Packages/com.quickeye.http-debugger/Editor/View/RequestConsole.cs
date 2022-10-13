@@ -120,17 +120,42 @@ namespace QuickEye.RequestWatcher
         {
             resultCol.makeCell = () => new StatusCodeCell();
             resultCol.bindCell = (element, i) =>
+            {
                 ((StatusCodeCell)element).Setup(Source[i].lastResponse?.statusCode ?? 0);
+                AddContextMenu(element, i);
+            };
 
             methodCol.makeCell = () => new MethodCell();
-            methodCol.bindCell = (element, i) => ((MethodCell)element).Setup(Source[i].type.ToString());
+            methodCol.bindCell = (element, i) =>
+            {
+                ((MethodCell)element).Setup(Source[i].type.ToString());
+                AddContextMenu(element, i);
+            };
 
             idCol.makeCell = () => new IdCell();
-            idCol.bindCell = (element, i) => ((IdCell)element).Setup(Source[i].id);
+            idCol.bindCell = (element, i) =>
+            {
+                ((IdCell)element).Setup(Source[i].id);
+                AddContextMenu(element, i);
+            };
 
             urlCol.makeCell = () => new UrlCell();
-            urlCol.bindCell = (element, i) => ((UrlCell)element).Setup(Source[i].url);
+            urlCol.bindCell = (element, i) =>
+            {
+                ((UrlCell)element).Setup(Source[i].url);
+                AddContextMenu(element, i);
+            };
         }
+
+        private void AddContextMenu(VisualElement element, int i)
+        {
+            element.AddManipulator(new ContextualMenuManipulator(evt =>
+            {
+                evt.menu.AppendAction("Save To Stash",
+                    _ => { StashDatabase.instance.requests.Add(HDRequest.Create(Source[i])); });
+            }));
+        }
+
 
         public void Setup(RequestList itemSource)
         {

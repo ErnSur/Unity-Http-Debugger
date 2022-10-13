@@ -15,6 +15,7 @@ namespace QuickEye.RequestWatcher
         public event Action<HDRequest> Added;
         public event Action<HDRequest> Removed;
         public event Action BeforeClear;
+        public event Action AfterClear;
 
         [SerializeField]
         private List<HDRequest> requests;
@@ -52,6 +53,7 @@ namespace QuickEye.RequestWatcher
         {
             BeforeClear?.Invoke();
             requests.Clear();
+            AfterClear?.Invoke();
         }
 
         public void CopyTo(HDRequest[] array, int arrayIndex)

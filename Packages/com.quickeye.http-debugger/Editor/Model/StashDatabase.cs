@@ -11,7 +11,7 @@ namespace QuickEye.RequestWatcher
     internal class StashDatabase : ScriptableSingleton<StashDatabase>
     {
         private const string FilePath = "Library/RequestStash.asset";
-        public RequestList requests = new ();
+        public RequestList requests = new();
 
         private void OnEnable()
         {
@@ -31,7 +31,7 @@ namespace QuickEye.RequestWatcher
         {
             Save();
         }
-        
+
         private void OnRequestsOnRemoved(HDRequest request)
         {
             Save();
@@ -44,6 +44,7 @@ namespace QuickEye.RequestWatcher
             {
                 request.Dispose();
             }
+
             Save();
         }
 
@@ -51,7 +52,7 @@ namespace QuickEye.RequestWatcher
         private void Save()
         {
             Save(true);
-            var assetObjects = requests.Cast<Object>().ToList();
+            var assetObjects = requests.Cast<Object>().Where(o => o != null).ToList();
             assetObjects.Insert(0, this);
             InternalEditorUtility.SaveToSerializedFileAndForget(assetObjects.ToArray(), FilePath, true);
         }
