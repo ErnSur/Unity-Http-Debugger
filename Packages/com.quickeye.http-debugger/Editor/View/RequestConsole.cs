@@ -20,9 +20,9 @@ namespace QuickEye.RequestWatcher
         private bool clearOnPlay;
 
         [SerializeField]
-        private string _searchText;
+        private string searchText;
 
-        private RequestList Source => string.IsNullOrWhiteSpace(_searchText) ? _source : _filteredSource;
+        private RequestList Source => string.IsNullOrWhiteSpace(searchText) ? _source : _filteredSource;
 
 
         public RequestConsole()
@@ -72,29 +72,29 @@ namespace QuickEye.RequestWatcher
         {
             searchField.tooltip =
                 "Search filters:\n\"res:\" by status code\n\"met:\" by method\n\"id:\" by id\n\"url:\" by url";
-            searchField.value = _searchText;
+            searchField.value = searchText;
             searchField.RegisterValueChangedCallback(evt =>
             {
-                _searchText = evt.newValue;
+                searchText = evt.newValue;
                 FilterAndRefresh();
             });
         }
 
         private void FilterSource(string searchText)
         {
-            _searchText = searchText;
+            this.searchText = searchText;
             if (string.IsNullOrWhiteSpace(searchText))
             {
                 _filteredSource.Clear();
                 return;
             }
 
-            _filteredSource = new RequestList(FilterInterpreter.Filter(_source, _searchText));
+            _filteredSource = new RequestList(FilterInterpreter.Filter(_source, this.searchText));
         }
 
         private void FilterAndRefresh()
         {
-            FilterSource(_searchText);
+            FilterSource(searchText);
             requestList.itemsSource = Source;
             requestList.Rebuild();
         }
