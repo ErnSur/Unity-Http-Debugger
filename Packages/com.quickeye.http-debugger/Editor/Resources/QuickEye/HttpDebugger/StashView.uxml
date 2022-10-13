@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:Template name="RequestStash" src="project://database/Packages/com.quickeye.http-debugger/Editor/UIAssets/RequestStash.uxml?fileID=9197481963319205126&amp;guid=93584e9566f8c4eb8b2ca59269b26c6a&amp;type=3#RequestStash" />
-    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/StashView.uss?fileID=7433441132597879392&amp;guid=cf99f679e048a422dabf42c15e8150b1&amp;type=3#StashView" />
-    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
-    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
-        <ui:Instance template="RequestStash" name="RequestStash" />
-    </ui:VisualElement>
-</ui:UXML>

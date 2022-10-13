@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <QuickEye.RequestWatcher.TabGroup>
-        <QuickEye.RequestWatcher.Tab />
-    </QuickEye.RequestWatcher.TabGroup>
-</ui:UXML>
