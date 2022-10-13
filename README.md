@@ -1,88 +1,76 @@
 # Unity HTTP Debugger
 ![](Documentation~/EditorWindow.jpg)
-Http request logging tool for Unity. 
+HTTP request logging tool for Unity. 
 
-- Send http requests from Editor Window
-  - Save requests and responses
-- Log http requests
+## Features
+
+### Runtime Extensions
+- Extension methods to Log web requests
+- Logged requests are visible in the *Request Console Window*
+
+### Request Console
+> Open from context menu: _Http Debugger/Console_
+- Log, filter, search, and preview web requests from your game/app
+- Save chosen requests and responses to *Request Stash*
+
+### Request Inspector
+> Open selecting request in Console or Stash windows
+- Preview and edit your request/response
+- Send requests and save responses 
+
+### Request Stash
+> Open from context menu: _Http Debugger/Stash_
+- Go back to your saved requests to run and or edit them
  
 # TODO
-## Priorites
-- Add/polish features that can't be replacet with extarnal apps like postamn
+
+## Priorities
+- Add/polish features that can't be replaced with external apps like Postman
   - request logging
   - breakpoints
   - fast request/response edit/inspect
-## Refactor
-1. Finish Exchange inspector
-  - ~~nothing selected view~~
-  - ~~Wrap request into a scriptable object and use inspector window~~
-  - ~~Inspect playmode logs~~
-    - ~~read only mode: copy data but not overwrite~~
-  - ~~inspect stash requests~~
-    - ~~edit and serialize~~
-  - ~~send button working~~
-  - Add Header with request ID and time?
-
-2. Stash View
-  - Design
-    - integrate into inspector?
-
-3. Design UX for
-  - ~~Inspeting playmode requests~~
-    - ~~Wrap request into a scriptable object and use original inspector~~
-
-4. Finish Request Console
-  - ~~filter by status and id~~
-  - ~~search functionality~~
-  - ~~Clear button~~
-  - ~~Clear on Play option~~
-  - ~~Saving playmode requests to stash~~
-  - Write logs to log file in a readable format, do not serialize HDRequests unless for editor persistant state
-
-5. Design datastore
-  - ~~How and where to serialize playmode request logs~~
-  - ~~how to access them~~
-
-5. Fix the All-in-one window
-
-## Open Problems
-- I can't extract request headers from `UnityWebRequest` object
-  - Decorator/wrapper class for `UnityWebRequest`?
 
 ## Features
-- Editor
-    - Serialize data outside EditorPrefs, so that two different project dont share the same data
+> listed in priority order
+
+### Request Console
+- Write logs to file in a readable format, do not serialize HDRequests unless for editor persistent state
+- request breakpoints (edit request before it is sent)
+- Add stack trace
+  - Double-click to open script
+- Categories- Add req IDs to categories and filter logs by them
+
+### Misc
+- Mock responses
+    - Window where you can toggle a mock response for requests with specific IDs
+
+### Exchange inspector
+- Add Header with request ID and time?
+- "Format" Button for body
+- Support more than JSON body
+- CodeField
+  - Better scroll view
 
 - Request View
-    - Edit Headers
-    - Edit Authentication
-    - "Format" Button for json body
-    - Support different body types
+  - Edit Headers
+  - Edit Authentication
 
 - Response View
-    - Raw/Formatted payload toggle
-    - XML Response formatter
+  - Raw/Formatted payload toggle
+  - XML Response formatter
+- If the request URL doesn't start with HTTPS or HTTP try to add it (very low priority)
 
-- Request Console
-    - request breakpoints (edit request before it is sent)
-    - Add "Clear on Play" toggle
-    - Autoscroll down
-    - Add stacktrace
-        - Double-click to open script
-        - Add breakpoints?
-    - Add filters
-        - Ability to toggle log visibility by ID
-        - Categories- Add req IDs to categories and filter logs by them
-    - ~~Change list view to Tree view with columns for name, url, response, method, time~~
-    - ~~Right click request to "Save to stash"~~     
+### Stash View
+> nothing right now.
+> Stash view is less important right now as Postman does it 100 times better
+> It is better to focus on features unique to this tool
 
-- Mock responses
-    - Window where you can toggle a mock response for requests with a specific IDs
+### All-in-One window
+- create an editor window that contains all views like it was at the beginning of the project
 
-- QoL
-    - If reqest url doesn't start with https or http try to add it
-    - ~~Fix performance issue when Playmode has bigger dataset~~
-    - ~~Remove UITK Aid dependency~~
+## Open Problems
+- I can't extract request headers from the `UnityWebRequest` object
+  - Decorator/wrapper class for `UnityWebRequest`?
 
 ## References
 - [Insomnia](https://github.com/Kong/insomnia)
