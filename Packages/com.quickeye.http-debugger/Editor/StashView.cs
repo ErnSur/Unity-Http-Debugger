@@ -78,7 +78,7 @@ namespace QuickEye.RequestWatcher
             {
                 var reqProp = (SerializedProperty)stashList.itemsSource[index];
                 var typeProp = reqProp.FindPropertyRelative(nameof(HDRequest.type));
-                var nameProp = reqProp.FindPropertyRelative(nameof(HDRequest.name));
+                var nameProp = reqProp.FindPropertyRelative(nameof(HDRequest.id));
                 var button = ve.As<RequestButtonBig>();
                 button.BindProperties(typeProp, nameProp);
                 button.Deleted = () =>

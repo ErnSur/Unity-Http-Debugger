@@ -86,7 +86,7 @@ namespace QuickEye.RequestWatcher
 
         private static bool FilterByName(HDRequest request, string name)
         {
-            return request.name.ToLower().Contains(name.ToLower());
+            return request.id.ToLower().Contains(name.ToLower());
         }
         
         private static List<TokenMatch> GetTokenMatches(string query)

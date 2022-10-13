@@ -41,6 +41,7 @@ namespace QuickEye.RequestWatcher
                 request.Dispose();
             }
 
+            Save();
             Debug.Log($"Cleared");
         }
 

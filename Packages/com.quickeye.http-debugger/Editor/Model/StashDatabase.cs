@@ -11,15 +11,55 @@ namespace QuickEye.RequestWatcher
     internal class StashDatabase : ScriptableSingleton<StashDatabase>
     {
         private const string FilePath = "Library/RequestStash.asset";
-        public List<HDRequest> requests;
+        public RequestList requests = new ();
+
+        private void OnEnable()
+        {
+            requests.Added += OnRequestsOnAdded;
+            requests.Removed += OnRequestsOnRemoved;
+            requests.BeforeClear += OnRequestsOnBeforeClear;
+        }
+
+        private void OnDisable()
+        {
+            requests.Added -= OnRequestsOnAdded;
+            requests.Removed -= OnRequestsOnRemoved;
+            requests.BeforeClear -= OnRequestsOnBeforeClear;
+        }
+
+        void OnRequestsOnAdded(HDRequest request)
+        {
+            Save();
+        }
+        
+        private void OnRequestsOnRemoved(HDRequest request)
+        {
+            Save();
+            request.Dispose();
+        }
+
+        private void OnRequestsOnBeforeClear()
+        {
+            foreach (var request in requests)
+            {
+                request.Dispose();
+            }
+            Save();
+        }
 
         [ContextMenu("Save")]
-        public void Save()
+        private void Save()
         {
             Save(true);
-            var assetObjects =requests.Cast<Object>().ToList();
-            assetObjects.Insert(0,this);
+            var assetObjects = requests.Cast<Object>().ToList();
+            assetObjects.Insert(0, this);
             InternalEditorUtility.SaveToSerializedFileAndForget(assetObjects.ToArray(), FilePath, true);
-        } 
+        }
+
+        [ContextMenu("Clear")]
+        public void Clear()
+        {
+            requests.Clear();
+        }
     }
 }

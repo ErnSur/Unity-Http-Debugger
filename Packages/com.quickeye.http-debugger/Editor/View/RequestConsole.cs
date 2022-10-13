@@ -126,7 +126,7 @@ namespace QuickEye.RequestWatcher
             methodCol.bindCell = (element, i) => ((MethodCell)element).Setup(Source[i].type.ToString());
 
             idCol.makeCell = () => new IdCell();
-            idCol.bindCell = (element, i) => ((IdCell)element).Setup(Source[i].name);
+            idCol.bindCell = (element, i) => ((IdCell)element).Setup(Source[i].id);
 
             urlCol.makeCell = () => new UrlCell();
             urlCol.bindCell = (element, i) => ((UrlCell)element).Setup(Source[i].url);

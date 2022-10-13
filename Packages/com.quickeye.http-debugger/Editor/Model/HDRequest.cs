@@ -17,9 +17,7 @@ namespace QuickEye.RequestWatcher
     internal class HDRequest : ScriptableObject, IDisposable
     {
         private static HttpClient _client = new HttpClient();
-
-        private static HideFlags flags;
-        //public string name;
+        public string id;
         public string url;
         public HttpMethodType type;
         public string body;
@@ -29,16 +27,20 @@ namespace QuickEye.RequestWatcher
 
         private HDRequest() { }
 
-        public static HDRequest Create(string name, string url, HttpMethodType type, string body, string headers)
+        public static HDRequest Create(string id, string url, HttpMethodType type, string body, string headers)
         {
             var i = CreateInstance<HDRequest>();
             i.hideFlags = HideFlags.DontSaveInEditor;
-            i.name = name;
+            i.name = i.id = id;
             i.url = url;
             i.type = type;
             i.body = body;
             i.headers = headers;
             return i;
+        }
+        public static HDRequest Create(HDRequest request)
+        {
+            return Instantiate(request);
         }
 
         public async Task<HttpResponseMessage> SendAsync()
@@ -106,6 +108,11 @@ namespace QuickEye.RequestWatcher
         public void Dispose()
         {
             DestroyImmediate(this);
+        }
+
+        private void OnValidate()
+        {
+            name = id;
         }
     }
 }

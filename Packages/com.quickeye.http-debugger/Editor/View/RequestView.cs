@@ -88,9 +88,10 @@ namespace QuickEye.RequestWatcher
             try
             {
                 using var res = await target.SendAsync();
-                var newReq = await HDRequest.FromHttpResponseMessage(target.name, res);
-                Debug.Log($"$MES$: {newReq.lastResponse.statusCode}");
-                RequestAwaitEnded?.Invoke(newReq.lastResponse);
+                using var tempReq = await HDRequest.FromHttpResponseMessage(target.id, res);
+                target.lastResponse = tempReq.lastResponse;
+                Debug.Log($"{target.lastResponse.statusCode}");
+                RequestAwaitEnded?.Invoke(target.lastResponse);
             }
             catch (Exception e)
             {

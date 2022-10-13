@@ -8,6 +8,10 @@ namespace QuickEye.RequestWatcher
     [Serializable]
     internal class RequestList : IList<HDRequest>, IList
     {
+        // TODO: To avoid disposing request on add/remove
+        // before unreferencing any request add it to "Unused" set
+        // and remove form it if you are assigning it again
+        // add DisposeUnunsed method
         public event Action<HDRequest> Added;
         public event Action<HDRequest> Removed;
         public event Action BeforeClear;
