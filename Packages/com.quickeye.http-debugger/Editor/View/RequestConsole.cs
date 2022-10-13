@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,6 +27,11 @@ namespace QuickEye.RequestWatcher
         public RequestConsole()
         {
             EditorApplication.playModeStateChanged += PlayModeChanged;
+        }
+
+        private void OpenRequestScript()
+        {
+            InternalEditorUtility.OpenFileAtLineExternal("path", 1);
         }
 
         private void PlayModeChanged(PlayModeStateChange newState)

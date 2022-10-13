@@ -1,31 +1,63 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = System.Object;
 
 namespace QuickEye.RequestWatcher
 {
-    // TODO: support selection of multiple request at one time with locked inspectors
-    // create new Scriptable object for each request and destroy it in editor OnDestroy/onselection change
     [CustomEditor(typeof(ScriptableRequest))]
     internal class ExchangeInspectorWindow : Editor
     {
-        public static void Open()
-        {
-            var sr = ScriptableRequest.Instance;
-            Selection.activeObject = sr;
-        }
+        private static Dictionary<HDRequest, ScriptableRequest> _scriptableRequests;
+        private static readonly Dictionary<ScriptableRequest, int> _UsedTargets = new();
+
         public static void Select(HDRequest request, bool readOnly = false)
         {
-            var sr = ScriptableRequest.Instance;
-            Selection.activeObject = sr;
-            sr.request = request;
+            InitRequestDic();
+            var sr = GetTargetFor(request);
             sr.isReadOnly = readOnly;
+            Selection.activeObject = sr;
         }
+
+        private static void InitRequestDic()
+        {
+            if (_scriptableRequests != null)
+                return;
+            _scriptableRequests = _UsedTargets
+                .ToDictionary(kvp => kvp.Key.request, kvp => kvp.Key);
+        }
+
+        private static ScriptableRequest GetTargetFor(HDRequest request)
+        {
+            DestroyUnusedTargets();
+
+            if (_scriptableRequests.TryGetValue(request, out var sr))
+                return sr;
+            sr = CreateInstance<ScriptableRequest>();
+            _scriptableRequests[request] = sr;
+            sr.request = request;
+            return sr;
+        }
+
+        private static void DestroyUnusedTargets()
+        {
+            var unusedKeys = _scriptableRequests
+                .Where(kvp => !_UsedTargets.ContainsKey(kvp.Value))
+                .Select(kvp => kvp.Key)
+                .ToArray();
+            foreach (var key in unusedKeys)
+            {
+                DestroyImmediate(_scriptableRequests[key]);
+                _scriptableRequests.Remove(key);
+            }
+        }
+
         private ExchangeInspector _inspectorController;
         private VisualElement _fullWindowRoot;
         private ScriptableRequest Target => (ScriptableRequest)target;
-        private bool _isReadOnly;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -33,11 +65,27 @@ namespace QuickEye.RequestWatcher
             InitViewController();
             return root;
         }
+        
+        private void Awake()
+        {
+            if (!_UsedTargets.ContainsKey(Target))
+            {
+                _UsedTargets[Target] = 0;
+            }
+
+            _UsedTargets[Target]++;
+        }
 
         private void OnDestroy()
-        {
-            Debug.Log($"Destroyed Editor");
-            // Destroy scriptable object here
+        { 
+            if(!_UsedTargets.ContainsKey(Target))
+                return;
+            
+            _UsedTargets[Target]--;
+            if (_UsedTargets[Target] == 0)
+            {
+                _UsedTargets.Remove(Target);
+            }
         }
 
         private void InitViewController()
@@ -46,8 +94,8 @@ namespace QuickEye.RequestWatcher
                 "Packages/com.quickeye.http-debugger/Editor/UIAssets/ExchangeInspector.uxml");
             uxml.CloneTree(_fullWindowRoot);
             _inspectorController = new ExchangeInspector(_fullWindowRoot);
-            Debug.Log($"readonly {_isReadOnly}");
-            _inspectorController.Setup(serializedObject.FindProperty("request"), _isReadOnly);
+            var readOnly = serializedObject.FindProperty("isReadOnly").boolValue;
+            _inspectorController.Setup(serializedObject.FindProperty("request"), readOnly);
         }
 
         private VisualElement GetRoot()
@@ -74,17 +122,5 @@ namespace QuickEye.RequestWatcher
 
         public override bool UseDefaultMargins() => false;
         protected override void OnHeaderGUI() { }
-        
-        internal class ScriptableRequest : SingletonScriptableObject<ScriptableRequest>
-        {
-            public HDRequest request;
-            public bool isReadOnly;
-            private void OnValidate()
-            {
-                // Save request
-                // in case of stash item, save to disk
-                // playmode, nothing
-            }
-        }
     }
 }

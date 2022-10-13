@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.Networking;
 
 [assembly: InternalsVisibleTo("Sandbox.Editor")]
@@ -23,7 +21,6 @@ namespace QuickEye.RequestWatcher
         public HttpMethodType type;
         public string body;
         public string headers;
-
         public HDResponse lastResponse;
 
         public async Task<HttpResponseMessage> SendAsync()
@@ -97,11 +94,6 @@ namespace QuickEye.RequestWatcher
         private static string ArrayToString(IEnumerable<string> enumerable)
         {
             return string.Join("; ", enumerable.ToArray());
-        }
-
-        public HDRequest Clone()
-        {
-            return JsonUtility.FromJson<HDRequest>(JsonUtility.ToJson(this));
         }
     }
 }
