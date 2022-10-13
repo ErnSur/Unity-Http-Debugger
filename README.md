@@ -18,13 +18,14 @@ Http request logging tool for Unity.
   - ~~Wrap request into a scriptable object and use inspector window~~
   - ~~Inspect playmode logs~~
     - ~~read only mode: copy data but not overwrite~~
-  - inspect stash requests
-    - edit and serialize
-  - send button working
-  
+  - ~~inspect stash requests~~
+    - ~~edit and serialize~~
+  - ~~send button working~~
+  - Add Header with request ID and time?
+
 2. Stash View
   - Design
-    - integrate into inspector? 
+    - integrate into inspector?
 
 3. Design UX for
   - ~~Inspeting playmode requests~~
@@ -39,8 +40,8 @@ Http request logging tool for Unity.
   - Write logs to log file in a readable format, do not serialize HDRequests unless for editor persistant state
 
 5. Design datastore
-  - How and where to serialize playmode request logs
-  - how to access them
+  - ~~How and where to serialize playmode request logs~~
+  - ~~how to access them~~
 
 5. Fix the All-in-one window
 
