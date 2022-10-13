@@ -1,4 +1,3 @@
-
 .codeField-scrollView--container {
     flex-direction: row;
 }
@@ -20,8 +19,10 @@
     color: rgb(89, 89, 89);
     -unity-text-align: upper-right;
     margin-left: 5px;
+    -unity-font-definition: none;
 }
 
 #codeField--input {
-    -unity-font: var(--code-font);
+    -unity-font: resource('QuickEye/HttpDebugger/RobotoMono-Regular');
+    -unity-font-definition: none;
 }
