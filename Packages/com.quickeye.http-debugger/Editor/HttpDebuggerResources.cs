@@ -9,18 +9,14 @@ namespace QuickEye.RequestWatcher
     {
         private const string BaseDir = "QuickEye/HttpDebugger/";
         private const string CommonStyle = BaseDir + "Common";
-
-        // In Unity 2019 Loading USS files form resources for some reason created unpredictable results
-        // try returning Resources load here to compare 
+        
         private static T LoadAsset<T>(string resourcesRelativePath) where T : Object
         {
-            var baseResourcesPath = "Packages/com.quickeye.http-debugger/Editor/Resources/";
-            var extension = typeof(T) == typeof(StyleSheet) ? ".uss" : ".uxml";
-            return AssetDatabase.LoadAssetAtPath<T>(
-                $"{baseResourcesPath}{resourcesRelativePath}{extension}");
+            var suffix = typeof(T) == typeof(StyleSheet) ? "-style" : "";
+            return Resources.Load<T>($"{resourcesRelativePath}{suffix}");
         }
 
-        public static bool TryLoadTree<T>(out VisualTreeAsset tree)
+        private static bool TryLoadTree<T>(out VisualTreeAsset tree)
         {
             tree = LoadAsset<VisualTreeAsset>(BaseDir + typeof(T).Name);
             return tree != null;
@@ -28,16 +24,14 @@ namespace QuickEye.RequestWatcher
 
         private static bool TryLoadThemeStyle<T>(out StyleSheet styleSheet) where T : VisualElement
         {
-            var styleSuffix = EditorGUIUtility.isProSkin ? "Dark" : "Light";
-            styleSheet = LoadAsset<StyleSheet>($"{BaseDir}{typeof(T).Name}-{styleSuffix}");
+            var styleSuffix = EditorGUIUtility.isProSkin ? "-dark" : "-light";
+            styleSheet = LoadAsset<StyleSheet>($"{BaseDir}{typeof(T).Name}{styleSuffix}");
             return styleSheet != null;
         }
 
         private static bool TryLoadStyle<T>(out StyleSheet styleSheet) where T : VisualElement
         {
             styleSheet = LoadAsset<StyleSheet>($"{BaseDir}{typeof(T).Name}");
-            if (typeof(T) == typeof(Tab) && styleSheet == null)
-                Debug.Log($"TryLoad Style: {typeof(T).Name} / is null = {styleSheet == null}");
             return styleSheet != null;
         }
 

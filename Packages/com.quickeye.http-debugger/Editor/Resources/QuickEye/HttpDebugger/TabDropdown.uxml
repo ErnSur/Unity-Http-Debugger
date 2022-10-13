@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:Label text="Auth" style="flex-shrink: 1; flex-grow: 1;">
-        <Style src="Tab.uss" />
-    </ui:Label>
-    <ui:VisualElement class="unity-enum-field__arrow">
-        <Style src="Tab.uss" />
-    </ui:VisualElement>
-</ui:UXML>

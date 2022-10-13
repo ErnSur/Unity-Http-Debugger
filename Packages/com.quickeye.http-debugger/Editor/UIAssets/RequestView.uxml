@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="true">
+    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
+    <uie:Toolbar class="header-toolbar" style="flex-direction: row;">
+        <ui:EnumField name="req-type-menu" type="QuickEye.RequestWatcher.HttpMethodType, QuickEye.RequestWatcher.Editor" style="width: 60px;" />
+        <ui:TextField picking-mode="Ignore" name="req-url-field" style="flex-shrink: 1; flex-grow: 1;" />
+        <uie:ToolbarButton text="Send" name="req-send-button" class="header-toolbar--button" style="-unity-text-align: middle-center; max-width: 60px; min-width: 47px;" />
+    </uie:Toolbar>
+    <QuickEye.UIToolkit.TabGroup style="flex-direction: row;">
+        <QuickEye.UIToolkit.Tab name="body-tab" text="Body" />
+        <QuickEye.UIToolkit.TabDropdown text="Auth" name="auth-tab">
+            <ui:Label />
+        </QuickEye.UIToolkit.TabDropdown>
+        <QuickEye.UIToolkit.Tab name="headers-tab" text="Headers" />
+    </QuickEye.UIToolkit.TabGroup>
+    <QuickEye.RequestWatcher.CodeField multiline="true" name="req-body-field" />
+    <ui:VisualElement name="headers-view" style="flex-grow: 1;">
+        <ui:Label text="Label" />
+    </ui:VisualElement>
+</ui:UXML>

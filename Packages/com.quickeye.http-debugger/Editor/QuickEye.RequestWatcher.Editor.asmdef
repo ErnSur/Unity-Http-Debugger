@@ -1,5 +1,6 @@
 {
     "name": "QuickEye.RequestWatcher.Editor",
+    "rootNamespace": "QuickEye.RequestWatcher",
     "references": [
         "GUID:cc849d66545be244a9c60f51db5a5bcc",
         "GUID:9861c8596b4de1544a09a56d39ef2572"

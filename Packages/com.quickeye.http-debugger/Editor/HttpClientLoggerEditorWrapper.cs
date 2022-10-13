@@ -7,10 +7,9 @@ using UnityEngine.Networking;
 
 namespace QuickEye.RequestWatcher
 {
+    [InitializeOnLoad]
     public static class HttpClientLoggerEditorWrapper
     {
-        private const string PlaymodePrefsKey = "PostmanPlaymode";
-
         internal static event Action<HDRequest> ExchangeLogged;
 
         static HttpClientLoggerEditorWrapper()
@@ -25,8 +24,8 @@ namespace QuickEye.RequestWatcher
             if (message == null)
                 return;
             var ex = await HDRequest.FromHttpRequestMessage(name, message);
-            ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
+            ExchangeLogged?.Invoke(ex);
         }
         
         private static void Log(string name, UnityWebRequest message)
@@ -34,8 +33,8 @@ namespace QuickEye.RequestWatcher
             if (message == null)
                 return;
             var ex =  HDRequest.FromUnityRequest(name, message);
-            ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
+            ExchangeLogged?.Invoke(ex);
         }
 
         private static async Task Log(string name, HttpResponseMessage message)
@@ -43,16 +42,13 @@ namespace QuickEye.RequestWatcher
             if (message == null)
                 return;
             var ex = await HDRequest.FromHttpResponseMessage(name, message);
-            ExchangeLogged?.Invoke(ex);
             SerializePlaymodeLog(ex);
+            ExchangeLogged?.Invoke(ex);
         }
 
         private static void SerializePlaymodeLog(HDRequest exchange)
         {
-            var json = EditorPrefs.GetString(PlaymodePrefsKey, JsonUtility.ToJson(new PostmanData()));
-            var data = JsonUtility.FromJson<PostmanData>(json);
-            data.requests.Add(exchange);
-            EditorPrefs.SetString(PlaymodePrefsKey, JsonUtility.ToJson(data));
+            RequestConsoleDatabase.instance.requests.Add(exchange);
         }
     }
 }

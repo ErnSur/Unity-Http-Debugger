@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
+    <uie:Toolbar class="header-toolbar" style="flex-direction: row; padding-left: 4px;">
+        <ui:Label name="res-status-label" text="200 ok" class="status-code" style="-unity-text-align: middle-left; margin-top: 2px; margin-bottom: 2px;" />
+    </uie:Toolbar>
+    <QuickEye.UIToolkit.TabGroup style="flex-direction: row;">
+        <QuickEye.UIToolkit.Tab name="body-tab" text="Body" />
+        <QuickEye.UIToolkit.Tab name="headers-tab" text="Headers" />
+        <QuickEye.UIToolkit.Tab name="cookie-tab" text="Cookie" />
+    </QuickEye.UIToolkit.TabGroup>
+    <QuickEye.RequestWatcher.CodeField name="res-body-field" readonly="true" />
+    <ui:VisualElement name="headers-view" style="flex-grow: 1;">
+        <ui:Label text="Label" style="font-size: 16px;" />
+    </ui:VisualElement>
+    <ui:Label text="Loading..." name="loading-overlay" style="-unity-text-align: middle-center; flex-grow: 1; font-size: 20px; -unity-font-style: normal; top: 0; position: absolute; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.33); color: rgb(196, 196, 196); display: none;" />
+</ui:UXML>

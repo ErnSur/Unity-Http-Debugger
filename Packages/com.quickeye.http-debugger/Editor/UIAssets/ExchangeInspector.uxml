@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Template name="RequestView" src="project://database/Packages/com.quickeye.http-debugger/Editor/UIAssets/RequestView.uxml?fileID=9197481963319205126&amp;guid=5d3798e0fa3b34a1b8027ff570de231e&amp;type=3#RequestView" />
+    <ui:Template name="ResponseView" src="project://database/Packages/com.quickeye.http-debugger/Editor/UIAssets/ResponseView.uxml?fileID=9197481963319205126&amp;guid=830bd9c3c3e1846bf8e52c7d4de14a00&amp;type=3#ResponseView" />
+    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
+    <ui:TwoPaneSplitView name="exchange-pane" fixed-pane-initial-dimension="280">
+        <ui:Instance template="RequestView" name="request-view-root" style="min-width: 250px; min-height: 250px;" />
+        <ui:Instance template="ResponseView" name="response-view-root" style="min-width: 250px; min-height: 250px;" />
+    </ui:TwoPaneSplitView>
+    <ui:Label text="Nothing. Select a reqest. " name="no-select-view" class="nothing-selected-label" style="display: none;" />
+</ui:UXML>
