@@ -15,7 +15,7 @@ HTTP request logging tool for Unity.
 - Save chosen requests and responses to *Request Stash*
 
 ### Request Inspector
-> Open selecting request in Console or Stash windows
+> Open by selecting request in Console or Stash windows
 - Preview and edit your request/response
 - Send requests and save responses 
 
@@ -62,9 +62,8 @@ HTTP request logging tool for Unity.
 - If the request URL doesn't start with HTTPS or HTTP try to add it (very low priority)
 
 #### Stash View
-> nothing right now.
-> Stash view is less important right now as Postman does it 100 times better
-> It is better to focus on features unique to this tool
+> Stash view is less important right now as Postman does it 100 times better.
+> Development should focus on features unique to this tool.
 
 #### All-in-One window
 - create an editor window that contains all views like it was at the beginning of the project
