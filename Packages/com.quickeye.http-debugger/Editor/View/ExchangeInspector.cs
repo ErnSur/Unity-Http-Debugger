@@ -17,6 +17,8 @@ namespace QuickEye.RequestWatcher
             AssignQueryResults(root);
             _requestViewController = new RequestView(requestViewRoot);
             _responseViewController = new ResponseView(responseViewRoot);
+            _requestViewController.RequestAwaitStarted += () => _responseViewController.ToggleLoadingOverlay(true);
+            _requestViewController.RequestAwaitEnded += _ => _responseViewController.ToggleLoadingOverlay(false);
             exchangePane.fixedPaneIndex = 1;
             exchangePane.fixedPaneInitialDimension = 400;
             exchangePane.RegisterCallback<GeometryChangedEvent>(evt =>
