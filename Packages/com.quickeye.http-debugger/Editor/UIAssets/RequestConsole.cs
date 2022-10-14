@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
@@ -12,7 +10,7 @@ namespace QuickEye.RequestWatcher
     [Serializable]
     internal partial class RequestConsole
     {
-        public event Action<IEnumerable<HDRequest>> ItemsChosen;
+        public event Action<HDRequest> SelectionChanged;
         private RequestList _source;
         private RequestList _filteredSource = new RequestList();
 
@@ -54,7 +52,7 @@ namespace QuickEye.RequestWatcher
             InitClearButton();
             InitSearchField();
 
-            requestList.itemsChosen += items => { ItemsChosen?.Invoke(items.Cast<HDRequest>()); };
+            requestList.selectionChanged += items => { SelectionChanged?.Invoke(items.FirstOrDefault() as HDRequest); };
             HttpClientLoggerEditorWrapper.ExchangeLogged += _ =>
             {
                 var autoScroll = false;

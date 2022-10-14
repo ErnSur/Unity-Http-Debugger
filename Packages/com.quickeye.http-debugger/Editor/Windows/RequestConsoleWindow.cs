@@ -15,14 +15,11 @@ namespace QuickEye.RequestWatcher
         protected override void OnEnable()
         {
             base.OnEnable();
-            
+
             _database = RequestConsoleDatabase.instance;
             requestConsole.Init(rootVisualElement);
             requestConsole.Setup(_database.requests);
-            requestConsole.ItemsChosen += requests =>
-            {
-                ExchangeInspectorWindow.Select(requests.FirstOrDefault(),true);
-            };
+            requestConsole.SelectionChanged += request => { ExchangeInspectorWindow.Select(request, true); };
         }
     }
 }
