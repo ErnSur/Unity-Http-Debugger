@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections;
 using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace QuickEye.RequestWatcher.LoggingSample
 {
     public class RequestSender : MonoBehaviour
     {
         [SerializeField]
-        private float requestInterval=3;
+        private float requestInterval = 3;
 
         private float _remainingTimeToRequest;
         private static int _logIndex = -1;
@@ -19,7 +22,9 @@ namespace QuickEye.RequestWatcher.LoggingSample
             _remainingTimeToRequest -= Time.deltaTime;
             if (!(_remainingTimeToRequest <= 0))
                 return;
-            SendSampleRequest();
+
+            StartCoroutine(SendUnityRequest());
+            //SendSampleRequest();
             _remainingTimeToRequest = requestInterval;
         }
 
@@ -46,9 +51,14 @@ namespace QuickEye.RequestWatcher.LoggingSample
             }
         }
 
-        private static int Repeat(int value, int maxValue)
+        private static IEnumerator SendUnityRequest()
         {
-            return value % maxValue;
+            var r = new UnityWebRequest("http://dummy.restapiexample.com/api/v1/employee/1", "GET");
+            r.SetRequestHeader("Header1", "Test");
+            yield return r.SendWebRequest();
+            var localIndex = _logIndex = ++_logIndex % 3;
+
+            r.Log($"Unity Req {localIndex}");
         }
     }
 }
