@@ -14,11 +14,12 @@ namespace QuickEye.RequestWatcher
         public event Action<HDResponse> RequestAwaitEnded;
         private readonly VisualElement _root;
         private HDRequest target;
-
+        private readonly HeadersView _headersViewController;
         public RequestView(VisualElement root)
         {
             _root = root;
             AssignQueryResults(root);
+            _headersViewController = new HeadersView(headersView);
             reqSendButton.clicked += OnSendButtonClick;
             reqSendButton.clicked += () => SendButtonClicked?.Invoke();
             InitTabs();
@@ -54,7 +55,7 @@ namespace QuickEye.RequestWatcher
             reqTypeMenu.BindProperty(serializedObject.FindProperty(nameof(HDRequest.type)));
             reqUrlField.BindProperty(serializedObject.FindProperty(nameof(HDRequest.url)));
             reqBodyField.Field.BindProperty(serializedObject.FindProperty(nameof(HDRequest.body)));
-            headersView.Q<Label>().BindProperty(serializedObject.FindProperty(nameof(HDRequest.headers)));
+            _headersViewController.Setup(serializedObject.FindProperty(nameof(HDRequest.headers)));
         }
 
         private void InitTabs()

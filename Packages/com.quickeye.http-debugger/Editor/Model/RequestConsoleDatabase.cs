@@ -28,10 +28,9 @@ namespace QuickEye.RequestWatcher
             requests.BeforeClear -= OnRequestsOnBeforeClear;
         }
 
-        void OnRequestsOnAdded(HDRequest request)
+        private void OnRequestsOnAdded(HDRequest request)
         {
             Save();
-            Debug.Log($"Added");
         }
 
         private void OnRequestsOnBeforeClear()
@@ -42,14 +41,12 @@ namespace QuickEye.RequestWatcher
             }
 
             Save();
-            Debug.Log($"Cleared");
         }
 
         private void OnRequestsOnRemoved(HDRequest request)
         {
             Save();
             request.Dispose();
-            Debug.Log($"Removed");
         }
 
         [ContextMenu("Save")]
@@ -61,7 +58,7 @@ namespace QuickEye.RequestWatcher
             InternalEditorUtility.SaveToSerializedFileAndForget(assetObjects.ToArray(), FilePath, true);
         }
 
-        [ContextMenu("Save")]
+        [ContextMenu("Clear")]
         public void Clear()
         {
             requests.Clear();

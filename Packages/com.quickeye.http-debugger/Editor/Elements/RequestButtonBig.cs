@@ -8,15 +8,7 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    public class RequestButton : VisualElement
-    {
-        protected string FormatHttpMethodType(string value)
-        {
-            return value.Substring(0, 3).ToUpperInvariant();
-        }
-    }
-
-    public class RequestButtonBig : RequestButton
+    public class RequestButtonBig : VisualElement
     {
         public Action Deleted;
         public Action Duplicated;
@@ -47,13 +39,13 @@ namespace QuickEye.RequestWatcher
 
         public void BindProperties(SerializedProperty typeProp, SerializedProperty nameProp)
         {
-            this.TrackPropertyChange(typeProp, p =>
-            {
-                var enumName = p.enumNames[p.enumValueIndex];
-                _typeLabel.text = FormatHttpMethodType(enumName);
-            });
+            _typeLabel.text = EnumIndexToDisplayText(typeProp.enumValueIndex);
+            _typeLabel.TrackPropertyValue(typeProp,
+                p => { _typeLabel.text = EnumIndexToDisplayText(p.enumValueIndex); });
             _nameLabel.BindProperty(nameProp);
         }
+
+        private static string EnumIndexToDisplayText(int i) => ((HttpMethodType)i).ToString()[..3].ToUpperInvariant();
 
         public new class UxmlFactory : UxmlFactory<RequestButtonBig, UxmlTraits> { }
 

@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 
 [assembly: InternalsVisibleTo("Sandbox.Editor")]
 
@@ -21,13 +20,14 @@ namespace QuickEye.RequestWatcher
         public string url;
         public HttpMethodType type;
         public string body;
-        public string headers;
+        public List<Header> headers;
         public HDResponse lastResponse;
         public bool isReadOnly;
 
         private HDRequest() { }
 
-        public static HDRequest Create(string id, string url, HttpMethodType type, string body, string headers)
+        public static HDRequest Create(string id, string url, HttpMethodType type, string body,
+            IEnumerable<Header> headers)
         {
             var i = CreateInstance<HDRequest>();
             i.hideFlags = HideFlags.DontSaveInEditor;
@@ -35,20 +35,26 @@ namespace QuickEye.RequestWatcher
             i.url = url;
             i.type = type;
             i.body = body;
-            i.headers = headers;
+            i.headers = headers == null ? new List<Header>() : new List<Header>(headers);
             return i;
         }
+
         public static HDRequest Create(HDRequest request)
         {
             return Instantiate(request);
         }
 
+        //TODO: Add SendUnityRequest
         public async Task<HttpResponseMessage> SendAsync()
         {
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var request = new HttpRequestMessage(type.ToHttpMethod(), url);
+            foreach (var header in headers.Where(header => header.enabled))
+            {
+                request.Headers.Add(header.name, header.value);
+            }
 
             if (type == HttpMethodType.Post)
                 request.Content = new StringContent(body, Encoding.UTF8, "application/json");
@@ -60,7 +66,7 @@ namespace QuickEye.RequestWatcher
         {
             var url = req.RequestUri.OriginalString;
             var type = HttpMethodTypeUtil.FromHttpMethod(req.Method);
-            var headers = HeadersToString(req.Content?.Headers);
+            var headers = ContentHeadersToList(req.Content?.Headers);
             var e = Create(name, url, type, null, headers);
             if (req.Content != null)
                 e.body = JsonFormatter.Format(await req.Content.ReadAsStringAsync());
@@ -69,35 +75,46 @@ namespace QuickEye.RequestWatcher
 
         public static async Task<HDRequest> FromHttpResponseMessage(string name, HttpResponseMessage res)
         {
-             var hdRequest = await FromHttpRequestMessage(name, res.RequestMessage);
+            var hdRequest = await FromHttpRequestMessage(name, res.RequestMessage);
             hdRequest.lastResponse = new HDResponse((int)res.StatusCode);
             if (res.Content != null)
                 hdRequest.lastResponse.payload = JsonFormatter.Format(await res.Content.ReadAsStringAsync());
-            hdRequest.lastResponse.headers = HeadersToString(res.Content?.Headers);
+            hdRequest.lastResponse.headers = ContentHeadersToList(res.Content?.Headers);
             return hdRequest;
+        }
+
+        private static List<Header> ContentHeadersToList(HttpContentHeaders headerCollection)
+        {
+            if (headerCollection == null)
+                return null;
+            return new List<Header>(headerCollection
+                .Select(p => new Header(p.Key, string.Join("; ", p))));
+        }
+
+        private static List<Header> ContentHeadersToList(Dictionary<string, string> dictionary)
+        {
+            if (dictionary == null)
+                return null;
+            return new List<Header>(dictionary
+                .Select(p => new Header(p.Key, p.Value)));
         }
 
         public static HDRequest FromUnityRequest(string name, UnityWebRequest req)
         {
             var hdRequest = Create(name, req.url, HttpMethodTypeUtil.FromString(req.method), null, null);
-            var textPayload = Encoding.UTF8.GetString(req.uploadHandler.data);
-            hdRequest.body = new JsonFormatter(textPayload).Format();
-            //hdRequest.headers = req.GetRequestHeader()
+            if (req.uploadHandler != null)
+            {
+                var textPayload = Encoding.UTF8.GetString(req.uploadHandler.data);
+                hdRequest.body = new JsonFormatter(textPayload).Format();
+            }
+
+            hdRequest.headers = ContentHeadersToList(req.GetRequestHeaders());
             hdRequest.lastResponse = new HDResponse((int)req.responseCode);
-            hdRequest.lastResponse.headers = string.Join("\n",
-                req.GetResponseHeaders().Select(kvp => $"{kvp.Key} :: {kvp.Value}").ToArray());
-            if (req.downloadHandler.text != null)
+            hdRequest.lastResponse.headers = ContentHeadersToList(req.GetResponseHeaders());
+            if (req.downloadHandler?.text != null)
                 hdRequest.lastResponse.payload = new JsonFormatter(req.downloadHandler.text).Format();
 
             return hdRequest;
-        }
-
-        private static string HeadersToString(HttpHeaders headers)
-        {
-            if (headers == null)
-                return "";
-            var headersKvps = headers.Select(kvp => $"{kvp.Key} :: {ArrayToString(kvp.Value)}").ToArray();
-            return string.Join("\n", headersKvps);
         }
 
         private static string ArrayToString(IEnumerable<string> enumerable)

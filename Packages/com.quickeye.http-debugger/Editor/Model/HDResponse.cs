@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace QuickEye.RequestWatcher
@@ -8,18 +9,18 @@ namespace QuickEye.RequestWatcher
     {
         public int statusCode;
         public string payload;
-        public string headers;
+        public List<Header> headers;
 
         public HDResponse(int statusCode)
         {
             this.statusCode = statusCode;
         }
 
-        public HDResponse(int statusCode, string payload, string headers)
+        public HDResponse(int statusCode, string payload, IEnumerable<Header> headers)
         {
             this.statusCode = statusCode;
             this.payload = payload;
-            this.headers = headers;
+            this.headers = new List<Header>(headers);
         }
     }
 }

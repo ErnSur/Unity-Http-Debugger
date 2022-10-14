@@ -9,11 +9,13 @@ namespace QuickEye.RequestWatcher
     internal partial class ResponseView
     {
         private VisualElement _root;
+        private HeadersView _headersViewController;
         public ResponseView(VisualElement root)
         {
             _root = root;
             AssignQueryResults(root);
             ToggleLoadingOverlay(false);
+            _headersViewController = new HeadersView(headersView);
             bodyTab.TabContent = resBodyField;
             headersTab.TabContent = headersView;
             bodyTab.value = true;
@@ -34,9 +36,8 @@ namespace QuickEye.RequestWatcher
 
         public void Setup(SerializedProperty responseProperty)
         {
-            
             resBodyField.Field.BindProperty(responseProperty.FindPropertyRelative(nameof(HDResponse.payload)));
-            _root.TrackPropertyChange(responseProperty.FindPropertyRelative(nameof(HDResponse.statusCode)), prop =>
+            _root.TrackPropertyValueAndInit(responseProperty.FindPropertyRelative(nameof(HDResponse.statusCode)), prop =>
             {
                 var v = prop.intValue;
                 var isDefined = Enum.IsDefined(typeof(HttpStatusCode2), v);
@@ -47,8 +48,7 @@ namespace QuickEye.RequestWatcher
                 resStatusLabel.text = message;
                 HttpStatusCodeUtil.ToggleStatusCodeClass(resStatusLabel, v);
             });
-
-            headersView.Q<Label>().BindProperty(responseProperty.FindPropertyRelative(nameof(HDResponse.headers)));
+            _headersViewController.Setup(responseProperty.FindPropertyRelative(nameof(HDResponse.headers)));
         }
     }
 }

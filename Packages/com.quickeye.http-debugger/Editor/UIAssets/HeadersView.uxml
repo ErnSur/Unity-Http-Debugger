@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:MultiColumnListView fixed-item-height="22" horizontal-scrolling="true" name="header-list" style="flex-grow: 1;" >
+        <ui:Columns>
+            <ui:Column name="toggle-col" title="Enabled" width="25" resizable="false" cell-binding-path="enabled" />
+            <ui:Column name="name-col" title="Name" stretchable="true" />
+            <ui:Column name="value-col" title="Value" stretchable="true" />
+        </ui:Columns>
+    </ui:MultiColumnListView>
+</ui:UXML>

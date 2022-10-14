@@ -16,7 +16,7 @@ namespace QuickEye.RequestWatcher
         private QuickEye.UIToolkit.TabDropdown authTab;
         private QuickEye.UIToolkit.Tab headersTab;
         private QuickEye.RequestWatcher.CodeField reqBodyField;
-        private VisualElement headersView;
+        private TemplateContainer headersView;
     
         protected void AssignQueryResults(VisualElement root)
         {
@@ -27,7 +27,7 @@ namespace QuickEye.RequestWatcher
             authTab = root.Q<QuickEye.UIToolkit.TabDropdown>("auth-tab");
             headersTab = root.Q<QuickEye.UIToolkit.Tab>("headers-tab");
             reqBodyField = root.Q<QuickEye.RequestWatcher.CodeField>("req-body-field");
-            headersView = root.Q<VisualElement>("headers-view");
+            headersView = root.Q<TemplateContainer>("headers-view");
         }
     }
 }
