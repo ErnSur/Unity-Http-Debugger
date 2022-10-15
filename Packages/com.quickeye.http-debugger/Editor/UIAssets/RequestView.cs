@@ -15,6 +15,7 @@ namespace QuickEye.RequestWatcher
         private readonly VisualElement _root;
         private HDRequest target;
         private readonly HeadersView _headersViewController;
+        
         public RequestView(VisualElement root)
         {
             _root = root;
@@ -33,19 +34,8 @@ namespace QuickEye.RequestWatcher
             {
                 textField.isReadOnly = value;
             }
+            _headersViewController.ToggleReadOnlyMode(value);
         }
-
-        // public void Setup(HDRequest request)
-        // {
-        //     if (request is null)
-        //         return;
-        //     target = request;
-        //     reqTypeMenu.Init(HttpMethodType.Get);
-        //     reqTypeMenu.value = request.type;
-        //     reqUrlField.value = request.url;
-        //     reqBodyField.Field.value = request.body;
-        //     headersView.Q<Label>().text = request.headers;
-        // }
 
         public void Setup(SerializedObject serializedObject)
         {

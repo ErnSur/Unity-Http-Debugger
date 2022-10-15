@@ -27,6 +27,7 @@ namespace QuickEye.RequestWatcher
             {
                 textField.isReadOnly = value;
             }
+            _headersViewController.ToggleReadOnlyMode(value);
         }
 
         public void ToggleLoadingOverlay(bool value)

@@ -32,9 +32,9 @@ namespace QuickEye.RequestWatcher
         
         public void Setup(SerializedObject serializedObject)
         {
-            ToggleReadOnlyMode(serializedObject.FindProperty(nameof(HDRequest.isReadOnly)).boolValue);
             _target = serializedObject;
             RefreshReqView();
+            ToggleReadOnlyMode(serializedObject.FindProperty(nameof(HDRequest.isReadOnly)).boolValue);
         }
 
         private void ToggleReadOnlyMode(bool value)

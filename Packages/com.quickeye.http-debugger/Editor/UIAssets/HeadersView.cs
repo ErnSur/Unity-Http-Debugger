@@ -9,6 +9,8 @@ namespace QuickEye.RequestWatcher
     {
         private SerializedProperty _headersProperty;
         private SerializedArrayProperty _serializedArrayProperty;
+        private bool _inReadOnlyMode;
+
         public HeadersView(VisualElement root)
         {
             AssignQueryResults(root);
@@ -24,8 +26,6 @@ namespace QuickEye.RequestWatcher
             };
             toggleCol.bindCell = (element, i) =>
             {
-                if (_headersProperty == null)
-                    return;
                 var prop = _serializedArrayProperty[i].FindPropertyRelative(nameof(Header.enabled));
                 element.Q<Toggle>().BindProperty(prop);
             };
@@ -33,19 +33,19 @@ namespace QuickEye.RequestWatcher
             nameCol.makeCell = () => new TextField();
             nameCol.bindCell = (element, i) =>
             {
-                if (_headersProperty == null)
-                    return;
                 var prop = _serializedArrayProperty[i].FindPropertyRelative(nameof(Header.name));
-                ((TextField)element).BindProperty(prop);
+                var field = (TextField)element;
+                field.BindProperty(prop);
+                field.isReadOnly = _inReadOnlyMode;
             };
 
             valueCol.makeCell = () => new TextField();
             valueCol.bindCell = (element, i) =>
             {
-                if (_headersProperty == null)
-                    return;
                 var prop = _serializedArrayProperty[i].FindPropertyRelative(nameof(Header.value));
-                ((TextField)element).BindProperty(prop);
+                var field = (TextField)element;
+                field.BindProperty(prop);
+                field.isReadOnly = _inReadOnlyMode;
             };
         }
 
@@ -53,8 +53,19 @@ namespace QuickEye.RequestWatcher
         {
             _headersProperty = headersProperty;
             _serializedArrayProperty = new SerializedArrayProperty(_headersProperty);
-            
+
             headerList.itemsSource = _serializedArrayProperty;
+            headerList.Rebuild();
+        }
+
+        public void ToggleReadOnlyMode(bool enabled)
+        {
+            _inReadOnlyMode = enabled;
+            headerList.showAddRemoveFooter = !_inReadOnlyMode;
+            if (_inReadOnlyMode)
+                headerList.columns.Remove(toggleCol);
+            else if (!headerList.columns.Contains(toggleCol))
+                headerList.columns.Add(toggleCol);
             headerList.Rebuild();
         }
     }
