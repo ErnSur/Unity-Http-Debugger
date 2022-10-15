@@ -41,7 +41,9 @@ namespace QuickEye.RequestWatcher
 
         public static HDRequest Create(HDRequest request)
         {
-            return Instantiate(request);
+            var i = Instantiate(request);
+            i.hideFlags = HideFlags.DontSaveInEditor;
+            return i;
         }
 
         //TODO: Add SendUnityRequest
