@@ -1,9 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEditor;
-using UnityEngine;
-using UnityEngine.Networking;
 
 namespace QuickEye.RequestWatcher
 {
@@ -14,44 +13,57 @@ namespace QuickEye.RequestWatcher
 
         static HttpClientLoggerEditorWrapper()
         {
-            HttpClientLogger.LoggedRequest += async (n, m) => await Log(n, m);
-            HttpClientLogger.LoggedResponse += async (n, m) => await Log(n, m);
+            HttpClientLogger.LoggedRequest += async (n, m, s) => await Log(n, m, s);
+            HttpClientLogger.LoggedResponse += async (n, m, s) => await Log(n, m, s);
             HttpClientLogger.LoggedUnityRequest += Log;
         }
 
-        private static async Task Log(string name, HttpRequestMessage message)
+        private static async Task Log(string name, HttpRequestMessage message, string stackTrace)
         {
             if (message == null)
                 return;
-            var ex = await RequestDataUtility.FromHttpRequestMessage<ConsoleRequestData>(message);
-            ex.name = name;
-            SerializePlaymodeLog(ex);
-            ExchangeLogged?.Invoke(ex);
+            var req = await RequestDataUtility.FromHttpRequestMessage<ConsoleRequestData>(message);
+            req.name = name;
+            req.stackTrace = RemoveFirstTwoLines(stackTrace);
+            SerializePlaymodeLog(req);
+            ExchangeLogged?.Invoke(req);
         }
 
-        private static void Log(string name, UnityWebRequest message)
+        private static void Log(string name, UnityWebRequest message, string stackTrace)
         {
             if (message == null)
                 return;
-            var ex = RequestDataUtility.FromUnityRequest<ConsoleRequestData>(message);
-            ex.name = name;
-            SerializePlaymodeLog(ex);
-            ExchangeLogged?.Invoke(ex);
+            var req = RequestDataUtility.FromUnityRequest<ConsoleRequestData>(message);
+            req.name = name;
+            req.stackTrace = RemoveFirstTwoLines(stackTrace);
+            SerializePlaymodeLog(req);
+            ExchangeLogged?.Invoke(req);
         }
 
-        private static async Task Log(string name, HttpResponseMessage message)
+        private static async Task Log(string name, HttpResponseMessage message, string stackTrace)
         {
             if (message == null)
                 return;
-            var ex = await RequestDataUtility.FromHttpResponseMessage<ConsoleRequestData>(message);
-            ex.name = name;
-            SerializePlaymodeLog(ex);
-            ExchangeLogged?.Invoke(ex);
+            var req = await RequestDataUtility.FromHttpResponseMessage<ConsoleRequestData>(message);
+            req.name = name;
+            req.stackTrace = RemoveFirstTwoLines(stackTrace);
+            SerializePlaymodeLog(req);
+            ExchangeLogged?.Invoke(req);
         }
 
         private static void SerializePlaymodeLog(RequestData exchange)
         {
             RequestConsoleDatabase.instance.requests.Add(exchange);
+        }
+
+        private static string RemoveFirstTwoLines(string text)
+        {
+            using (var sr = new StringReader(text))
+            {
+                sr.ReadLine();
+                sr.ReadLine();
+                return sr.ReadToEnd();
+            }
         }
     }
 }
