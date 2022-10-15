@@ -13,13 +13,21 @@ namespace QuickEye.RequestWatcher
         {
             AssignQueryResults(root);
             headerList.showAddRemoveFooter = true;
-            toggleCol.makeCell = () => new Toggle();
+            toggleCol.makeCell = () =>
+            {
+                var ve = new VisualElement();
+                ve.Add(new Toggle());
+                ve.style.flexGrow = 1;
+                ve.style.alignItems = Align.Center;
+                ve.style.justifyContent = Justify.Center;
+                return ve;
+            };
             toggleCol.bindCell = (element, i) =>
             {
                 if (_headersProperty == null)
                     return;
                 var prop = _serializedArrayProperty[i].FindPropertyRelative(nameof(Header.enabled));
-                ((Toggle)element).BindProperty(prop);
+                element.Q<Toggle>().BindProperty(prop);
             };
 
             nameCol.makeCell = () => new TextField();
