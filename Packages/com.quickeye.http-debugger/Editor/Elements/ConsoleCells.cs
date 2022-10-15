@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
@@ -55,18 +56,36 @@ namespace QuickEye.RequestWatcher
         }
     }
 
-    internal class IdCell : Label
+    internal class IdCell : VisualElement
     {
-        public IdCell()
-        {
-            AddToClassList("cell-text");
+        private readonly Label _label;
+        private readonly Toggle _breakpointToggle;
+        private string _id;
 
+        public IdCell(Action<string, bool> onBreakpointValueChange)
+        {
+            Add(_label = new Label());
+            Add(_breakpointToggle = new Toggle());
+            _breakpointToggle.AddToClassList("breakpoint-toggle");
+            _label.AddToClassList("cell-text");
             AddToClassList("id-cell");
+            _breakpointToggle.RegisterValueChangedCallback(e => { onBreakpointValueChange?.Invoke(_id, e.newValue); });
+            const string breakpointHoverClass = "breakpoint-toggle--hover";
+            RegisterCallback<MouseEnterEvent>(evt =>
+            {
+                _breakpointToggle.EnableInClassList(breakpointHoverClass, true);
+            });
+
+            RegisterCallback<MouseLeaveEvent>(evt =>
+            {
+                _breakpointToggle.EnableInClassList(breakpointHoverClass, false);
+            });
         }
 
-        public void Setup(string id)
+        public void Setup(string id, bool hasBreakpoint)
         {
-            text = id;
+            _id = _label.text = id;
+            _breakpointToggle.SetValueWithoutNotify(hasBreakpoint);
         }
     }
 }

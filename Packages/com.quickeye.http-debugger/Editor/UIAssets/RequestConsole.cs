@@ -27,7 +27,7 @@ namespace QuickEye.RequestWatcher
         {
             EditorApplication.playModeStateChanged += PlayModeChanged;
         }
-        
+
         private void PlayModeChanged(PlayModeStateChange newState)
         {
             if (clearOnPlay && newState == PlayModeStateChange.EnteredPlayMode)
@@ -47,7 +47,10 @@ namespace QuickEye.RequestWatcher
             InitClearButton();
             InitSearchField();
 
-            requestList.selectionChanged += items => { SelectionChanged?.Invoke(items.FirstOrDefault() as RequestData); };
+            requestList.selectionChanged += items =>
+            {
+                SelectionChanged?.Invoke(items.FirstOrDefault() as RequestData);
+            };
             HttpClientLoggerEditorWrapper.ExchangeLogged += _ =>
             {
                 var autoScroll = false;
@@ -125,10 +128,19 @@ namespace QuickEye.RequestWatcher
                 AddContextMenu(element, i);
             };
 
-            idCol.makeCell = () => new IdCell();
+            idCol.makeCell = () => new IdCell((id, hasBreakpoint) =>
+            {
+                if (hasBreakpoint)
+                    RequestConsoleDatabase.instance.breakpoints.Add(id);
+                else
+                    RequestConsoleDatabase.instance.breakpoints.Remove(id);
+                requestList.RefreshItems();
+            });
             idCol.bindCell = (element, i) =>
             {
-                ((IdCell)element).Setup(Source[i].name);
+                var id = Source[i].name;
+                var hasBreakpoint = RequestConsoleDatabase.instance.breakpoints.Contains(id);
+                ((IdCell)element).Setup(id, hasBreakpoint);
                 AddContextMenu(element, i);
             };
 
