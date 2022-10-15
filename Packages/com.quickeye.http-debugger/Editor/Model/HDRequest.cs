@@ -15,6 +15,7 @@ namespace QuickEye.RequestWatcher
     [Serializable]
     internal class HDRequest : ScriptableObject, IDisposable
     {
+        public event Action Modified; 
         private static HttpClient _client = new HttpClient();
         public string id;
         public string url;
@@ -132,6 +133,7 @@ namespace QuickEye.RequestWatcher
         private void OnValidate()
         {
             name = id;
+            Modified?.Invoke();
         }
     }
 }
