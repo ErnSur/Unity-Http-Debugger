@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
@@ -7,11 +9,14 @@ using Object = UnityEngine.Object;
 namespace QuickEye.RequestWatcher
 {
     [FilePath(FilePath, FilePathAttribute.Location.ProjectFolder)]
-    internal class RequestConsoleDatabase : ScriptableSingleton<RequestConsoleDatabase>
+    internal class RequestConsoleDatabase : ScriptableSingleton<RequestConsoleDatabase>, ISerializationCallbackReceiver
     {
         public const string FilePath = "Logs/http.log";
 
         public RequestList requests;
+        public HashSet<string> breakpoints = new HashSet<string>();
+        [SerializeField]
+        private List<string> serializedBreakpoints = new List<string>();
 
         private void OnEnable()
         {
@@ -62,6 +67,16 @@ namespace QuickEye.RequestWatcher
         public void Clear()
         {
             requests.Clear();
+        }
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
+            serializedBreakpoints = new List<string>(breakpoints);
+        }
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
+            breakpoints = new HashSet<string>(serializedBreakpoints);
         }
     }
 }

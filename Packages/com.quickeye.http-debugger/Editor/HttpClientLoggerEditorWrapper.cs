@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEditor;
+using UnityEngine;
 
 namespace QuickEye.RequestWatcher
 {
@@ -18,6 +19,15 @@ namespace QuickEye.RequestWatcher
             HttpClientLogger.LoggedUnityRequest += Log;
         }
 
+        private static void HandleBreakpoint(string reqName)
+        {
+            if (RequestConsoleDatabase.instance.breakpoints.Contains(reqName))
+            {
+                // show mock window
+                Debug.Break();
+            }
+        }
+
         private static async Task Log(string name, HttpRequestMessage message, string stackTrace)
         {
             if (message == null)
@@ -27,6 +37,7 @@ namespace QuickEye.RequestWatcher
             req.stackTrace = RemoveFirstTwoLines(stackTrace);
             SerializePlaymodeLog(req);
             ExchangeLogged?.Invoke(req);
+            HandleBreakpoint(name);
         }
 
         private static void Log(string name, UnityWebRequest message, string stackTrace)
@@ -38,6 +49,7 @@ namespace QuickEye.RequestWatcher
             req.stackTrace = RemoveFirstTwoLines(stackTrace);
             SerializePlaymodeLog(req);
             ExchangeLogged?.Invoke(req);
+            HandleBreakpoint(name);
         }
 
         private static async Task Log(string name, HttpResponseMessage message, string stackTrace)
@@ -49,6 +61,7 @@ namespace QuickEye.RequestWatcher
             req.stackTrace = RemoveFirstTwoLines(stackTrace);
             SerializePlaymodeLog(req);
             ExchangeLogged?.Invoke(req);
+            HandleBreakpoint(name);
         }
 
         private static void SerializePlaymodeLog(RequestData exchange)
