@@ -10,7 +10,7 @@ namespace QuickEye.RequestWatcher
     [Serializable]
     internal partial class RequestConsole
     {
-        public event Action<HDRequest> SelectionChanged;
+        public event Action<RequestData> SelectionChanged;
         private RequestList _source;
         private RequestList _filteredSource = new RequestList();
 
@@ -27,12 +27,7 @@ namespace QuickEye.RequestWatcher
         {
             EditorApplication.playModeStateChanged += PlayModeChanged;
         }
-
-        private void OpenRequestScript()
-        {
-            InternalEditorUtility.OpenFileAtLineExternal("path", 1);
-        }
-
+        
         private void PlayModeChanged(PlayModeStateChange newState)
         {
             if (clearOnPlay && newState == PlayModeStateChange.EnteredPlayMode)
@@ -52,7 +47,7 @@ namespace QuickEye.RequestWatcher
             InitClearButton();
             InitSearchField();
 
-            requestList.selectionChanged += items => { SelectionChanged?.Invoke(items.FirstOrDefault() as HDRequest); };
+            requestList.selectionChanged += items => { SelectionChanged?.Invoke(items.FirstOrDefault() as RequestData); };
             HttpClientLoggerEditorWrapper.ExchangeLogged += _ =>
             {
                 var autoScroll = false;
@@ -133,7 +128,7 @@ namespace QuickEye.RequestWatcher
             idCol.makeCell = () => new IdCell();
             idCol.bindCell = (element, i) =>
             {
-                ((IdCell)element).Setup(Source[i].id);
+                ((IdCell)element).Setup(Source[i].name);
                 AddContextMenu(element, i);
             };
 
@@ -150,7 +145,7 @@ namespace QuickEye.RequestWatcher
             element.AddManipulator(new ContextualMenuManipulator(evt =>
             {
                 evt.menu.AppendAction("Save To Stash",
-                    _ => { StashDatabase.instance.requests.Add(HDRequest.Create(Source[i])); });
+                    _ => { StashDatabase.instance.requests.Add(RequestData.Create(Source[i])); });
             }));
         }
 

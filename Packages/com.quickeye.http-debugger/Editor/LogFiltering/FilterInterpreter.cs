@@ -31,16 +31,16 @@ namespace QuickEye.RequestWatcher
             };
         }
 
-        public static IEnumerable<HDRequest> Filter(ICollection<HDRequest> requests, string query)
+        public static IEnumerable<RequestData> Filter(ICollection<RequestData> requests, string query)
         {
             var currentStatement = TokenType.NotDefined;
 
-            var selectors = new List<Func<HDRequest, bool>>();
+            var selectors = new List<Func<RequestData, bool>>();
             var lowestTokenIndex = int.MaxValue;
             foreach (var token in Tokenize(query))
             {
                 lowestTokenIndex = Math.Min(lowestTokenIndex, token.StartIndex);
-                Debug.Log($"Token {token}");
+                //Debug.Log($"Token {token}");
                 switch (token.TokenType)
                 {
                     case TokenType.NotDefined:
@@ -84,9 +84,9 @@ namespace QuickEye.RequestWatcher
             return requests.Where(p => selectors.All(s => s(p)));
         }
 
-        private static bool FilterByName(HDRequest request, string name)
+        private static bool FilterByName(RequestData request, string name)
         {
-            return request.id.ToLower().Contains(name.ToLower());
+            return request.name.ToLower().Contains(name.ToLower());
         }
         
         private static List<TokenMatch> GetTokenMatches(string query)
@@ -110,7 +110,6 @@ namespace QuickEye.RequestWatcher
             TokenMatch lastMatch = null;
             foreach (var tokens in groupedByIndex)
             {
-                Debug.Log($"index: {tokens.Key}");
                 var bestMatch = tokens.OrderBy(x => x.Precedence).First();
                 if (lastMatch != null && bestMatch.StartIndex < lastMatch.EndIndex)
                     continue;

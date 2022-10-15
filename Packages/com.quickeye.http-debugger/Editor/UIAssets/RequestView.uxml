@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="true">
-    <ui:Template name="HeadersView" src="project://database/Packages/com.quickeye.http-debugger/Editor/UIAssets/HeadersView.uxml?fileID=9197481963319205126&amp;guid=492946eb90a8040368617081a5f1c8f0&amp;type=3#HeaderView" />
+    <ui:Template name="HeadersView" src="project://database/Packages/com.quickeye.http-debugger/Editor/UIAssets/HeadersView.uxml?fileID=9197481963319205126&amp;guid=492946eb90a8040368617081a5f1c8f0&amp;type=3#HeadersView" />
     <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
     <uie:Toolbar class="header-toolbar" style="flex-direction: row;">
         <ui:EnumField name="req-type-menu" type="QuickEye.RequestWatcher.HttpMethodType, QuickEye.RequestWatcher.Editor" style="width: 60px;" />
@@ -8,11 +8,15 @@
     </uie:Toolbar>
     <QuickEye.UIToolkit.TabGroup style="flex-direction: row;">
         <QuickEye.UIToolkit.Tab name="body-tab" text="Body" />
-        <QuickEye.UIToolkit.TabDropdown text="Auth" name="auth-tab">
+        <QuickEye.UIToolkit.TabDropdown text="Auth" name="auth-tab" style="display: none;">
             <ui:Label />
         </QuickEye.UIToolkit.TabDropdown>
         <QuickEye.UIToolkit.Tab name="headers-tab" text="Headers" />
+        <QuickEye.UIToolkit.Tab name="stack-trace-tab" text="Stack Trace" />
     </QuickEye.UIToolkit.TabGroup>
     <QuickEye.RequestWatcher.CodeField multiline="true" name="req-body-field" />
     <ui:Instance template="HeadersView" name="headers-view" />
+    <ui:ScrollView name="stack-trace-view">
+        <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="stack-trace-label" style="white-space: normal;" />
+    </ui:ScrollView>
 </ui:UXML>

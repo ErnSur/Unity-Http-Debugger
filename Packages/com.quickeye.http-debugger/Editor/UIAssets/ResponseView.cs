@@ -37,8 +37,8 @@ namespace QuickEye.RequestWatcher
 
         public void Setup(SerializedProperty responseProperty)
         {
-            resBodyField.Field.BindProperty(responseProperty.FindPropertyRelative(nameof(HDResponse.payload)));
-            _root.TrackPropertyValueAndInit(responseProperty.FindPropertyRelative(nameof(HDResponse.statusCode)), prop =>
+            resBodyField.Field.BindProperty(responseProperty.FindPropertyRelative(nameof(ResponseData.payload)));
+            _root.TrackPropertyValueAndInit(responseProperty.FindPropertyRelative(nameof(ResponseData.statusCode)), prop =>
             {
                 var v = prop.intValue;
                 var isDefined = Enum.IsDefined(typeof(HttpStatusCode2), v);
@@ -49,7 +49,7 @@ namespace QuickEye.RequestWatcher
                 resStatusLabel.text = message;
                 HttpStatusCodeUtil.ToggleStatusCodeClass(resStatusLabel, v);
             });
-            _headersViewController.Setup(responseProperty.FindPropertyRelative(nameof(HDResponse.headers)));
+            _headersViewController.Setup(responseProperty.FindPropertyRelative(nameof(ResponseData.headers)));
         }
     }
 }

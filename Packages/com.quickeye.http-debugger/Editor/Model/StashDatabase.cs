@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
@@ -15,6 +14,10 @@ namespace QuickEye.RequestWatcher
 
         private void OnEnable()
         {
+            foreach (var request in requests)
+            {
+                request.Modified += Save;
+            }
             requests.Added += OnRequestsOnAdded;
             requests.Removed += OnRequestsOnRemoved;
             requests.BeforeClear += OnRequestsOnBeforeClear;
@@ -22,18 +25,25 @@ namespace QuickEye.RequestWatcher
 
         private void OnDisable()
         {
+            foreach (var request in requests)
+            {
+                request.Modified -= Save;
+            }
             requests.Added -= OnRequestsOnAdded;
             requests.Removed -= OnRequestsOnRemoved;
             requests.BeforeClear -= OnRequestsOnBeforeClear;
         }
 
-        void OnRequestsOnAdded(HDRequest request)
+        void OnRequestsOnAdded(RequestData request)
         {
+            request.hideFlags = HideFlags.DontSaveInEditor;
+            request.Modified += Save;
             Save();
         }
 
-        private void OnRequestsOnRemoved(HDRequest request)
+        private void OnRequestsOnRemoved(RequestData request)
         {
+            request.Modified -= Save;
             Save();
             request.Dispose();
         }
@@ -44,7 +54,6 @@ namespace QuickEye.RequestWatcher
             {
                 request.Dispose();
             }
-
             Save();
         }
 

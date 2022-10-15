@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
@@ -28,8 +27,9 @@ namespace QuickEye.RequestWatcher
             requests.BeforeClear -= OnRequestsOnBeforeClear;
         }
 
-        private void OnRequestsOnAdded(HDRequest request)
+        private void OnRequestsOnAdded(RequestData request)
         {
+            request.hideFlags = HideFlags.DontSaveInEditor;
             Save();
         }
 
@@ -43,7 +43,7 @@ namespace QuickEye.RequestWatcher
             Save();
         }
 
-        private void OnRequestsOnRemoved(HDRequest request)
+        private void OnRequestsOnRemoved(RequestData request)
         {
             Save();
             request.Dispose();

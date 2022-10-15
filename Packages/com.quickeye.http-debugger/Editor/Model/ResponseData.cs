@@ -5,18 +5,18 @@ using UnityEngine;
 namespace QuickEye.RequestWatcher
 {
     [Serializable]
-    internal class HDResponse
+    internal class ResponseData
     {
         public int statusCode;
         public string payload;
         public List<Header> headers;
 
-        public HDResponse(int statusCode)
+        public ResponseData(int statusCode)
         {
             this.statusCode = statusCode;
         }
 
-        public HDResponse(int statusCode, string payload, IEnumerable<Header> headers)
+        public ResponseData(int statusCode, string payload, IEnumerable<Header> headers)
         {
             this.statusCode = statusCode;
             this.payload = payload;

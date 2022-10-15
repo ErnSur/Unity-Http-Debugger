@@ -6,44 +6,44 @@ using UnityEngine;
 namespace QuickEye.RequestWatcher
 {
     [Serializable]
-    internal class RequestList : IList<HDRequest>, IList
+    internal class RequestList : IList<RequestData>, IList
     {
         // TODO: To avoid disposing request on add/remove
         // before unreferencing any request add it to "Unused" set
         // and remove form it if you are assigning it again
         // add DisposeUnunsed method
-        public event Action<HDRequest> Added;
-        public event Action<HDRequest> Removed;
+        public event Action<RequestData> Added;
+        public event Action<RequestData> Removed;
         public event Action BeforeClear;
         public event Action AfterClear;
 
         [SerializeField]
-        private List<HDRequest> requests;
+        private List<RequestData> requests;
 
-        public RequestList() => requests = new List<HDRequest>();
+        public RequestList() => requests = new List<RequestData>();
 
-        public RequestList(IEnumerable<HDRequest> collection)
+        public RequestList(IEnumerable<RequestData> collection)
         {
-            requests = new List<HDRequest>(collection);
+            requests = new List<RequestData>(collection);
         }
 
         void IList.Clear() => Clear();
 
-        bool IList.Contains(object value) => Contains((HDRequest)value);
+        bool IList.Contains(object value) => Contains((RequestData)value);
 
-        int IList.IndexOf(object value) => IndexOf((HDRequest)value);
+        int IList.IndexOf(object value) => IndexOf((RequestData)value);
 
-        void IList.Insert(int index, object value) => Insert(index, (HDRequest)value);
+        void IList.Insert(int index, object value) => Insert(index, (RequestData)value);
 
         int IList.Add(object value)
         {
-            Add((HDRequest)value);
+            Add((RequestData)value);
             return Count - 1;
         }
 
-        void IList.Remove(object value) => Remove((HDRequest)value);
+        void IList.Remove(object value) => Remove((RequestData)value);
 
-        public void Add(HDRequest request)
+        public void Add(RequestData request)
         {
             requests.Add(request);
             Added?.Invoke(request);
@@ -56,12 +56,12 @@ namespace QuickEye.RequestWatcher
             AfterClear?.Invoke();
         }
 
-        public void CopyTo(HDRequest[] array, int arrayIndex)
+        public void CopyTo(RequestData[] array, int arrayIndex)
         {
             requests.CopyTo(array, arrayIndex);
         }
 
-        public bool Remove(HDRequest item)
+        public bool Remove(RequestData item)
         {
             if (item == null)
                 return false;
@@ -83,17 +83,17 @@ namespace QuickEye.RequestWatcher
 
         public bool IsReadOnly => false;
 
-        public bool Contains(HDRequest item)
+        public bool Contains(RequestData item)
         {
             return requests.Contains(item);
         }
 
-        public IEnumerator<HDRequest> GetEnumerator() => requests.GetEnumerator();
+        public IEnumerator<RequestData> GetEnumerator() => requests.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => requests.GetEnumerator();
-        public int IndexOf(HDRequest item) => requests.IndexOf(item);
+        public int IndexOf(RequestData item) => requests.IndexOf(item);
 
-        public void Insert(int index, HDRequest item) => requests.Insert(index, item);
+        public void Insert(int index, RequestData item) => requests.Insert(index, item);
 
         public void RemoveAt(int index) => requests.RemoveAt(index);
 
@@ -102,10 +102,10 @@ namespace QuickEye.RequestWatcher
         object IList.this[int index]
         {
             get => this[index];
-            set => this[index] = (HDRequest)value;
+            set => this[index] = (RequestData)value;
         }
 
-        public HDRequest this[int index]
+        public RequestData this[int index]
         {
             get => requests[index];
             set

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 [assembly: InternalsVisibleTo("QuickEye.RequestWatcher.Editor")]
 
@@ -15,25 +16,25 @@ namespace QuickEye.RequestWatcher
     /// </summary>
     public static class HttpClientLogger
     {
-        internal static event Action<string, HttpRequestMessage> LoggedRequest;
-        internal static event Action<string, HttpResponseMessage> LoggedResponse;
-        internal static event Action<string, UnityWebRequest> LoggedUnityRequest;
+        internal static event Action<string, HttpRequestMessage, string> LoggedRequest;
+        internal static event Action<string, HttpResponseMessage, string> LoggedResponse;
+        internal static event Action<string, UnityWebRequest, string> LoggedUnityRequest;
 
         public static void Log(string name, HttpRequestMessage message)
         {
-            LoggedRequest?.Invoke(name, message);
+            LoggedRequest?.Invoke(name, message, StackTraceUtility.ExtractStackTrace());
         }
 
         public static void Log(string name, HttpResponseMessage message)
         {
-            LoggedResponse?.Invoke(name, message);
+            LoggedResponse?.Invoke(name, message,StackTraceUtility.ExtractStackTrace());
         }
 
         public static async Task<HttpResponseMessage> SendAsync(this HttpClient c, string id,
             HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var result = await c.SendAsync(request, cancellationToken);
-            LoggedResponse?.Invoke(id, result);
+            LoggedResponse?.Invoke(id, result,StackTraceUtility.ExtractStackTrace());
             return result;
         }
 
@@ -41,7 +42,7 @@ namespace QuickEye.RequestWatcher
             HttpRequestMessage request)
         {
             var result = await c.SendAsync(request);
-            LoggedResponse?.Invoke(id, result);
+            LoggedResponse?.Invoke(id, result,StackTraceUtility.ExtractStackTrace());
             return result;
         }
 
@@ -49,7 +50,7 @@ namespace QuickEye.RequestWatcher
             HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var result = await c.SendAsync(request, cancellationToken);
-            LoggedResponse?.Invoke(id, result);
+            LoggedResponse?.Invoke(id, result,StackTraceUtility.ExtractStackTrace());
             return result;
         }
 
@@ -57,7 +58,7 @@ namespace QuickEye.RequestWatcher
         {
             try
             {
-                LoggedUnityRequest?.Invoke(id, unityRequest);
+                LoggedUnityRequest?.Invoke(id, unityRequest,StackTraceUtility.ExtractStackTrace());
             }
             catch (Exception e)
             {

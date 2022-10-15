@@ -3,11 +3,10 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.RequestWatcher
 {
-    // TODO: Support selection and editing requests from stash
-    [CustomEditor(typeof(HDRequest))]
+    [CustomEditor(typeof(RequestData), true)]
     internal class ExchangeInspectorWindow : Editor
     {
-        public static void Select(HDRequest request, bool readOnly = false)
+        public static void Select(RequestData request, bool readOnly)
         {
             request.isReadOnly = readOnly;
             Selection.activeObject = request;
@@ -15,7 +14,6 @@ namespace QuickEye.RequestWatcher
 
         private ExchangeInspector _inspectorController;
         private VisualElement _fullWindowRoot;
-        private HDRequest Target => (HDRequest)target;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -37,7 +35,6 @@ namespace QuickEye.RequestWatcher
         private VisualElement GetRoot()
         {
             var root = new VisualElement();
-            root.name = "======ROOT===";
             _fullWindowRoot = new VisualElement();
             StretchVe(_fullWindowRoot);
 
