@@ -34,13 +34,14 @@ namespace QuickEye.RequestWatcher
             requests.BeforeClear -= OnRequestsOnBeforeClear;
         }
 
-        void OnRequestsOnAdded(HDRequest request)
+        void OnRequestsOnAdded(RequestData request)
         {
+            request.hideFlags = HideFlags.DontSaveInEditor;
             request.Modified += Save;
             Save();
         }
 
-        private void OnRequestsOnRemoved(HDRequest request)
+        private void OnRequestsOnRemoved(RequestData request)
         {
             request.Modified -= Save;
             Save();

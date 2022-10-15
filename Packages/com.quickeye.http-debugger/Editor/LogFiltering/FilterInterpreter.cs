@@ -31,11 +31,11 @@ namespace QuickEye.RequestWatcher
             };
         }
 
-        public static IEnumerable<HDRequest> Filter(ICollection<HDRequest> requests, string query)
+        public static IEnumerable<RequestData> Filter(ICollection<RequestData> requests, string query)
         {
             var currentStatement = TokenType.NotDefined;
 
-            var selectors = new List<Func<HDRequest, bool>>();
+            var selectors = new List<Func<RequestData, bool>>();
             var lowestTokenIndex = int.MaxValue;
             foreach (var token in Tokenize(query))
             {
@@ -84,9 +84,9 @@ namespace QuickEye.RequestWatcher
             return requests.Where(p => selectors.All(s => s(p)));
         }
 
-        private static bool FilterByName(HDRequest request, string name)
+        private static bool FilterByName(RequestData request, string name)
         {
-            return request.id.ToLower().Contains(name.ToLower());
+            return request.name.ToLower().Contains(name.ToLower());
         }
         
         private static List<TokenMatch> GetTokenMatches(string query)

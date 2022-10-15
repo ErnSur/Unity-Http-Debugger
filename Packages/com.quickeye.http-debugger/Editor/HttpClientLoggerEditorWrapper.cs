@@ -10,7 +10,7 @@ namespace QuickEye.RequestWatcher
     [InitializeOnLoad]
     public static class HttpClientLoggerEditorWrapper
     {
-        internal static event Action<HDRequest> ExchangeLogged;
+        internal static event Action<RequestData> ExchangeLogged;
 
         static HttpClientLoggerEditorWrapper()
         {
@@ -23,16 +23,18 @@ namespace QuickEye.RequestWatcher
         {
             if (message == null)
                 return;
-            var ex = await HDRequest.FromHttpRequestMessage(name, message);
+            var ex = await RequestDataUtility.FromHttpRequestMessage<ConsoleRequestData>(message);
+            ex.name = name;
             SerializePlaymodeLog(ex);
             ExchangeLogged?.Invoke(ex);
         }
-        
+
         private static void Log(string name, UnityWebRequest message)
         {
             if (message == null)
                 return;
-            var ex =  HDRequest.FromUnityRequest(name, message);
+            var ex = RequestDataUtility.FromUnityRequest<ConsoleRequestData>(message);
+            ex.name = name;
             SerializePlaymodeLog(ex);
             ExchangeLogged?.Invoke(ex);
         }
@@ -41,12 +43,13 @@ namespace QuickEye.RequestWatcher
         {
             if (message == null)
                 return;
-            var ex = await HDRequest.FromHttpResponseMessage(name, message);
+            var ex = await RequestDataUtility.FromHttpResponseMessage<ConsoleRequestData>(message);
+            ex.name = name;
             SerializePlaymodeLog(ex);
             ExchangeLogged?.Invoke(ex);
         }
 
-        private static void SerializePlaymodeLog(HDRequest exchange)
+        private static void SerializePlaymodeLog(RequestData exchange)
         {
             RequestConsoleDatabase.instance.requests.Add(exchange);
         }

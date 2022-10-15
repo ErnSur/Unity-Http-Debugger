@@ -11,9 +11,9 @@ namespace QuickEye.RequestWatcher
     {
         public event Action SendButtonClicked;
         public event Action RequestAwaitStarted;
-        public event Action<HDResponse> RequestAwaitEnded;
+        public event Action<ResponseData> RequestAwaitEnded;
         private readonly VisualElement _root;
-        private HDRequest target;
+        private RequestData target;
         private readonly HeadersView _headersViewController;
         
         public RequestView(VisualElement root)
@@ -41,11 +41,11 @@ namespace QuickEye.RequestWatcher
         {
             if (serializedObject is null)
                 return;
-            target = (HDRequest)serializedObject.targetObject;
-            reqTypeMenu.BindProperty(serializedObject.FindProperty(nameof(HDRequest.type)));
-            reqUrlField.BindProperty(serializedObject.FindProperty(nameof(HDRequest.url)));
-            reqBodyField.Field.BindProperty(serializedObject.FindProperty(nameof(HDRequest.body)));
-            _headersViewController.Setup(serializedObject.FindProperty(nameof(HDRequest.headers)));
+            target = (RequestData)serializedObject.targetObject;
+            reqTypeMenu.BindProperty(serializedObject.FindProperty(nameof(RequestData.type)));
+            reqUrlField.BindProperty(serializedObject.FindProperty(nameof(RequestData.url)));
+            reqBodyField.Field.BindProperty(serializedObject.FindProperty(nameof(RequestData.body)));
+            _headersViewController.Setup(serializedObject.FindProperty(nameof(RequestData.headers)));
         }
 
         private void InitTabs()
@@ -72,14 +72,12 @@ namespace QuickEye.RequestWatcher
             try
             {
                 using var res = await target.SendAsync();
-                using var tempReq = await HDRequest.FromHttpResponseMessage(target.id, res);
+                using var tempReq = await RequestDataUtility.FromHttpResponseMessage<RequestData>(res);
                 target.lastResponse = tempReq.lastResponse;
-                Debug.Log($"{target.lastResponse.statusCode}");
                 RequestAwaitEnded?.Invoke(target.lastResponse);
             }
             catch (Exception e)
             {
-                Debug.Log($"URL: {target.url}");
                 Debug.LogException(e);
                 RequestAwaitEnded?.Invoke(null);
             }

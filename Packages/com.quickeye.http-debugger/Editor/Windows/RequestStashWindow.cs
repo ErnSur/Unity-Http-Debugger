@@ -16,7 +16,7 @@ namespace QuickEye.RequestWatcher
             _stashDatabase = StashDatabase.instance;
             _requestStash = new RequestStash(rootVisualElement);
             _requestStash.Setup(_stashDatabase.requests);
-            _requestStash.SelectionChanged += request => ExchangeInspectorWindow.Select(request);
+            _requestStash.SelectionChanged += request => ExchangeInspectorWindow.Select(request, false);
         }
     }
 }

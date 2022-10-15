@@ -9,18 +9,17 @@ namespace QuickEye.RequestWatcher
 {
     internal partial class RequestStash
     {
-        public event Action<HDRequest> SelectionChanged;
+        public event Action<RequestData> SelectionChanged;
 
         private readonly VisualElement _root;
         private RequestList _requestList;
         private RequestList _searchResult;
 
-        [SerializeField]
         private string searchText;
 
         private RequestList Source => string.IsNullOrWhiteSpace(searchText) ? _requestList : _searchResult;
 
-        private HDRequest SelectedReq => (HDRequest)stashList.selectedItem;
+        private RequestData SelectedReq => (RequestData)stashList.selectedItem;
 
         public RequestStash(VisualElement root)
         {
@@ -55,7 +54,7 @@ namespace QuickEye.RequestWatcher
             requestList.AfterClear -= stashList.Rebuild;
         }
 
-        private void OnRequestListModification(HDRequest obj)
+        private void OnRequestListModification(RequestData obj)
         {
             stashList.Rebuild();
         }
@@ -77,7 +76,7 @@ namespace QuickEye.RequestWatcher
                 }
 
                 _searchResult = new RequestList(from req in _requestList
-                    let name = req.id
+                    let name = req.name
                     where name.ToLower().Contains(evt.newValue.ToLower())
                     select req);
 
@@ -91,32 +90,34 @@ namespace QuickEye.RequestWatcher
             stashList.bindItem = (ve, index) =>
             {
                 var serObj = new SerializedObject(Source[index]);
-                var typeProp = serObj.FindProperty(nameof(HDRequest.type));
-                var nameProp = serObj.FindProperty(nameof(HDRequest.id));
+                var typeProp = serObj.FindProperty(nameof(RequestData.type));
+                var nameProp = serObj.FindProperty(RequestData.NamePropertyName);
                 var button = ve.As<RequestButtonBig>();
                 button.BindProperties(typeProp, nameProp);
                 button.Deleted = () =>
                 {
                     _requestList.RemoveAt(index);
                     stashList.Rebuild();
-                    //RefreshReqView();
                 };
                 button.Duplicated = () =>
                 {
-                    _requestList.Insert(index, HDRequest.Create(Source[index]));
+                    _requestList.Insert(index, RequestData.Create(Source[index]));
                     stashList.Rebuild();
-                    //RefreshReqView();
                 };
             };
             stashList.selectionChanged += selection =>
             {
-                SelectionChanged?.Invoke((HDRequest)selection.FirstOrDefault());
-                //RefreshReqView();
+                SelectionChanged?.Invoke((RequestData)selection.FirstOrDefault());
             };
 
             createButton.clicked += () =>
             {
-                _requestList.Add(HDRequest.Create("New Request", null, HttpMethodType.Get, "{ }", null));
+                var newRequest = RequestData.Create();
+                newRequest.name = "New Request";
+                newRequest.type = HttpMethodType.Get;
+                newRequest.body = "{ }";
+                
+                _requestList.Add(newRequest);
                 stashList.Rebuild();
             };
         }

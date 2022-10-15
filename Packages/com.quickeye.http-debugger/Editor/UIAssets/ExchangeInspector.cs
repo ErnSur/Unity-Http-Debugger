@@ -34,7 +34,7 @@ namespace QuickEye.RequestWatcher
         {
             _target = serializedObject;
             RefreshReqView();
-            ToggleReadOnlyMode(serializedObject.FindProperty(nameof(HDRequest.isReadOnly)).boolValue);
+            ToggleReadOnlyMode(serializedObject.FindProperty(nameof(RequestData.isReadOnly)).boolValue);
         }
 
         private void ToggleReadOnlyMode(bool value)
@@ -49,7 +49,7 @@ namespace QuickEye.RequestWatcher
             if (_target ==  null)
                 return;
             _requestViewController.Setup(_target);
-            _responseViewController.Setup(_target.FindProperty(nameof(HDRequest.lastResponse)));
+            _responseViewController.Setup(_target.FindProperty(nameof(RequestData.lastResponse)));
         }
 
         private void UpdateSelectedView()
