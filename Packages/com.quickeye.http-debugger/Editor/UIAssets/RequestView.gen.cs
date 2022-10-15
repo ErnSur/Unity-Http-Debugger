@@ -15,8 +15,11 @@ namespace QuickEye.RequestWatcher
         private QuickEye.UIToolkit.Tab bodyTab;
         private QuickEye.UIToolkit.TabDropdown authTab;
         private QuickEye.UIToolkit.Tab headersTab;
+        private QuickEye.UIToolkit.Tab stackTraceTab;
         private QuickEye.RequestWatcher.CodeField reqBodyField;
         private TemplateContainer headersView;
+        private ScrollView stackTraceView;
+        private Label stackTraceLabel;
     
         protected void AssignQueryResults(VisualElement root)
         {
@@ -26,8 +29,11 @@ namespace QuickEye.RequestWatcher
             bodyTab = root.Q<QuickEye.UIToolkit.Tab>("body-tab");
             authTab = root.Q<QuickEye.UIToolkit.TabDropdown>("auth-tab");
             headersTab = root.Q<QuickEye.UIToolkit.Tab>("headers-tab");
+            stackTraceTab = root.Q<QuickEye.UIToolkit.Tab>("stack-trace-tab");
             reqBodyField = root.Q<QuickEye.RequestWatcher.CodeField>("req-body-field");
             headersView = root.Q<TemplateContainer>("headers-view");
+            stackTraceView = root.Q<ScrollView>("stack-trace-view");
+            stackTraceLabel = root.Q<Label>("stack-trace-label");
         }
     }
 }

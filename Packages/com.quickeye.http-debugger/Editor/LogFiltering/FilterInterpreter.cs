@@ -40,7 +40,7 @@ namespace QuickEye.RequestWatcher
             foreach (var token in Tokenize(query))
             {
                 lowestTokenIndex = Math.Min(lowestTokenIndex, token.StartIndex);
-                Debug.Log($"Token {token}");
+                //Debug.Log($"Token {token}");
                 switch (token.TokenType)
                 {
                     case TokenType.NotDefined:
@@ -110,7 +110,6 @@ namespace QuickEye.RequestWatcher
             TokenMatch lastMatch = null;
             foreach (var tokens in groupedByIndex)
             {
-                Debug.Log($"index: {tokens.Key}");
                 var bestMatch = tokens.OrderBy(x => x.Precedence).First();
                 if (lastMatch != null && bestMatch.StartIndex < lastMatch.EndIndex)
                     continue;

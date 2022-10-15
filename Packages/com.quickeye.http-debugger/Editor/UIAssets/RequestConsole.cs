@@ -27,12 +27,7 @@ namespace QuickEye.RequestWatcher
         {
             EditorApplication.playModeStateChanged += PlayModeChanged;
         }
-
-        private void OpenRequestScript()
-        {
-            InternalEditorUtility.OpenFileAtLineExternal("path", 1);
-        }
-
+        
         private void PlayModeChanged(PlayModeStateChange newState)
         {
             if (clearOnPlay && newState == PlayModeStateChange.EnteredPlayMode)
