@@ -20,17 +20,18 @@ namespace QuickEye.WebTools.Editor
             AssignQueryResults(root);
             reqSendButton.clicked += OnSendButtonClick;
         }
-        
+
         public void Setup(SerializedObject serializedObject)
         {
             if (serializedObject is null)
                 return;
             _target = (RequestData)serializedObject.targetObject;
+            UpdateIcon(_target is ConsoleRequestData);
             reqTypeMenu.BindProperty(serializedObject.FindProperty(nameof(RequestData.type)));
             reqUrlField.BindProperty(serializedObject.FindProperty(nameof(RequestData.url)));
             nameField.BindProperty(serializedObject.FindProperty(RequestData.NamePropertyName));
         }
-        
+
         public void ToggleReadOnlyMode(bool enabled)
         {
             reqSendButton.ToggleDisplayStyle(!enabled);
@@ -38,7 +39,13 @@ namespace QuickEye.WebTools.Editor
             nameField.isReadOnly = enabled;
             reqUrlField.isReadOnly = enabled;
         }
-        
+
+        private void UpdateIcon(bool isConsoleRequest)
+        {
+            icon.EnableInClassList("icon-blue", !isConsoleRequest);
+            icon.EnableInClassList("icon-gray", isConsoleRequest);
+        }
+
         private void OnSendButtonClick()
         {
             var unityWebRequest = _target.ToUnityWebRequest();
