@@ -25,6 +25,7 @@ namespace QuickEye.RequestWatcher
             {
                 // show mock window
                 Debug.Break();
+                RequestConsoleWindow.Open().ShowNotification(new GUIContent($"Breakpoint: {reqName}"));
             }
         }
 
