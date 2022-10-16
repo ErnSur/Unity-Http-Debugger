@@ -7,7 +7,7 @@
     <QuickEye.UIToolkit.TabGroup style="flex-direction: row;">
         <QuickEye.UIToolkit.Tab name="body-tab" text="Body" />
         <QuickEye.UIToolkit.Tab name="headers-tab" text="Headers" />
-        <QuickEye.UIToolkit.Tab name="cookie-tab" text="Cookie" />
+        <QuickEye.UIToolkit.Tab name="cookie-tab" text="Cookie" style="display: none;" />
     </QuickEye.UIToolkit.TabGroup>
     <QuickEye.WebTools.Editor.CodeField name="res-body-field" readonly="true" />
     <ui:Instance template="HeadersView" name="headers-view" />
