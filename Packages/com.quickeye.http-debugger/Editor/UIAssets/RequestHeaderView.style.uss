@@ -1,0 +1,4 @@
+#req-url-field > Label {
+    width: 31px;
+    min-width: 30px;
+}

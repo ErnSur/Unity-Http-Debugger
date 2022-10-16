@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/UIAssets/RequestHeaderView.style.uss?fileID=7433441132597879392&amp;guid=09d63fc9f765b4bdfb46ae80d694ba28&amp;type=3#RequestHeaderView.style" />
+    <ui:VisualElement style="height: 60px; padding-top: 5px; background-color: rgb(58, 58, 58); border-bottom-width: 1px; border-left-color: rgb(24, 24, 24); border-right-color: rgb(24, 24, 24); border-top-color: rgb(24, 24, 24); border-bottom-color: rgb(24, 24, 24); padding-left: 5px; padding-right: 3px; flex-direction: row;">
+        <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Packages/com.quickeye.http-debugger/Editor/Icons/request_data.png?fileID=2800000&amp;guid=cf80eec2403e94e0bb3c724f98ba3c2d&amp;type=3#request_data&apos;); -unity-background-scale-mode: scale-to-fit; width: 32px; height: 35px;" />
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <ui:VisualElement style="flex-direction: row; height: 20px;">
+                <ui:TextField picking-mode="Ignore" name="name-field" style="flex-grow: 1; height: 18px;" />
+                <ui:EnumField name="req-type-menu" type="QuickEye.WebTools.HttpMethodType, QuickEye.WebTools" style="width: 60px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="height: 20px; flex-direction: row;">
+                <ui:TextField picking-mode="Ignore" name="req-url-field" label="URL:" style="flex-shrink: 1; flex-grow: 1;" />
+                <ui:Button tabindex="-1" text="Send" display-tooltip-when-elided="true" name="req-send-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

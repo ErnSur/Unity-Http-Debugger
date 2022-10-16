@@ -1,11 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="true">
     <ui:Template name="HeadersView" src="project://database/Packages/com.quickeye.http-debugger/Editor/UIAssets/HeadersView.uxml?fileID=9197481963319205126&amp;guid=492946eb90a8040368617081a5f1c8f0&amp;type=3#HeadersView" />
     <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
-    <uie:Toolbar class="header-toolbar" style="flex-direction: row;">
-        <ui:EnumField name="req-type-menu" type="QuickEye.WebTools.HttpMethodType, QuickEye.WebTools" style="width: 60px;" />
-        <ui:TextField picking-mode="Ignore" name="req-url-field" style="flex-shrink: 1; flex-grow: 1;" />
-        <uie:ToolbarButton text="Send" name="req-send-button" class="header-toolbar--button" style="-unity-text-align: middle-center; max-width: 60px; min-width: 47px;" />
-    </uie:Toolbar>
     <QuickEye.UIToolkit.TabGroup style="flex-direction: row;">
         <QuickEye.UIToolkit.Tab name="body-tab" text="Body" />
         <QuickEye.UIToolkit.TabDropdown text="Auth" name="auth-tab" style="display: none;">
