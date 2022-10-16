@@ -13,6 +13,8 @@ namespace QuickEye.RequestWatcher
         protected override void OnEnable()
         {
             base.OnEnable();
+            titleContent = EditorGUIUtility.IconContent("Folder");
+            titleContent.text = "Request Stash";
             _stashDatabase = StashDatabase.instance;
             _requestStash = new RequestStash(rootVisualElement);
             _requestStash.Setup(_stashDatabase.requests);

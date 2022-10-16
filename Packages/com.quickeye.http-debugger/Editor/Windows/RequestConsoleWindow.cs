@@ -1,4 +1,4 @@
-using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace QuickEye.RequestWatcher
@@ -15,7 +15,8 @@ namespace QuickEye.RequestWatcher
         protected override void OnEnable()
         {
             base.OnEnable();
-
+            titleContent = EditorGUIUtility.IconContent("UnityEditor.ConsoleWindow");
+            titleContent.text = "Request Console";
             _database = RequestConsoleDatabase.instance;
             requestConsole.Init(rootVisualElement);
             requestConsole.Setup(_database.requests);
