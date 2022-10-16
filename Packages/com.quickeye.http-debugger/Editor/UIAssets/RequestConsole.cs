@@ -157,6 +157,12 @@ namespace QuickEye.WebTools.Editor
             {
                 evt.menu.AppendAction("Save To Stash",
                     _ => { StashDatabase.instance.requests.Add(RequestData.Create(Source[i])); });
+                evt.menu.AppendAction("Save To Assets",
+                    _ =>
+                    {
+                        var copy = RequestData.Create(Source[i]);
+                        ProjectWindowUtil.CreateAsset(copy,$"Assets/{copy.name}.asset");
+                    });
             }));
         }
 
