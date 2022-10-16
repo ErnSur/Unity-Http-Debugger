@@ -1,6 +1,6 @@
 {
-    "name": "Sandbox",
-    "rootNamespace": "Sandbox",
+    "name": "TestEnv",
+    "rootNamespace": "TestEnv",
     "references": [
         "GUID:cc849d66545be244a9c60f51db5a5bcc"
     ],

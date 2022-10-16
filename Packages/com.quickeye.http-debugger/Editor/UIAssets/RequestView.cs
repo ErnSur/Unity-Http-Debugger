@@ -1,11 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using QuickEye.UIToolkit;
+using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -88,20 +91,17 @@ namespace QuickEye.WebTools.Editor
             bodyTab.value = true;
         }
 
-        private async void OnSendButtonClick()
+        private void OnSendButtonClick()
         {
-            RequestAwaitStarted?.Invoke();
-            try
+            var unityWebRequest = _target.ToUnityWebRequest();
+            EditorCoroutineUtility.StartCoroutineOwnerless(HandleWebRequest(unityWebRequest));
+            IEnumerator HandleWebRequest(UnityWebRequest request)
             {
-                using var res = await _target.SendAsync();
-                using var tempReq = await RequestDataUtility.FromHttpResponseMessage<RequestData>(res);
-                _target.lastResponse = tempReq.lastResponse;
+                RequestAwaitStarted?.Invoke();
+                yield return request.SendWebRequest();
+                _target.lastResponse = RequestDataUtility.ResponseFromUnityWebRequest(request);
                 RequestAwaitEnded?.Invoke(_target.lastResponse);
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                RequestAwaitEnded?.Invoke(null);
+                request.Dispose();
             }
         }
 

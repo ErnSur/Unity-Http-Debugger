@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace QuickEye.WebTools.Editor
 {
@@ -45,7 +46,7 @@ namespace QuickEye.WebTools.Editor
         {
             if (message == null)
                 return;
-            var req = RequestDataUtility.FromUnityRequest<ConsoleRequestData>(message);
+            var req = RequestDataUtility.FromUnityWebRequest<ConsoleRequestData>(message);
             req.name = name;
             req.stackTrace = RemoveFirstTwoLines(stackTrace);
             SerializePlaymodeLog(req);

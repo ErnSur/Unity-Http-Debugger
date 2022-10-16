@@ -1,7 +1,10 @@
 {
-    "name": "com.quickeye.http-debugger",
-    "displayName": "HTTP Debugger",
-    "version": "0.1.0",
-    "author": "Quick Eye",
-    "type": "library"
+  "name": "com.quickeye.http-debugger",
+  "displayName": "HTTP Debugger",
+  "version": "0.1.0",
+  "author": "Quick Eye",
+  "type": "library",
+  "dependencies": {
+    "com.unity.editorcoroutines": "1.0.0"
   }
+}

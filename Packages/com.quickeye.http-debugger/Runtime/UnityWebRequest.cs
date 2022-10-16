@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 
 // ReSharper disable InconsistentNaming
 
+#if false
 //TODO: Write a tool that will automatically create this class
 public class UnityWebRequest : IDisposable
 {
@@ -23,8 +24,10 @@ public class UnityWebRequest : IDisposable
     public static void Head(Uri uri) => UnityEngine.Networking.UnityWebRequest.Head(uri);
     public static void Head(string uri) => UnityEngine.Networking.UnityWebRequest.Head(uri);
 
+    public static void Post(Uri uri, string postData, string contentType) =>
+        UnityEngine.Networking.UnityWebRequest.Post(uri, postData, contentType);
+
     // TODO: Add All overloads
-    // public static void Post(Uri uri) => UnityEngine.Networking.UnityWebRequest.Post();
     // public static void Post(string uri) => UnityEngine.Networking.UnityWebRequest.Post(uri);
     // public static void Put(Uri uri) => UnityEngine.Networking.UnityWebRequest.Put(uri);
     // public static void Put(string uri) => UnityEngine.Networking.UnityWebRequest.Put(uri);
@@ -151,3 +154,4 @@ public class UnityWebRequest : IDisposable
 
     #endregion
 }
+#endif
