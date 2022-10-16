@@ -3,7 +3,8 @@
     "rootNamespace": "QuickEye.WebTools.Editor",
     "references": [
         "GUID:cc849d66545be244a9c60f51db5a5bcc",
-        "GUID:9861c8596b4de1544a09a56d39ef2572"
+        "GUID:9861c8596b4de1544a09a56d39ef2572",
+        "GUID:478a2357cc57436488a56e564b08d223"
     ],
     "includePlatforms": [
         "Editor"

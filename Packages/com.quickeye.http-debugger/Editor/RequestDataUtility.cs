@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace QuickEye.WebTools.Editor
 {
@@ -34,22 +35,29 @@ namespace QuickEye.WebTools.Editor
             return hdRequest;
         }
 
-        public static T FromUnityRequest<T>(UnityWebRequest req) where T : RequestData
+        public static T FromUnityWebRequest<T>(UnityWebRequest req) where T : RequestData
         {
             var result = ScriptableObject.CreateInstance<T>();
             result.url = req.url;
             result.type = HttpMethodTypeUtil.FromString(req.method);
-            if (req.uploadHandler != null)
+            if (req.uploadHandler != null && req.uploadHandler.data != null)
             {
+                result.headers.Add(new Header("Content-Type", req.uploadHandler.contentType));
                 var textPayload = Encoding.UTF8.GetString(req.uploadHandler.data);
                 result.body = new JsonFormatter(textPayload).Format();
             }
 
-            result.headers = ContentHeadersToList(req.GetRequestHeaders());
-            result.lastResponse = new ResponseData((int)req.responseCode);
-            result.lastResponse.headers = ContentHeadersToList(req.GetResponseHeaders());
+            //result.headers.AddRange(ContentHeadersToList(req.GetRequestHeaders()));
+            result.lastResponse = ResponseFromUnityWebRequest(req);
+            return result;
+        }
+        
+        public static ResponseData ResponseFromUnityWebRequest(UnityWebRequest req)
+        {
+            var result = new ResponseData((int)req.responseCode);
+            result.headers = ContentHeadersToList(req.GetResponseHeaders());
             if (req.downloadHandler?.text != null)
-                result.lastResponse.payload = new JsonFormatter(req.downloadHandler.text).Format();
+                result.payload = new JsonFormatter(req.downloadHandler.text).Format();
 
             return result;
         }

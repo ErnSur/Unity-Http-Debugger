@@ -4,7 +4,9 @@
       "version": "file:com.quickeye.http-debugger",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "com.unity.editorcoroutines": "1.0.0"
+      }
     },
     "com.quickeye.ui-toolkit-plus": {
       "version": "https://github.com/ErnSur/UI-Toolkit-Plus.git",
@@ -12,6 +14,22 @@
       "source": "git",
       "dependencies": {},
       "hash": "d102d6ee1176b5984a956999da0d7a8b7e225d1c"
+    },
+    "com.quickeye.utility": {
+      "version": "https://github.com/ErnSur/QuickEye-Utility.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.settings-manager": "2.0.1"
+      },
+      "hash": "5449c92b9146137e97175a1bf8bfddaff47a8b55"
+    },
+    "com.unity.editorcoroutines": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
@@ -58,6 +76,13 @@
     },
     "com.unity.searcher": {
       "version": "4.9.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.settings-manager": {
+      "version": "2.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},

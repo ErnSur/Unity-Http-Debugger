@@ -21,5 +21,11 @@ namespace QuickEye.WebTools
             name = pair.Key;
             value = pair.Value;
         }
+
+        public void Deconstruct(out string name, out string value)
+        {
+            name = this.name;
+            value = this.value;
+        }
     }
 }
