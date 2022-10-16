@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,8 +10,8 @@ namespace QuickEye.RequestWatcher
     internal partial class RequestConsole
     {
         public event Action<RequestData> SelectionChanged;
-        private RequestList _source;
-        private RequestList _filteredSource = new RequestList();
+        private ListWithEvents<RequestData> _source;
+        private ListWithEvents<RequestData> _filteredSource = new ListWithEvents<RequestData>();
 
         [SerializeField]
         private bool clearOnPlay;
@@ -20,7 +19,7 @@ namespace QuickEye.RequestWatcher
         [SerializeField]
         private string searchText;
 
-        private RequestList Source => string.IsNullOrWhiteSpace(searchText) ? _source : _filteredSource;
+        private ListWithEvents<RequestData> Source => string.IsNullOrWhiteSpace(searchText) ? _source : _filteredSource;
 
 
         public RequestConsole()
@@ -85,7 +84,7 @@ namespace QuickEye.RequestWatcher
                 return;
             }
 
-            _filteredSource = new RequestList(FilterInterpreter.Filter(_source, this.searchText));
+            _filteredSource = new ListWithEvents<RequestData>(FilterInterpreter.Filter(_source, this.searchText));
         }
 
         private void FilterAndRefresh()
@@ -162,7 +161,7 @@ namespace QuickEye.RequestWatcher
         }
 
 
-        public void Setup(RequestList itemSource)
+        public void Setup(ListWithEvents<RequestData> itemSource)
         {
             _source = itemSource;
             FilterAndRefresh();

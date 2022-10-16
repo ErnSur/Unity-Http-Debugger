@@ -12,12 +12,12 @@ namespace QuickEye.RequestWatcher
         public event Action<RequestData> SelectionChanged;
 
         private readonly VisualElement _root;
-        private RequestList _requestList;
-        private RequestList _searchResult;
+        private PersistentRequestList _requestList;
+        private PersistentRequestList _searchResult;
 
         private string searchText;
 
-        private RequestList Source => string.IsNullOrWhiteSpace(searchText) ? _requestList : _searchResult;
+        private PersistentRequestList Source => string.IsNullOrWhiteSpace(searchText) ? _requestList : _searchResult;
 
         private RequestData SelectedReq => (RequestData)stashList.selectedItem;
 
@@ -29,7 +29,7 @@ namespace QuickEye.RequestWatcher
             InitSearchField();
         }
 
-        public void Setup(RequestList requestList)
+        public void Setup(PersistentRequestList requestList)
         {
             UnregisterListEvents(_requestList);
             _requestList = requestList;
@@ -38,14 +38,14 @@ namespace QuickEye.RequestWatcher
             SetupList(requestList);
         }
 
-        private void RegisterListEvents(RequestList requestList)
+        private void RegisterListEvents(PersistentRequestList requestList)
         {
             requestList.Added += OnRequestListModification;
             requestList.Removed += OnRequestListModification;
             requestList.AfterClear += stashList.Rebuild;
         }
 
-        private void UnregisterListEvents(RequestList requestList)
+        private void UnregisterListEvents(PersistentRequestList requestList)
         {
             if (requestList == null)
                 return;
@@ -75,7 +75,7 @@ namespace QuickEye.RequestWatcher
                     return;
                 }
 
-                _searchResult = new RequestList(from req in _requestList
+                _searchResult = new PersistentRequestList(from req in _requestList
                     let name = req.name
                     where name.ToLower().Contains(evt.newValue.ToLower())
                     select req);
