@@ -5,7 +5,7 @@ namespace QuickEye.RequestWatcher
 {
     public class RequestConsoleWindow : VisualElementWindow
     {
-        public static void Open() => Open<RequestConsoleWindow>("Request Console");
+        public static RequestConsoleWindow Open() => Open<RequestConsoleWindow>("Request Console");
 
         private RequestConsoleDatabase _database;
 
