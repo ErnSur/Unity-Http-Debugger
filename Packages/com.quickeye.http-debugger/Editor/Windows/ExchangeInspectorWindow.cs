@@ -1,10 +1,10 @@
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     [CustomEditor(typeof(RequestData), true)]
-    internal class ExchangeInspectorWindow : Editor
+    internal class ExchangeInspectorWindow : UnityEditor.Editor
     {
         public static void Select(RequestData request, bool readOnly)
         {

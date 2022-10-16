@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     internal static class HttpDebuggerResources
     {

@@ -1,6 +1,5 @@
 ﻿#define HTTP_DEBUGGER_DEV
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -8,9 +7,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-[assembly: InternalsVisibleTo("QuickEye.RequestWatcher.Editor")]
+[assembly: InternalsVisibleTo("QuickEye.WebTools.Editor")]
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools
 {
     /// <summary>
     /// Runtime API for game to log their HTTP calls. Those will be visible in Request Console Window

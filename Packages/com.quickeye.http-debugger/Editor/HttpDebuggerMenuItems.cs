@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     internal static class HttpDebuggerMenuItems
     {

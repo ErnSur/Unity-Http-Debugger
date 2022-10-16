@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools
 {
     [Serializable]
-    internal class ResponseData
+    public class ResponseData
     {
         public int statusCode;
         public string payload;

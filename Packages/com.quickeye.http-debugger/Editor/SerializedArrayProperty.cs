@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEditor;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     public class SerializedArrayProperty : IReadOnlyList<SerializedProperty>, IList
     {

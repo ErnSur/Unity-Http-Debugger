@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     internal partial class RequestView
     {

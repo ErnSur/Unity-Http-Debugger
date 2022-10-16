@@ -1,7 +1,7 @@
 using System;
 using System.Net.Http;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools
 {
     internal static class HttpMethodTypeUtil
     {

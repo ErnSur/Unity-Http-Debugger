@@ -2,7 +2,7 @@
 using QuickEye.UIToolkit;
 using UnityEngine.UIElements;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     public class CodeField : VisualElement
     {

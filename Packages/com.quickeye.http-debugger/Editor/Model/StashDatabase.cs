@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     [FilePath(FilePath, FilePathAttribute.Location.ProjectFolder)]
     internal class StashDatabase : ScriptableSingleton<StashDatabase>

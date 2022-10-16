@@ -5,7 +5,7 @@
 // -----------------------
 using UnityEngine.UIElements;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     partial class RequestView
     {
@@ -16,7 +16,7 @@ namespace QuickEye.RequestWatcher
         private QuickEye.UIToolkit.TabDropdown authTab;
         private QuickEye.UIToolkit.Tab headersTab;
         private QuickEye.UIToolkit.Tab stackTraceTab;
-        private QuickEye.RequestWatcher.CodeField reqBodyField;
+        private QuickEye.WebTools.Editor.CodeField reqBodyField;
         private TemplateContainer headersView;
         private ScrollView stackTraceView;
         private Label stackTraceLabel;
@@ -30,7 +30,7 @@ namespace QuickEye.RequestWatcher
             authTab = root.Q<QuickEye.UIToolkit.TabDropdown>("auth-tab");
             headersTab = root.Q<QuickEye.UIToolkit.Tab>("headers-tab");
             stackTraceTab = root.Q<QuickEye.UIToolkit.Tab>("stack-trace-tab");
-            reqBodyField = root.Q<QuickEye.RequestWatcher.CodeField>("req-body-field");
+            reqBodyField = root.Q<QuickEye.WebTools.Editor.CodeField>("req-body-field");
             headersView = root.Q<TemplateContainer>("headers-view");
             stackTraceView = root.Q<ScrollView>("stack-trace-view");
             stackTraceLabel = root.Q<Label>("stack-trace-label");

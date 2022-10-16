@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using UnityEngine.UIElements;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     // HTTP status codes as per RFC 2616.
     public enum HttpStatusCode2

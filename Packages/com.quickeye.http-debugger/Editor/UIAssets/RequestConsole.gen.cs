@@ -5,11 +5,11 @@
 // -----------------------
 using UnityEngine.UIElements;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     partial class RequestConsole
     {
-        private QuickEye.RequestWatcher.DropdownButton clearButton;
+        private QuickEye.WebTools.Editor.DropdownButton clearButton;
         private UnityEditor.UIElements.ToolbarSearchField searchField;
         private MultiColumnListView requestList;
         private Column timeCol;
@@ -20,7 +20,7 @@ namespace QuickEye.RequestWatcher
     
         protected void AssignQueryResults(VisualElement root)
         {
-            clearButton = root.Q<QuickEye.RequestWatcher.DropdownButton>("clear-button");
+            clearButton = root.Q<QuickEye.WebTools.Editor.DropdownButton>("clear-button");
             searchField = root.Q<UnityEditor.UIElements.ToolbarSearchField>("search-field");
             requestList = root.Q<MultiColumnListView>("request-list");
             timeCol = requestList.columns["time-col"];

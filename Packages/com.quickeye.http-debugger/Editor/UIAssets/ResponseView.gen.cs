@@ -5,7 +5,7 @@
 // -----------------------
 using UnityEngine.UIElements;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     partial class ResponseView
     {
@@ -13,7 +13,7 @@ namespace QuickEye.RequestWatcher
         private QuickEye.UIToolkit.Tab bodyTab;
         private QuickEye.UIToolkit.Tab headersTab;
         private QuickEye.UIToolkit.Tab cookieTab;
-        private QuickEye.RequestWatcher.CodeField resBodyField;
+        private QuickEye.WebTools.Editor.CodeField resBodyField;
         private TemplateContainer headersView;
         private Label loadingOverlay;
     
@@ -23,7 +23,7 @@ namespace QuickEye.RequestWatcher
             bodyTab = root.Q<QuickEye.UIToolkit.Tab>("body-tab");
             headersTab = root.Q<QuickEye.UIToolkit.Tab>("headers-tab");
             cookieTab = root.Q<QuickEye.UIToolkit.Tab>("cookie-tab");
-            resBodyField = root.Q<QuickEye.RequestWatcher.CodeField>("res-body-field");
+            resBodyField = root.Q<QuickEye.WebTools.Editor.CodeField>("res-body-field");
             headersView = root.Q<TemplateContainer>("headers-view");
             loadingOverlay = root.Q<Label>("loading-overlay");
         }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.UIElements;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     internal class StatusCodeCell : Label
     {

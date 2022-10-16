@@ -2,7 +2,7 @@ using System.IO;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     internal static class ScriptableSingletonUtility
     {

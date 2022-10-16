@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools
 {
     [Serializable]
-    internal class Header
+    public class Header
     {
         public string name;
         public string value;

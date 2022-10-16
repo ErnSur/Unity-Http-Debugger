@@ -1,4 +1,4 @@
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     internal class ConsoleRequestData : RequestData
     {

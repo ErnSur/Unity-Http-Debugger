@@ -2,7 +2,7 @@ using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     internal partial class ExchangeInspector
     {

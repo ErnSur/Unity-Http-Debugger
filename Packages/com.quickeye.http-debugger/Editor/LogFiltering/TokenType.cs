@@ -1,4 +1,4 @@
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     internal enum TokenType
     {

@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
-[assembly: InternalsVisibleTo("Sandbox.Editor")]
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools
 {
-    internal class RequestData : ScriptableObject, IDisposable
+    [CreateAssetMenu]
+    public class RequestData : ScriptableObject, IDisposable
     {
         private static readonly HttpClient _Client = new HttpClient();
         internal const string NamePropertyName = "m_Name";

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     public class JsonFormatter
     {

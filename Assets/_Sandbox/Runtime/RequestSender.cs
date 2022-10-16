@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Networking;
+using QuickEye.WebTools;
 
 namespace QuickEye.RequestWatcher.LoggingSample
 {

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace QuickEye.RequestWatcher
+namespace QuickEye.WebTools.Editor
 {
     public class RequestConsoleWindow : VisualElementWindow
     {
