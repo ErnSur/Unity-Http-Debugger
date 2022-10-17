@@ -10,6 +10,7 @@ namespace QuickEye.WebTools.Editor
     partial class RequestHeaderView
     {
         private VisualElement icon;
+        private QuickEye.WebTools.Editor.BreakpointToggle breakpointToggle;
         private TextField nameField;
         private EnumField reqTypeMenu;
         private TextField reqUrlField;
@@ -18,6 +19,7 @@ namespace QuickEye.WebTools.Editor
         protected void AssignQueryResults(VisualElement root)
         {
             icon = root.Q<VisualElement>("icon");
+            breakpointToggle = root.Q<QuickEye.WebTools.Editor.BreakpointToggle>("breakpoint-toggle");
             nameField = root.Q<TextField>("name-field");
             reqTypeMenu = root.Q<EnumField>("req-type-menu");
             reqUrlField = root.Q<TextField>("req-url-field");

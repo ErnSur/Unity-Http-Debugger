@@ -26,10 +26,21 @@ namespace QuickEye.WebTools.Editor
             if (serializedObject is null)
                 return;
             _target = (RequestData)serializedObject.targetObject;
-            UpdateIcon(_target is ConsoleRequestData);
+            var isConsoleRequest = _target is ConsoleRequestData;
+            UpdateBreakpointToggle(isConsoleRequest);
+            UpdateIcon(isConsoleRequest);
             reqTypeMenu.BindProperty(serializedObject.FindProperty(nameof(RequestData.type)));
             reqUrlField.BindProperty(serializedObject.FindProperty(nameof(RequestData.url)));
             nameField.BindProperty(serializedObject.FindProperty(RequestData.NamePropertyName));
+        }
+
+        private void UpdateBreakpointToggle(bool isConsoleRequest)
+        {
+            breakpointToggle.ToggleDisplayStyle(isConsoleRequest);
+            if (isConsoleRequest)
+            {
+                breakpointToggle.BreakpointName = _target.name;
+            }
         }
 
         public void ToggleReadOnlyMode(bool enabled)
