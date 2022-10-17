@@ -37,7 +37,7 @@ namespace QuickEye.WebTools.Editor
 
         public void Setup(SerializedProperty responseProperty)
         {
-            resBodyField.Field.BindProperty(responseProperty.FindPropertyRelative(nameof(ResponseData.payload)));
+            resBodyField.BindProperty(responseProperty.FindPropertyRelative(nameof(ResponseData.payload)));
             _root.TrackPropertyValueAndInit(responseProperty.FindPropertyRelative(nameof(ResponseData.statusCode)), prop =>
             {
                 var v = prop.intValue;

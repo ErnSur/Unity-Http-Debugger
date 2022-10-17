@@ -9,7 +9,7 @@
         </QuickEye.UIToolkit.TabGroup>
         <ui:Label name="res-status-label" text="200 ok" class="status-code" style="-unity-text-align: middle-left; margin-top: 2px; margin-bottom: 2px;" />
     </uie:Toolbar>
-    <QuickEye.WebTools.Editor.CodeField name="res-body-field" readonly="true" />
+    <QuickEye.WebTools.Editor.CodeField multiline="true" name="res-body-field" readonly="true" />
     <ui:Instance template="HeadersView" name="headers-view" />
     <ui:Label text="Loading..." name="loading-overlay" style="-unity-text-align: middle-center; flex-grow: 1; font-size: 20px; -unity-font-style: normal; top: 0; position: absolute; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.33); color: rgb(196, 196, 196); display: none;" />
 </ui:UXML>
