@@ -22,8 +22,6 @@ namespace QuickEye.WebTools.Editor
             
             _requestHeaderViewController.RequestAwaitStarted += () => _responseViewController.ToggleLoadingOverlay(true);
             _requestHeaderViewController.RequestAwaitEnded += _ => _responseViewController.ToggleLoadingOverlay(false);
-            exchangePane.fixedPaneIndex = 1;
-            exchangePane.fixedPaneInitialDimension = 400;
             exchangePane.RegisterCallback<GeometryChangedEvent>(evt =>
             {
                 exchangePane.orientation = evt.newRect.width < 500
