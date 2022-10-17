@@ -3,16 +3,12 @@
     min-width: 30px;
 }
 
-.icon-red {
-    background-image: url('project://database/Packages/com.quickeye.http-debugger/Editor/Icons/request_data_console.png?fileID=2800000&guid=a4816e7253f9646aaa8894bae1946629&type=3#request_data_console');
-}
-
 .icon-blue {
-    background-image: url('project://database/Packages/com.quickeye.http-debugger/Editor/Icons/request_data.png?fileID=2800000&guid=cf80eec2403e94e0bb3c724f98ba3c2d&type=3#request_data');
+    background-image: url('project://database/Packages/com.quickeye.http-debugger/Editor/Icons/request_data_blue.png?fileID=21300000&guid=cf80eec2403e94e0bb3c724f98ba3c2d&type=3#request_data_blue');
 }
 
 .icon-gray {
-    background-image: url('project://database/Packages/com.quickeye.http-debugger/Editor/Icons/request_data_gray.png?fileID=2800000&guid=e3d7b4cd1b1914a5487d34a1feb520a9&type=3#request_data_gray');
+    background-image: url('project://database/Packages/com.quickeye.http-debugger/Editor/Icons/request_data_gray.png?fileID=21300000&guid=e3d7b4cd1b1914a5487d34a1feb520a9&type=3#request_data_gray');
 }
 
 .header {
