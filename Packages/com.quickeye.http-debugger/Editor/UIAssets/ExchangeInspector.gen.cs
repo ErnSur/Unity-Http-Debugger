@@ -9,6 +9,7 @@ namespace QuickEye.WebTools.Editor
 {
     partial class ExchangeInspector
     {
+        private TemplateContainer requestHeaderView;
         private TwoPaneSplitView exchangePane;
         private TemplateContainer requestViewRoot;
         private TemplateContainer responseViewRoot;
@@ -16,6 +17,7 @@ namespace QuickEye.WebTools.Editor
     
         protected void AssignQueryResults(VisualElement root)
         {
+            requestHeaderView = root.Q<TemplateContainer>("requestHeaderView");
             exchangePane = root.Q<TwoPaneSplitView>("exchange-pane");
             requestViewRoot = root.Q<TemplateContainer>("request-view-root");
             responseViewRoot = root.Q<TemplateContainer>("response-view-root");

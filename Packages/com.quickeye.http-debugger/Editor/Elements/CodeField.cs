@@ -4,11 +4,12 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.WebTools.Editor
 {
-    public class CodeField : VisualElement
+    internal class CodeField : VisualElement
     {
         public TextField Field => codeFieldInput;
         private Label codeFieldLineNumberLabel;
         private TextField codeFieldInput;
+
         public CodeField()
         {
             this.InitResources();
@@ -30,10 +31,10 @@ namespace QuickEye.WebTools.Editor
             codeFieldInput.name = "codeField--input";
             codeFieldInput.style.flexGrow = 1;
             codeFieldInput.multiline = true;
-            
+
             Add(scrollView);
             scrollView.Add(container);
-            container.Insert(0,codeFieldLineNumberLabel);
+            container.Insert(0, codeFieldLineNumberLabel);
             container.Add(codeFieldInput);
         }
 
@@ -52,12 +53,8 @@ namespace QuickEye.WebTools.Editor
             codeFieldLineNumberLabel.text = lineNumbersText;
         }
 
-        public new class UxmlFactory : UxmlFactory<CodeField, UxmlTraits>
-        {
-        }
+        public new class UxmlFactory : UxmlFactory<CodeField, UxmlTraits> { }
 
-        public new class UxmlTraits : BindableElement.UxmlTraits
-        {
-        }
+        public new class UxmlTraits : BindableElement.UxmlTraits { }
     }
 }

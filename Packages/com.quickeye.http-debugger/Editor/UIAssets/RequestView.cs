@@ -16,9 +16,6 @@ namespace QuickEye.WebTools.Editor
 {
     internal partial class RequestView
     {
-        public event Action SendButtonClicked;
-        public event Action RequestAwaitStarted;
-        public event Action<ResponseData> RequestAwaitEnded;
         private readonly VisualElement _root;
         private RequestData _target;
         private readonly HeadersView _headersViewController;
@@ -29,8 +26,6 @@ namespace QuickEye.WebTools.Editor
             _root = root;
             AssignQueryResults(root);
             _headersViewController = new HeadersView(headersView);
-            reqSendButton.clicked += OnSendButtonClick;
-            reqSendButton.clicked += () => SendButtonClicked?.Invoke();
             stackTraceView.RegisterCallback<PointerUpLinkTagEvent>(evt =>
             {
                 var (filePath, line) = _linksByLinkText[evt.linkText];
@@ -41,8 +36,6 @@ namespace QuickEye.WebTools.Editor
 
         public void ToggleReadOnlyMode(bool value)
         {
-            reqSendButton.ToggleDisplayStyle(!value);
-            reqTypeMenu.SetEnabled(!value);
             foreach (var textField in _root.Query<TextField>().Build())
             {
                 textField.isReadOnly = value;
@@ -56,8 +49,6 @@ namespace QuickEye.WebTools.Editor
             if (serializedObject is null)
                 return;
             _target = (RequestData)serializedObject.targetObject;
-            reqTypeMenu.BindProperty(serializedObject.FindProperty(nameof(RequestData.type)));
-            reqUrlField.BindProperty(serializedObject.FindProperty(nameof(RequestData.url)));
             reqBodyField.Field.BindProperty(serializedObject.FindProperty(nameof(RequestData.body)));
             _headersViewController.Setup(serializedObject.FindProperty(nameof(RequestData.headers)));
             if (_target is ConsoleRequestData consoleRequestData)
@@ -91,19 +82,7 @@ namespace QuickEye.WebTools.Editor
             bodyTab.value = true;
         }
 
-        private void OnSendButtonClick()
-        {
-            var unityWebRequest = _target.ToUnityWebRequest();
-            EditorCoroutineUtility.StartCoroutineOwnerless(HandleWebRequest(unityWebRequest));
-            IEnumerator HandleWebRequest(UnityWebRequest request)
-            {
-                RequestAwaitStarted?.Invoke();
-                yield return request.SendWebRequest();
-                _target.lastResponse = RequestDataUtility.ResponseFromUnityWebRequest(request);
-                RequestAwaitEnded?.Invoke(_target.lastResponse);
-                request.Dispose();
-            }
-        }
+     
 
         // TODO: make it nicer to look at?
         private string StacktraceWithHyperlinks(string stacktraceText)

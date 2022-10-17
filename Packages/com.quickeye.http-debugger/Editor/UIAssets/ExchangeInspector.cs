@@ -9,6 +9,7 @@ namespace QuickEye.WebTools.Editor
         private SerializedObject _target;
         private readonly RequestView _requestViewController;
         private readonly ResponseView _responseViewController;
+        private readonly RequestHeaderView _requestHeaderViewController;
         private VisualElement _root;
 
         public ExchangeInspector(VisualElement root)
@@ -17,10 +18,10 @@ namespace QuickEye.WebTools.Editor
             AssignQueryResults(root);
             _requestViewController = new RequestView(requestViewRoot);
             _responseViewController = new ResponseView(responseViewRoot);
-            _requestViewController.RequestAwaitStarted += () => _responseViewController.ToggleLoadingOverlay(true);
-            _requestViewController.RequestAwaitEnded += _ => _responseViewController.ToggleLoadingOverlay(false);
-            exchangePane.fixedPaneIndex = 1;
-            exchangePane.fixedPaneInitialDimension = 400;
+            _requestHeaderViewController = new RequestHeaderView(requestHeaderView);
+            
+            _requestHeaderViewController.RequestAwaitStarted += () => _responseViewController.ToggleLoadingOverlay(true);
+            _requestHeaderViewController.RequestAwaitEnded += _ => _responseViewController.ToggleLoadingOverlay(false);
             exchangePane.RegisterCallback<GeometryChangedEvent>(evt =>
             {
                 exchangePane.orientation = evt.newRect.width < 500
@@ -41,6 +42,7 @@ namespace QuickEye.WebTools.Editor
         {
             _requestViewController.ToggleReadOnlyMode(value);
             _responseViewController.ToggleReadOnlyMode(value);
+            _requestHeaderViewController.ToggleReadOnlyMode(value);
         }
 
         private void RefreshReqView()
@@ -48,6 +50,7 @@ namespace QuickEye.WebTools.Editor
             UpdateSelectedView();
             if (_target ==  null)
                 return;
+            _requestHeaderViewController.Setup(_target);
             _requestViewController.Setup(_target);
             _responseViewController.Setup(_target.FindProperty(nameof(RequestData.lastResponse)));
         }

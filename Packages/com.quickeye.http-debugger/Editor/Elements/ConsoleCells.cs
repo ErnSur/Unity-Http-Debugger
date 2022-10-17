@@ -59,33 +59,20 @@ namespace QuickEye.WebTools.Editor
     internal class IdCell : VisualElement
     {
         private readonly Label _label;
-        private readonly Toggle _breakpointToggle;
-        private string _id;
+        private readonly BreakpointToggle _breakpointToggle;
 
-        public IdCell(Action<string, bool> onBreakpointValueChange)
+        public IdCell()
         {
             Add(_label = new Label());
-            Add(_breakpointToggle = new Toggle());
-            _breakpointToggle.AddToClassList("breakpoint-toggle");
+            Add(_breakpointToggle = new BreakpointToggle());
             _label.AddToClassList("cell-text");
             AddToClassList("id-cell");
-            _breakpointToggle.RegisterValueChangedCallback(e => { onBreakpointValueChange?.Invoke(_id, e.newValue); });
-            const string breakpointHoverClass = "breakpoint-toggle--hover";
-            RegisterCallback<MouseEnterEvent>(evt =>
-            {
-                _breakpointToggle.EnableInClassList(breakpointHoverClass, true);
-            });
-
-            RegisterCallback<MouseLeaveEvent>(evt =>
-            {
-                _breakpointToggle.EnableInClassList(breakpointHoverClass, false);
-            });
         }
 
-        public void Setup(string id, bool hasBreakpoint)
+        public void Setup(string id)
         {
-            _id = _label.text = id;
-            _breakpointToggle.SetValueWithoutNotify(hasBreakpoint);
+            _label.text = id;
+            _breakpointToggle.BreakpointName = id;
         }
     }
 }

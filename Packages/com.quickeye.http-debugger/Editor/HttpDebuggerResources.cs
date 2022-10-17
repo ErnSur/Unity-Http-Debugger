@@ -12,7 +12,7 @@ namespace QuickEye.WebTools.Editor
         
         private static T LoadAsset<T>(string resourcesRelativePath) where T : Object
         {
-            var suffix = typeof(T) == typeof(StyleSheet) ? "-style" : "";
+            var suffix = typeof(T) == typeof(StyleSheet) ? ".style" : "";
             return Resources.Load<T>($"{resourcesRelativePath}{suffix}");
         }
 

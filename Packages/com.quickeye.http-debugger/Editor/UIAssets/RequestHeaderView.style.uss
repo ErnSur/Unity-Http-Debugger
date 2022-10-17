@@ -1,0 +1,16 @@
+#req-url-field > Label {
+    width: 31px;
+    min-width: 30px;
+}
+
+.icon-blue {
+    background-image: url('project://database/Packages/com.quickeye.http-debugger/Editor/Icons/request_data_blue.png?fileID=21300000&guid=cf80eec2403e94e0bb3c724f98ba3c2d&type=3#request_data_blue');
+}
+
+.icon-gray {
+    background-image: url('project://database/Packages/com.quickeye.http-debugger/Editor/Icons/request_data_gray.png?fileID=21300000&guid=e3d7b4cd1b1914a5487d34a1feb520a9&type=3#request_data_gray');
+}
+
+.header {
+    background-color: var(--unity-colors-headerbar-background);
+}

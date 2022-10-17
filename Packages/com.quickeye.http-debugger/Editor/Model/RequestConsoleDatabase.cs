@@ -10,7 +10,7 @@ namespace QuickEye.WebTools.Editor
     internal class RequestConsoleDatabase : ScriptableSingleton<RequestConsoleDatabase>, ISerializationCallbackReceiver
     {
         public const string FilePath = "Logs/RequestConsoleDatabase.asset";
-
+        public const string BreakpointPropertyName = nameof(serializedBreakpoints);
         public PersistentRequestList requests;
         public HashSet<string> breakpoints = new HashSet<string>();
 

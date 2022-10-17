@@ -127,19 +127,11 @@ namespace QuickEye.WebTools.Editor
                 AddContextMenu(element, i);
             };
 
-            idCol.makeCell = () => new IdCell((id, hasBreakpoint) =>
-            {
-                if (hasBreakpoint)
-                    RequestConsoleDatabase.instance.breakpoints.Add(id);
-                else
-                    RequestConsoleDatabase.instance.breakpoints.Remove(id);
-                requestList.RefreshItems();
-            });
+            idCol.makeCell = () => new IdCell();
             idCol.bindCell = (element, i) =>
             {
                 var id = Source[i].name;
-                var hasBreakpoint = RequestConsoleDatabase.instance.breakpoints.Contains(id);
-                ((IdCell)element).Setup(id, hasBreakpoint);
+                ((IdCell)element).Setup(id);
                 AddContextMenu(element, i);
             };
 
