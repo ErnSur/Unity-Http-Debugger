@@ -32,8 +32,7 @@ namespace QuickEye.WebTools.Editor
 
         int IList.Add(object value)
         {
-            Property.arraySize++;
-            Property.serializedObject.ApplyModifiedProperties();
+            Insert(Count);
             return Count - 1;
         }
 
@@ -77,7 +76,7 @@ namespace QuickEye.WebTools.Editor
 
         void IList.Insert(int index, object value)
         {
-            throw new NotImplementedException();
+            Insert(index);
         }
 
         void IList.Remove(object value)
@@ -97,16 +96,21 @@ namespace QuickEye.WebTools.Editor
 
         object ICollection.SyncRoot { get; } = new object();
 
-        public void Add() => Insert(Count);
+        public void Add()
+        {
+            Insert(Count);
+        }
 
         public void Insert(int index)
         {
             Property.InsertArrayElementAtIndex(index);
+            Property.serializedObject.ApplyModifiedProperties();
         }
 
         public void RemoveAt(int index)
         {
             Property.DeleteArrayElementAtIndex(index);
+            Property.serializedObject.ApplyModifiedProperties();
         }
 
         bool IList.IsFixedSize => false;
