@@ -50,7 +50,7 @@ namespace QuickEye.WebTools.Editor
             if (serializedObject is null)
                 return;
             _target = (RequestData)serializedObject.targetObject;
-            reqBodyField.BindProperty(serializedObject.FindProperty(nameof(RequestData.body)));
+            reqBodyField.BindProperty(serializedObject.FindProperty(nameof(RequestData.content)));
             _headersViewController.Setup(serializedObject.FindProperty(nameof(RequestData.headers)));
             if (_target is ConsoleRequestData consoleRequestData)
             {

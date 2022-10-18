@@ -21,7 +21,7 @@ namespace QuickEye.WebTools.Editor
             result.type = type;
             result.headers = headers;
             if (req.Content != null)
-                result.body = JsonFormatter.Format(await req.Content.ReadAsStringAsync());
+                result.content = JsonFormatter.Format(await req.Content.ReadAsStringAsync());
             return result;
         }
 
@@ -30,7 +30,7 @@ namespace QuickEye.WebTools.Editor
             var hdRequest = await FromHttpRequestMessage<T>(res.RequestMessage);
             hdRequest.lastResponse = new ResponseData((int)res.StatusCode);
             if (res.Content != null)
-                hdRequest.lastResponse.payload = JsonFormatter.Format(await res.Content.ReadAsStringAsync());
+                hdRequest.lastResponse.content = await res.Content.ReadAsStringAsync();
             hdRequest.lastResponse.headers = ContentHeadersToList(res.Content?.Headers);
             return hdRequest;
         }
@@ -44,7 +44,7 @@ namespace QuickEye.WebTools.Editor
             {
                 result.headers.Add(new Header("Content-Type", req.uploadHandler.contentType));
                 var textPayload = Encoding.UTF8.GetString(req.uploadHandler.data);
-                result.body = new JsonFormatter(textPayload).Format();
+                result.content = new JsonFormatter(textPayload).Format();
             }
 
             //result.headers.AddRange(ContentHeadersToList(req.GetRequestHeaders()));
@@ -57,7 +57,7 @@ namespace QuickEye.WebTools.Editor
             var result = new ResponseData((int)req.responseCode);
             result.headers = ContentHeadersToList(req.GetResponseHeaders());
             if (req.downloadHandler?.text != null)
-                result.payload = new JsonFormatter(req.downloadHandler.text).Format();
+                result.content = new JsonFormatter(req.downloadHandler.text).Format();
 
             return result;
         }

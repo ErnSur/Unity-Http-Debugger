@@ -7,7 +7,7 @@ namespace QuickEye.WebTools
     public class ResponseData
     {
         public int statusCode;
-        public string payload;
+        public string content;
         public List<Header> headers;
 
         public ResponseData(int statusCode)
@@ -15,10 +15,10 @@ namespace QuickEye.WebTools
             this.statusCode = statusCode;
         }
 
-        public ResponseData(int statusCode, string payload, IEnumerable<Header> headers)
+        public ResponseData(int statusCode, string content, IEnumerable<Header> headers)
         {
             this.statusCode = statusCode;
-            this.payload = payload;
+            this.content = content;
             this.headers = new List<Header>(headers);
         }
     }

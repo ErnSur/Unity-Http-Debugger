@@ -115,7 +115,7 @@ namespace QuickEye.WebTools.Editor
                 var newRequest = RequestData.Create();
                 newRequest.name = "New Request";
                 newRequest.type = HttpMethodType.Get;
-                newRequest.body = "{ }";
+                newRequest.content = "{ }";
                 
                 _requestList.Add(newRequest);
                 stashList.Rebuild();

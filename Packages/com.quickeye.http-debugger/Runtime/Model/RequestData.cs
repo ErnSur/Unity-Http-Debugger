@@ -19,7 +19,7 @@ namespace QuickEye.WebTools
         internal event Action Modified;
         public string url;
         public HttpMethodType type;
-        public string body;
+        public string content;
 
         public List<Header> headers = new List<Header>();
 
@@ -52,8 +52,8 @@ namespace QuickEye.WebTools
 
             foreach (var (name, value) in headers.Where(header => header.enabled).Except(contentType))
                 result.Headers.Add(name, value);
-            if (!string.IsNullOrWhiteSpace(body) && contentType.Length > 0)
-                result.Content = new StringContent(body, Encoding.UTF8, contentType.Last().value);
+            if (!string.IsNullOrWhiteSpace(content) && contentType.Length > 0)
+                result.Content = new StringContent(content, Encoding.UTF8, contentType.Last().value);
             return result;
         }
 
@@ -68,7 +68,7 @@ namespace QuickEye.WebTools
                 .LastOrDefault(h => h.name == "Content-Type")?.value;
             if (contentType != null)
             {
-                var bytes = Encoding.UTF8.GetBytes(body);
+                var bytes = Encoding.UTF8.GetBytes(content);
                 result.uploadHandler = new UploadHandlerRaw(bytes);
                 result.uploadHandler.contentType = contentType;
             }
