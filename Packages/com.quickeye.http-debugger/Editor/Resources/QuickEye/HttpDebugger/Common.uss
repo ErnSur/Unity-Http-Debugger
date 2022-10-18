@@ -27,12 +27,8 @@
 .header-toolbar {
     height: 25px;
     border-top-width: 0;
-    border-bottom-width: 0;
-    border-left-color: rgba(0, 0, 0, 0.3);
-    border-right-color: rgba(0, 0, 0, 0.3);
-    border-top-color: rgba(0, 0, 0, 0.3);
-    border-bottom-color: rgba(0, 0, 0, 0.3);
-    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom-width: 1px;
+    background-color: var(--unity-colors-toolbar_button-background);
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
@@ -42,6 +38,7 @@
     padding-top: 0;
     padding-bottom: 0;
     min-height: 25px;
+    border-bottom-color: var(--unity-colors-toolbar-border);
 }
 
 .header-toolbar--button {
@@ -58,7 +55,6 @@
 }
 
 .status-code {
-    background-color: rgb(0, 0, 0);
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
     border-top-right-radius: 6px;
@@ -70,26 +66,54 @@
     color: rgb(255, 255, 255);
     -unity-font-style: bold;
     -unity-text-align: middle-center;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(17, 17, 17);
+    border-right-color: rgb(17, 17, 17);
+    border-top-color: rgb(17, 17, 17);
+    border-bottom-color: rgb(17, 17, 17);
 }
 
 .status-code-100 {
-    background-color: rgb(36, 166, 186);
+    
+    border-left-color: rgb(36, 166, 186);
+    border-right-color: rgb(36, 166, 186);
+    border-top-color: rgb(36, 166, 186);
+    border-bottom-color: rgb(36, 166, 186);
 }
 
 .status-code-200 {
-    background-color: rgb(98, 156, 30);
+    
+    border-left-color: rgb(98, 156, 30);
+    border-right-color: rgb(98, 156, 30);
+    border-top-color: rgb(98, 156, 30);
+    border-bottom-color: rgb(98, 156, 30);
 }
 
 .status-code-300 {
-    background-color: rgb(186, 36, 122);
+    
+    border-left-color: rgb(186, 36, 122);
+    border-right-color: rgb(186, 36, 122);
+    border-top-color: rgb(186, 36, 122);
+    border-bottom-color: rgb(186, 36, 122);
 }
 
 .status-code-400 {
-    background-color: rgb(197, 113, 2);
+    
+    border-left-color: rgb(197, 113, 2);
+    border-right-color: rgb(197, 113, 2);
+    border-top-color: rgb(197, 113, 2);
+    border-bottom-color: rgb(197, 113, 2);
 }
 
 .status-code-500 {
-    background-color: rgb(236, 54, 2);
+    
+    border-left-color: rgb(236, 54, 2);
+    border-right-color: rgb(236, 54, 2);
+    border-top-color: rgb(236, 54, 2);
+    border-bottom-color: rgb(236, 54, 2);
 }
 
 DropdownButton {
