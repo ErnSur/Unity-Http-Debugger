@@ -29,6 +29,7 @@ namespace QuickEye.WebTools.Editor
             var isConsoleRequest = _target is ConsoleRequestData;
             UpdateBreakpointToggle(isConsoleRequest);
             UpdateIcon(isConsoleRequest);
+            nameField.SetEnabled(!AssetDatabase.IsMainAsset(_target));
             reqTypeMenu.BindProperty(serializedObject.FindProperty(nameof(RequestData.type)));
             reqUrlField.BindProperty(serializedObject.FindProperty(nameof(RequestData.url)));
             nameField.BindProperty(serializedObject.FindProperty(RequestData.NamePropertyName));
