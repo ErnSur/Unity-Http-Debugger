@@ -1,5 +1,5 @@
 # Unity HTTP Debugger
-![](Documentation~/EditorWindow.jpg)
+![](Documentation~/EditorWindow.png)
 HTTP request logging tool for Unity. 
 
 > Supported in Unity 2022+ (may be backported at the later stages of the project)

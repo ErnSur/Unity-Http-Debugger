@@ -5,18 +5,15 @@
 }
 
 .status-code.code-cell {
-    border-width: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
     margin-bottom: 2px;
     margin-top: 2px;
     -unity-text-align: middle-center;
 }
 
 .type-cell {
-    -unity-font-style: bold;
+    /*-unity-font-style: bold;*/
+    color: var(--unity-colors-default-text-hover);
+
     width: 28px;
     margin-left: 3px;
     margin-right: 2px;

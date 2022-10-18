@@ -1,46 +1,62 @@
 ﻿using System.Linq;
-using QuickEye.UIToolkit;
 using UnityEngine.UIElements;
 
 namespace QuickEye.WebTools.Editor
 {
-    internal class CodeField : VisualElement
+    public class CodeField : TextField
     {
-        public TextField Field => codeFieldInput;
-        private Label codeFieldLineNumberLabel;
-        private TextField codeFieldInput;
-
+        private const string LineScrollViewName = "line-number--scroll-view";
+        private const string LineLabelName = "line-number--label";
+        private Label _lineNumberLabel;
+        private ScrollView _lineNumberScrollView;
+        
         public CodeField()
         {
             this.InitResources();
-            CreateTree();
-            codeFieldInput.RegisterCallback<InputEvent>(_ => RefreshCodeLines());
-            codeFieldInput.RegisterValueChangedCallback(_ => RefreshCodeLines());
+            AddToClassList("code-field");
+            this[0].style.flexDirection = FlexDirection.Row;
+            multiline = true;
+            SetVerticalScrollerVisibility(ScrollerVisibility.Auto);
+            AddLineNumbers();
+            RegisterScrollEvent();
         }
 
-        private void CreateTree()
+        private void AddLineNumbers()
         {
-            var scrollView = new ScrollView();
-            scrollView.AddToClassList("common-variables");
-            scrollView.AddToClassList("codeField-container");
-            var container = new VisualElement();
-            container.AddToClassList("codeField-scrollView--container");
-            codeFieldLineNumberLabel = new Label();
-            codeFieldLineNumberLabel.name = "codeField-lineNumber--label";
-            codeFieldInput = new TextField();
-            codeFieldInput.name = "codeField--input";
-            codeFieldInput.style.flexGrow = 1;
-            codeFieldInput.multiline = true;
+            _lineNumberLabel = new Label() { name = LineLabelName };
+            _lineNumberScrollView = new ScrollView
+            {
+                name = LineScrollViewName,
+                mode = ScrollViewMode.Vertical,
+                verticalScrollerVisibility = ScrollerVisibility.Hidden,
+                horizontalScrollerVisibility = ScrollerVisibility.Hidden
+            };
+            _lineNumberScrollView.Add(_lineNumberLabel);
+            _lineNumberScrollView.SetEnabled(false);
+            this[0].Insert(0, _lineNumberScrollView);
+        }
 
-            Add(scrollView);
-            scrollView.Add(container);
-            container.Insert(0, codeFieldLineNumberLabel);
-            container.Add(codeFieldInput);
+        private void RegisterScrollEvent()
+        {
+            // This will only work if CodeField was declared in UXML and had its multiline attribute set to true
+            var contentScrollView = this.Q<ScrollView>();
+            if (contentScrollView != null)
+                contentScrollView.verticalScroller.valueChanged +=
+                    v => _lineNumberScrollView.verticalScroller.value = v;
+        }
+
+        public override void SetValueWithoutNotify(string newValue)
+        {
+            base.SetValueWithoutNotify(newValue);
+            RefreshCodeLines();
         }
 
         private void RefreshCodeLines()
         {
-            var lineCount = codeFieldInput.text.Count(x => x == '\n') + 1;
+            if (_lineNumberLabel == null)
+                return;
+
+            var lineCount = text.Count(x => x == '\n') + 1;
             string lineNumbersText = "";
             for (int i = 1; i <= lineCount; ++i)
             {
@@ -50,11 +66,11 @@ namespace QuickEye.WebTools.Editor
                 lineNumbersText += i.ToString();
             }
 
-            codeFieldLineNumberLabel.text = lineNumbersText;
+            _lineNumberLabel.text = lineNumbersText;
         }
 
         public new class UxmlFactory : UxmlFactory<CodeField, UxmlTraits> { }
 
-        public new class UxmlTraits : BindableElement.UxmlTraits { }
+        public new class UxmlTraits : TextField.UxmlTraits { }
     }
 }

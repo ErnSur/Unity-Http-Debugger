@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0e3aa140b2e4ce4ab99fb3aac2295ed, type: 3}
-  m_Name: MockAPI Put
+  m_Name: Update User Profile
   m_EditorClassIdentifier: 
   url: https://75l93.mocklab.io/json/2
   type: 1

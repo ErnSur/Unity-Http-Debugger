@@ -1,28 +1,37 @@
-.codeField-scrollView--container {
-    flex-direction: row;
+.code-field {
+    -unity-font: resource('QuickEye/HttpDebugger/RobotoMono-Regular');
+    -unity-font-definition: none;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-.codeField-container {
-    background-color: rgb(36, 36, 36);
-    border-left-width: 1px;
+.code-field #line-number--label {
+    border-left-width: 0;
     border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-color: rgb(84, 84, 84);
-    border-right-color: rgb(84, 84, 84);
-    border-top-color: rgb(84, 84, 84);
-    border-bottom-color: rgb(84, 84, 84);
-}
-
-#codeField-lineNumber--label {
-    -unity-font: resource('QuickEye/HttpDebugger/RobotoMono-Regular');
-    color: rgb(89, 89, 89);
+    border-top-width: 0;
+    border-bottom-width: 0;
+    padding-left: 0;
+    padding-right: 3px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 7px;
+    margin-top: 0;
+    margin-bottom: 0;
     -unity-text-align: upper-right;
-    margin-left: 5px;
-    -unity-font-definition: none;
 }
 
-#codeField--input {
-    -unity-font: resource('QuickEye/HttpDebugger/RobotoMono-Regular');
-    -unity-font-definition: none;
+.code-field > #unity-text-input {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }

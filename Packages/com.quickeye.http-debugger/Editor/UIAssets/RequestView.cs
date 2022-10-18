@@ -31,6 +31,7 @@ namespace QuickEye.WebTools.Editor
                 var (filePath, line) = _linksByLinkText[evt.linkText];
                 InternalEditorUtility.OpenFileAtLineExternal(filePath, line);
             });
+            stackTraceLabel.selection.isSelectable = true;
             InitTabs();
         }
 
@@ -49,7 +50,7 @@ namespace QuickEye.WebTools.Editor
             if (serializedObject is null)
                 return;
             _target = (RequestData)serializedObject.targetObject;
-            reqBodyField.Field.BindProperty(serializedObject.FindProperty(nameof(RequestData.body)));
+            reqBodyField.BindProperty(serializedObject.FindProperty(nameof(RequestData.body)));
             _headersViewController.Setup(serializedObject.FindProperty(nameof(RequestData.headers)));
             if (_target is ConsoleRequestData consoleRequestData)
             {
@@ -82,7 +83,6 @@ namespace QuickEye.WebTools.Editor
             bodyTab.value = true;
         }
 
-     
 
         // TODO: make it nicer to look at?
         private string StacktraceWithHyperlinks(string stacktraceText)

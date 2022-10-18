@@ -13,10 +13,10 @@ namespace QuickEye.WebTools.Editor
         private UnityEditor.UIElements.ToolbarSearchField searchField;
         private MultiColumnListView requestList;
         private Column timeCol;
-        private Column resultCol;
         private Column methodCol;
         private Column idCol;
         private Column urlCol;
+        private Column resultCol;
     
         protected void AssignQueryResults(VisualElement root)
         {
@@ -24,10 +24,10 @@ namespace QuickEye.WebTools.Editor
             searchField = root.Q<UnityEditor.UIElements.ToolbarSearchField>("search-field");
             requestList = root.Q<MultiColumnListView>("request-list");
             timeCol = requestList.columns["time-col"];
-            resultCol = requestList.columns["result-col"];
             methodCol = requestList.columns["method-col"];
             idCol = requestList.columns["id-col"];
             urlCol = requestList.columns["url-col"];
+            resultCol = requestList.columns["result-col"];
         }
     }
 }
