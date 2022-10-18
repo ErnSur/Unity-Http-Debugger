@@ -31,6 +31,7 @@ namespace QuickEye.WebTools.Editor
                 var (filePath, line) = _linksByLinkText[evt.linkText];
                 InternalEditorUtility.OpenFileAtLineExternal(filePath, line);
             });
+            stackTraceLabel.selection.isSelectable = true;
             InitTabs();
         }
 
@@ -82,7 +83,6 @@ namespace QuickEye.WebTools.Editor
             bodyTab.value = true;
         }
 
-     
 
         // TODO: make it nicer to look at?
         private string StacktraceWithHyperlinks(string stacktraceText)

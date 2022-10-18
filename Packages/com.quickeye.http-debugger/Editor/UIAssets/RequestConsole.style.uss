@@ -11,7 +11,9 @@
 }
 
 .type-cell {
-    -unity-font-style: bold;
+    /*-unity-font-style: bold;*/
+    color: var(--unity-colors-default-text-hover);
+
     width: 28px;
     margin-left: 3px;
     margin-right: 2px;

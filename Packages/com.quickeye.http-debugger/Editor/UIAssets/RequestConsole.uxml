@@ -6,13 +6,13 @@
         <uie:ToolbarSpacer style="flex-grow: 1;" />
         <uie:ToolbarSearchField focusable="true" name="search-field" style="flex-shrink: 1;" />
     </uie:Toolbar>
-    <ui:MultiColumnListView fixed-item-height="22" horizontal-scrolling="true" name="request-list" style="flex-grow: 1;">
+    <ui:MultiColumnListView fixed-item-height="22" horizontal-scrolling="true" name="request-list" show-alternating-row-backgrounds="ContentOnly" style="flex-grow: 1;">
         <ui:Columns>
             <ui:Column name="time-col" title="Time" width="50" visible="false" />
-            <ui:Column name="result-col" title="Result" width="29" resizable="false" />
             <ui:Column name="method-col" title="Method" width="30" />
             <ui:Column name="id-col" title="ID" width="120" />
             <ui:Column name="url-col" title="URL" width="200" stretchable="true" />
+            <ui:Column name="result-col" title="Result" width="29" resizable="false" />
         </ui:Columns>
     </ui:MultiColumnListView>
 </ui:UXML>
