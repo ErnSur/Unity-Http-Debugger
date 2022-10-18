@@ -148,12 +148,16 @@ namespace QuickEye.WebTools.Editor
             element.AddManipulator(new ContextualMenuManipulator(evt =>
             {
                 evt.menu.AppendAction("Save To Stash",
-                    _ => { StashDatabase.instance.requests.Add(RequestData.Create(Source[i])); });
+                    _ =>
+                    {
+                        StashDatabase.instance.requests.Add(RequestData.Create(Source[i]));
+                        RequestStashWindow.Open();
+                    });
                 evt.menu.AppendAction("Save To Assets",
                     _ =>
                     {
                         var copy = RequestData.Create(Source[i]);
-                        ProjectWindowUtil.CreateAsset(copy,$"Assets/{copy.name}.asset");
+                        ProjectWindowUtil.CreateAsset(copy, $"Assets/{copy.name}.asset");
                     });
             }));
         }

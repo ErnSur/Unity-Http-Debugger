@@ -1,5 +1,3 @@
-using System;
-using System.Net;
 using UnityEngine.UIElements;
 
 namespace QuickEye.WebTools.Editor

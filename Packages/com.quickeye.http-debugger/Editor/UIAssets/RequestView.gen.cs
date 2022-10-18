@@ -9,7 +9,7 @@ namespace QuickEye.WebTools.Editor
 {
     partial class RequestView
     {
-        private QuickEye.UIToolkit.Tab bodyTab;
+        private QuickEye.UIToolkit.TabDropdown bodyTab;
         private QuickEye.UIToolkit.TabDropdown authTab;
         private QuickEye.UIToolkit.Tab headersTab;
         private QuickEye.UIToolkit.Tab stackTraceTab;
@@ -20,7 +20,7 @@ namespace QuickEye.WebTools.Editor
     
         protected void AssignQueryResults(VisualElement root)
         {
-            bodyTab = root.Q<QuickEye.UIToolkit.Tab>("body-tab");
+            bodyTab = root.Q<QuickEye.UIToolkit.TabDropdown>("body-tab");
             authTab = root.Q<QuickEye.UIToolkit.TabDropdown>("auth-tab");
             headersTab = root.Q<QuickEye.UIToolkit.Tab>("headers-tab");
             stackTraceTab = root.Q<QuickEye.UIToolkit.Tab>("stack-trace-tab");

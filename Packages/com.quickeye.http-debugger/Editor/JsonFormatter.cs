@@ -13,18 +13,18 @@ namespace QuickEye.WebTools.Editor
         {
             return new JsonFormatter(json).Format();
         }
- 
+
         public JsonFormatter(string json)
         {
             _walker = new StringWalker(json);
             ResetLine();
         }
- 
+
         public void ResetLine()
         {
             _currentLine.Length = 0;
         }
- 
+
         public string Format()
         {
             while (MoveNextChar())
@@ -52,10 +52,11 @@ namespace QuickEye.WebTools.Editor
                     AddCharToLine();
                 }
             }
+
             this.WriteCurrentLine();
             return _writer.ToString();
         }
- 
+
         private bool MoveNextChar()
         {
             bool success = _walker.MoveNext();
@@ -63,36 +64,37 @@ namespace QuickEye.WebTools.Editor
             {
                 this._quoted = !_quoted;
             }
+
             return success;
         }
- 
+
         public bool IsApostrophe()
         {
             return this._walker.CurrentChar == '"' && this._walker.IsEscaped == false;
         }
- 
+
         public bool IsOpenBracket()
         {
             return this._walker.CurrentChar == '{'
                    || this._walker.CurrentChar == '[';
         }
- 
+
         public bool IsCloseBracket()
         {
             return this._walker.CurrentChar == '}'
                    || this._walker.CurrentChar == ']';
         }
- 
+
         public bool IsColon()
         {
             return this._walker.CurrentChar == ',';
         }
- 
+
         private void AddCharToLine()
         {
             this._currentLine.Append(_walker.CurrentChar);
         }
- 
+
         private void WriteCurrentLine()
         {
             string line = this._currentLine.ToString().Trim();
@@ -100,31 +102,32 @@ namespace QuickEye.WebTools.Editor
             {
                 _writer.WriteLine(line);
             }
+
             this.ResetLine();
         }
     };
-    
+
     public class IndentWriter
     {
         private readonly StringBuilder _result = new StringBuilder();
         private int _indentLevel;
- 
+
         public void Indent()
         {
             _indentLevel++;
         }
- 
+
         public void UnIndent()
         {
             if (_indentLevel > 0)
                 _indentLevel--;
         }
- 
+
         public void WriteLine(string line)
         {
             _result.AppendLine(CreateIndent() + line);
         }
- 
+
         private string CreateIndent()
         {
             StringBuilder indent = new StringBuilder();
@@ -132,32 +135,32 @@ namespace QuickEye.WebTools.Editor
                 indent.Append("    ");
             return indent.ToString();
         }
- 
+
         public override string ToString()
         {
             return _result.ToString();
         }
     };
-    
+
     public class StringWalker
     {
         private readonly string _s;
- 
+
         public int Index { get; private set; }
         public bool IsEscaped { get; private set; }
         public char CurrentChar { get; private set; }
- 
+
         public StringWalker(string s)
         {
             _s = s;
             this.Index = -1;
         }
- 
+
         public bool MoveNext()
         {
             if (this.Index == _s.Length - 1)
                 return false;
- 
+
             if (IsEscaped == false)
                 IsEscaped = CurrentChar == '\\';
             else

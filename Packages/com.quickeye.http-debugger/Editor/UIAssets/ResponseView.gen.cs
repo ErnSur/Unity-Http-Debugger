@@ -9,7 +9,7 @@ namespace QuickEye.WebTools.Editor
 {
     partial class ResponseView
     {
-        private QuickEye.UIToolkit.Tab bodyTab;
+        private QuickEye.UIToolkit.TabDropdown bodyTab;
         private QuickEye.UIToolkit.Tab headersTab;
         private QuickEye.UIToolkit.Tab cookieTab;
         private Label resStatusLabel;
@@ -19,7 +19,7 @@ namespace QuickEye.WebTools.Editor
     
         protected void AssignQueryResults(VisualElement root)
         {
-            bodyTab = root.Q<QuickEye.UIToolkit.Tab>("body-tab");
+            bodyTab = root.Q<QuickEye.UIToolkit.TabDropdown>("body-tab");
             headersTab = root.Q<QuickEye.UIToolkit.Tab>("headers-tab");
             cookieTab = root.Q<QuickEye.UIToolkit.Tab>("cookie-tab");
             resStatusLabel = root.Q<Label>("res-status-label");

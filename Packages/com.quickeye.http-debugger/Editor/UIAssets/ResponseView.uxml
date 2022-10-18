@@ -3,7 +3,7 @@
     <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
     <uie:Toolbar class="header-toolbar" style="flex-direction: row; padding-right: 4px;">
         <QuickEye.UIToolkit.TabGroup style="flex-direction: row; background-color: rgba(53, 53, 53, 0); flex-grow: 1;">
-            <QuickEye.UIToolkit.Tab name="body-tab" text="Body" />
+            <QuickEye.UIToolkit.TabDropdown name="body-tab" text="Body" />
             <QuickEye.UIToolkit.Tab name="headers-tab" text="Headers" />
             <QuickEye.UIToolkit.Tab name="cookie-tab" text="Cookie" style="display: none;" />
         </QuickEye.UIToolkit.TabGroup>

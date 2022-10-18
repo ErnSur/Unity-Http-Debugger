@@ -21,7 +21,7 @@ namespace QuickEye.WebTools.Editor
             result.type = type;
             result.headers = headers;
             if (req.Content != null)
-                result.content = JsonFormatter.Format(await req.Content.ReadAsStringAsync());
+                result.content = await req.Content.ReadAsStringAsync();
             return result;
         }
 
@@ -43,21 +43,21 @@ namespace QuickEye.WebTools.Editor
             if (req.uploadHandler != null && req.uploadHandler.data != null)
             {
                 result.headers.Add(new Header("Content-Type", req.uploadHandler.contentType));
-                var textPayload = Encoding.UTF8.GetString(req.uploadHandler.data);
-                result.content = new JsonFormatter(textPayload).Format();
+                var content = Encoding.UTF8.GetString(req.uploadHandler.data);
+                result.content = content;
             }
 
             //result.headers.AddRange(ContentHeadersToList(req.GetRequestHeaders()));
             result.lastResponse = ResponseFromUnityWebRequest(req);
             return result;
         }
-        
+
         public static ResponseData ResponseFromUnityWebRequest(UnityWebRequest req)
         {
             var result = new ResponseData((int)req.responseCode);
             result.headers = ContentHeadersToList(req.GetResponseHeaders());
             if (req.downloadHandler?.text != null)
-                result.content = new JsonFormatter(req.downloadHandler.text).Format();
+                result.content = req.downloadHandler.text;
 
             return result;
         }

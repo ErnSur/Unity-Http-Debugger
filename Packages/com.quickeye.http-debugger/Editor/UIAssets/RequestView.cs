@@ -1,14 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using QuickEye.UIToolkit;
-using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEditorInternal;
-using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -69,6 +65,17 @@ namespace QuickEye.WebTools.Editor
             bodyTab.TabContent = reqBodyField;
             headersTab.TabContent = headersView;
             stackTraceTab.TabContent = stackTraceView;
+
+            bodyTab.BeforeMenuShow += menu =>
+            {
+                menu.AddItem("JSON", _target.IsContentType(RequestDataUtils.JsonContentType),
+                    () => { _target.SetContentType(RequestDataUtils.JsonContentType); });
+                menu.AddItem("XML", _target.IsContentType(RequestDataUtils.XmlContentType),
+                    () => { _target.SetContentType(RequestDataUtils.XmlContentType); });
+                menu.AddSeparator("");
+                menu.AddItem("Beautify", false, () => { _target.content = _target.GetFormattedContent(); });
+            };
+
             authTab.BeforeMenuShow += menu =>
             {
                 menu.AddItem("Basic Auth", false, null);
