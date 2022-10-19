@@ -39,6 +39,7 @@ namespace QuickEye.WebTools.Editor
             }
 
             _headersViewController.ToggleReadOnlyMode(value);
+            ToggleBodyTabDropdownActions(!value);
         }
 
         public void Setup(SerializedObject serializedObject)
@@ -65,17 +66,7 @@ namespace QuickEye.WebTools.Editor
             bodyTab.TabContent = reqBodyField;
             headersTab.TabContent = headersView;
             stackTraceTab.TabContent = stackTraceView;
-
-            bodyTab.BeforeMenuShow += menu =>
-            {
-                menu.AddItem("JSON", _target.IsContentType(RequestDataUtils.JsonContentType),
-                    () => { _target.SetContentType(RequestDataUtils.JsonContentType); });
-                menu.AddItem("XML", _target.IsContentType(RequestDataUtils.XmlContentType),
-                    () => { _target.SetContentType(RequestDataUtils.XmlContentType); });
-                menu.AddSeparator("");
-                menu.AddItem("Beautify", false, () => { _target.content = _target.GetFormattedContent(); });
-            };
-
+            ToggleBodyTabDropdownActions(true);
             authTab.BeforeMenuShow += menu =>
             {
                 menu.AddItem("Basic Auth", false, null);
@@ -88,6 +79,29 @@ namespace QuickEye.WebTools.Editor
             };
 
             bodyTab.value = true;
+        }
+        
+        private void ToggleBodyTabDropdownActions(bool value)
+        {
+            if (value)
+            {
+                bodyTab.BeforeMenuShow -= AddBodyTabMenuItems;
+                bodyTab.BeforeMenuShow += AddBodyTabMenuItems;
+            }
+            else
+            {
+                bodyTab.BeforeMenuShow -= AddBodyTabMenuItems;
+            }
+        }
+
+        private void AddBodyTabMenuItems(GenericDropdownMenu menu)
+        {
+            menu.AddItem("JSON", _target.IsContentType(RequestDataUtils.JsonContentType),
+                () => { _target.SetContentType(RequestDataUtils.JsonContentType); });
+            menu.AddItem("XML", _target.IsContentType(RequestDataUtils.XmlContentType),
+                () => { _target.SetContentType(RequestDataUtils.XmlContentType); });
+            menu.AddSeparator("");
+            menu.AddItem("Beautify", false, () => { _target.content = _target.GetFormattedContent(); });
         }
 
 
