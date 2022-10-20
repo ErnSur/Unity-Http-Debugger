@@ -2,7 +2,7 @@
     <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/UIAssets/RequestConsole.style.uss?fileID=7433441132597879392&amp;guid=779eec097141c469d95b186e741bd9cf&amp;type=3#RequestConsole.style" />
     <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/Common.uss?fileID=7433441132597879392&amp;guid=15355b22986e64b74805463bd348e850&amp;type=3#Common" />
     <uie:Toolbar>
-        <QuickEye.WebTools.Editor.DropdownButton tabindex="-1" focusable="false" text="Clear" name="clear-button" class="clear-button" />
+        <QuickEye.WebTools.Editor.DropdownButton tabindex="-1" focusable="false" text="Clear" name="clear-button" class="clear-button" style="flex-shrink: 0;" />
         <uie:ToolbarSpacer style="flex-grow: 1;" />
         <uie:ToolbarSearchField focusable="true" name="search-field" style="flex-shrink: 1;" />
     </uie:Toolbar>
