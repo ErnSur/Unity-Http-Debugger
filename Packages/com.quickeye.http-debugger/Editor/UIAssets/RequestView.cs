@@ -5,6 +5,7 @@ using QuickEye.UIToolkit;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEditorInternal;
+using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -77,10 +78,10 @@ namespace QuickEye.WebTools.Editor
                 menu.AddSeparator("");
                 menu.AddItem("No Authentication", true, null);
             };
-
+            UiUtils.InitializeTabStatePersistence(_root,"requestView-active-tab",bodyTab, headersTab, stackTraceTab);
             bodyTab.value = true;
         }
-        
+
         private void ToggleBodyTabDropdownActions(bool value)
         {
             if (value)

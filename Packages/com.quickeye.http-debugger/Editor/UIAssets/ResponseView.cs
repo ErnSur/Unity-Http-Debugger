@@ -35,6 +35,7 @@ namespace QuickEye.WebTools.Editor
                     UpdateBodyContent();
                 });
             };
+            UiUtils.InitializeTabStatePersistence(_root,"responseView-active-tab",bodyTab, headersTab);
         }
 
         private void UpdateBodyContent()

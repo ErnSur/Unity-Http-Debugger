@@ -6,7 +6,7 @@
         <uie:ToolbarSpacer style="flex-grow: 1;" />
         <uie:ToolbarSearchField focusable="true" name="search-field" style="flex-shrink: 1;" />
     </uie:Toolbar>
-    <ui:MultiColumnListView fixed-item-height="22" horizontal-scrolling="true" name="request-list" show-alternating-row-backgrounds="ContentOnly" style="flex-grow: 1;">
+    <ui:MultiColumnListView fixed-item-height="22" horizontal-scrolling="true" name="request-list" show-alternating-row-backgrounds="ContentOnly" view-data-key="req-list" style="flex-grow: 1;">
         <ui:Columns>
             <ui:Column name="time-col" title="Time" width="50" visible="false" />
             <ui:Column name="method-col" title="Method" width="30" />
