@@ -31,7 +31,7 @@ namespace QuickEye.WebTools.Editor
 
         internal static string GetContentType(this ResponseData data)
         {
-            return data.headers.FirstOrDefault(h => h.name == HeaderNames.ContentType)?.value;
+            return data?.headers?.FirstOrDefault(h => h.name == HeaderNames.ContentType)?.value;
         }
 
         internal static string GetFormattedContent(this RequestData data)

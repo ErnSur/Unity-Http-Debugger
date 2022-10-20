@@ -1,3 +1,5 @@
+using System;
+using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace QuickEye.WebTools.Editor
@@ -92,12 +94,24 @@ namespace QuickEye.WebTools.Editor
         NotExtended = 510,
         NetworkAuthenticationRequired = 511
     }
+    
     internal static class HttpStatusCodeUtil
     {
         public static bool IsValidHttpStatusCode(int code)
         {
             return code >= 100 && code < 600;
         }
+        
+        public static string StatusCodeToNiceString(int statusCode)
+        {
+            var isDefined = Enum.IsDefined(typeof(HttpStatusCode2), statusCode);
+
+            var text = $"{statusCode}";
+            if (isDefined)
+                text += $" {ObjectNames.NicifyVariableName(((HttpStatusCode2)statusCode).ToString())}";
+            return text;
+        }
+        
         private static StatusCodeType GetCodeType(int code)
         {
             if (code > 99 && code < 200)

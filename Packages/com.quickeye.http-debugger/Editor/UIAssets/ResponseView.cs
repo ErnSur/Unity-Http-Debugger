@@ -35,7 +35,7 @@ namespace QuickEye.WebTools.Editor
                     UpdateBodyContent();
                 });
             };
-            UiUtils.InitializeTabStatePersistence(_root,"responseView-active-tab",bodyTab, headersTab);
+            UiUtils.InitializeTabStatePersistence(_root, "responseView-active-tab", bodyTab, headersTab);
         }
 
         private void UpdateBodyContent()
@@ -56,6 +56,7 @@ namespace QuickEye.WebTools.Editor
 
         public void ToggleLoadingOverlay(bool value)
         {
+            _root.ToggleDisplayStyle(true);
             loadingOverlay.ToggleDisplayStyle(value);
         }
 
@@ -64,19 +65,18 @@ namespace QuickEye.WebTools.Editor
             contentProperty = responseProperty.FindPropertyRelative(nameof(ResponseData.content));
             resBodyField.TrackPropertyValue(contentProperty, _ => UpdateBodyContent());
             UpdateBodyContent();
-            _root.TrackPropertyValueAndInit(responseProperty.FindPropertyRelative(nameof(ResponseData.statusCode)),
-                prop =>
-                {
-                    var v = prop.intValue;
-                    var isDefined = Enum.IsDefined(typeof(HttpStatusCode2), v);
-
-                    var message = $"{v}";
-                    if (isDefined)
-                        message += $" {ObjectNames.NicifyVariableName(((HttpStatusCode2)v).ToString())}";
-                    resStatusLabel.text = message;
-                    HttpStatusCodeUtil.ToggleStatusCodeClass(resStatusLabel, v);
-                });
+            var statusCodeProp = responseProperty.FindPropertyRelative(nameof(ResponseData.statusCode));
+            _root.TrackPropertyValue(statusCodeProp, UpdateStatusCodeLabel);
+            UpdateStatusCodeLabel(statusCodeProp);
             _headersViewController.Setup(responseProperty.FindPropertyRelative(nameof(ResponseData.headers)));
+        }
+
+        private void UpdateStatusCodeLabel(SerializedProperty statusCodeProp)
+        {
+            var statusCode = statusCodeProp.intValue;
+            resStatusLabel.text = HttpStatusCodeUtil.StatusCodeToNiceString(statusCode);
+            HttpStatusCodeUtil.ToggleStatusCodeClass(resStatusLabel, statusCode);
+            _root.ToggleDisplayStyle(statusCode != 0);
         }
     }
 }

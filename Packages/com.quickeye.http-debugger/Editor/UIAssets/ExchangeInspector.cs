@@ -19,8 +19,9 @@ namespace QuickEye.WebTools.Editor
             _requestViewController = new RequestView(requestViewRoot);
             _responseViewController = new ResponseView(responseViewRoot);
             _requestHeaderViewController = new RequestHeaderView(requestHeaderView);
-            
-            _requestHeaderViewController.RequestAwaitStarted += () => _responseViewController.ToggleLoadingOverlay(true);
+
+            _requestHeaderViewController.RequestAwaitStarted +=
+                () => _responseViewController.ToggleLoadingOverlay(true);
             _requestHeaderViewController.RequestAwaitEnded += _ => _responseViewController.ToggleLoadingOverlay(false);
             exchangePane.RegisterCallback<GeometryChangedEvent>(evt =>
             {
@@ -30,7 +31,7 @@ namespace QuickEye.WebTools.Editor
             });
             RefreshReqView();
         }
-        
+
         public void Setup(SerializedObject serializedObject)
         {
             _target = serializedObject;
@@ -48,7 +49,7 @@ namespace QuickEye.WebTools.Editor
         private void RefreshReqView()
         {
             UpdateSelectedView();
-            if (_target ==  null)
+            if (_target == null)
                 return;
             _requestHeaderViewController.Setup(_target);
             _requestViewController.Setup(_target);
@@ -61,6 +62,5 @@ namespace QuickEye.WebTools.Editor
             noSelectView.ToggleDisplayStyle(!hasSelection);
             exchangePane.ToggleDisplayStyle(hasSelection);
         }
-
     }
 }
