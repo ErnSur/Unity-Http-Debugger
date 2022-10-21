@@ -1,0 +1,13 @@
+#exchange-inspector {
+    flex-grow: 1;
+    margin-bottom: -2px;
+}
+
+.exchange-inspector-ancestor {
+    flex-grow: 1;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
