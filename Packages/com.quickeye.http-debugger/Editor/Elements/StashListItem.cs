@@ -8,21 +8,22 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.WebTools.Editor
 {
-    public class RequestButtonBig : VisualElement
+    public class StashListItem : VisualElement
     {
         public Action Deleted;
         public Action Duplicated;
 
         private readonly Label _typeLabel;
-        private readonly EditableLabel _nameLabel;
-        private readonly Button _dropdownButton;
+        private readonly Label _nameLabel;
+        private readonly Label _dropdownButton;
 
-        public RequestButtonBig()
+        public StashListItem()
         {
             this.InitResources();
-            Add(_typeLabel = new Label().Class("rbb-type"));
-            Add(_nameLabel = new EditableLabel().Class("rbb-name"));
-            Add(_dropdownButton = new Button() { text = "▼" }.Clicked(() =>
+            AddToClassList("stash-list-item");
+            Add(_typeLabel = new Label().Class("stash-list-item__type-label"));
+            Add(_nameLabel = new Label().Class("stash-list-item__name-label"));
+            Add(_dropdownButton = new Label("▼").Class("stash-list-item__dropdown").Clicked(() =>
             {
                 var menu = new GenericMenu();
                 menu.AddItem(new GUIContent("Duplicate"), false, () => Duplicated?.Invoke());
@@ -47,7 +48,7 @@ namespace QuickEye.WebTools.Editor
 
         private static string EnumIndexToDisplayText(int i) => ((HttpMethodType)i).ToString()[..3].ToUpperInvariant();
 
-        public new class UxmlFactory : UxmlFactory<RequestButtonBig, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<StashListItem, UxmlTraits> { }
 
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
@@ -65,8 +66,8 @@ namespace QuickEye.WebTools.Editor
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
-                ve.As<RequestButtonBig>()._nameLabel.value = _text.GetValueFromBag(bag, cc);
-                ve.As<RequestButtonBig>()._typeLabel.text = _type.GetValueFromBag(bag, cc).ToString();
+                ve.As<StashListItem>()._nameLabel.text = _text.GetValueFromBag(bag, cc);
+                ve.As<StashListItem>()._typeLabel.text = _type.GetValueFromBag(bag, cc).ToString();
             }
         }
     }

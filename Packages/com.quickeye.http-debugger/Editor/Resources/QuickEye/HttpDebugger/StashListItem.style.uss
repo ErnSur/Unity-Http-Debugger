@@ -1,0 +1,39 @@
+.stash-list-item {
+    height: 36px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 11px;
+}
+
+.stash-list-item > * {
+    font-size: 15px;
+}
+
+.stash-list-item__type-label {
+    -unity-font-style: bold;
+    width: 42px;
+}
+
+.stash-list-item__name-label {
+    flex-shrink: 1;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.stash-list-item__dropdown {
+    -unity-font-style: bold;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 17px;
+    font-size: 11px;
+}
+
+.stash-list-item__dropdown:hover {
+    color: rgba(255, 255, 255, 0.58);
+}

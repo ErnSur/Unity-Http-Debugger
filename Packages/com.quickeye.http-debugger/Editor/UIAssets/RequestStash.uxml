@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.quickeye.http-debugger/Editor/Resources/QuickEye/HttpDebugger/StashListItem.style.uss?fileID=7433441132597879392&amp;guid=90457ee4361b42fa995aeae37ca28bb7&amp;type=3#StashListItem.style" />
     <uie:Toolbar class="header-toolbar">
         <uie:ToolbarButton name="create--button" text="+" class="header-toolbar--button" style="width: 28px; -unity-font-style: bold; -unity-text-align: middle-center; font-size: 20px; padding-left: 0; padding-right: 0; padding-top: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-bottom: 3px;" />
         <uie:ToolbarSearchField focusable="true" name="search-field" style="flex-shrink: 1; flex-grow: 1;" />

@@ -85,20 +85,20 @@ namespace QuickEye.WebTools.Editor
 
         private void InitList()
         {
-            stashList.makeItem = () => new RequestButtonBig();
+            stashList.makeItem = () => new StashListItem();
             stashList.bindItem = (ve, index) =>
             {
                 var serObj = new SerializedObject(Source[index]);
                 var typeProp = serObj.FindProperty(nameof(RequestData.type));
                 var nameProp = serObj.FindProperty(RequestData.NamePropertyName);
-                var button = ve.As<RequestButtonBig>();
-                button.BindProperties(typeProp, nameProp);
-                button.Deleted = () =>
+                var listItem = ve.As<StashListItem>();
+                listItem.BindProperties(typeProp, nameProp);
+                listItem.Deleted = () =>
                 {
                     _requestList.RemoveAt(index);
                     stashList.Rebuild();
                 };
-                button.Duplicated = () =>
+                listItem.Duplicated = () =>
                 {
                     _requestList.Insert(index, RequestData.Create(Source[index]));
                     stashList.Rebuild();
