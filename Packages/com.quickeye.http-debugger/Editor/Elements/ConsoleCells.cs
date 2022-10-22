@@ -2,30 +2,12 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.WebTools.Editor
 {
-    internal class StatusCodeCell : Label
-    {
-        public StatusCodeCell()
-        {
-            AddToClassList("cell-text");
-
-            AddToClassList("code-cell");
-            AddToClassList("status-code");
-        }
-
-        public void Setup(int statusCode)
-        {
-            text = statusCode.ToString();
-            HttpStatusCodeUtil.ToggleStatusCodeClass(this, statusCode);
-        }
-    }
-
     internal class MethodCell : Label
     {
         public MethodCell()
         {
             AddToClassList("cell-text");
-
-            AddToClassList("type-cell");
+            AddToClassList("method-cell");
         }
 
         public void Setup(string method)
@@ -33,25 +15,9 @@ namespace QuickEye.WebTools.Editor
             text = FormatHttpMethodType(method);
         }
 
-        private string FormatHttpMethodType(string value)
+        private static string FormatHttpMethodType(string value)
         {
             return value[..3].ToUpperInvariant();
-        }
-    }
-
-    internal class UrlCell : TextField
-    {
-        public UrlCell()
-        {
-            AddToClassList("cell-text");
-            AddToClassList("url-cell");
-            textInputBase.AddToClassList("url-cell--text-input");
-            isReadOnly = true;
-        }
-
-        public void Setup(string url)
-        {
-            text = url;
         }
     }
 
@@ -72,6 +38,37 @@ namespace QuickEye.WebTools.Editor
         {
             _label.text = id;
             _breakpointToggle.BreakpointName = id;
+        }
+    }
+
+    internal class UrlCell : Label
+    {
+        public UrlCell()
+        {
+            AddToClassList("cell-text");
+            AddToClassList("url-cell");
+            selection.isSelectable = true;
+        }
+
+        public void Setup(string url)
+        {
+            text = url;
+        }
+    }
+
+    internal class ResultCell : Label
+    {
+        public ResultCell()
+        {
+            AddToClassList("cell-text");
+            AddToClassList("result-cell");
+            AddToClassList("status-code");
+        }
+
+        public void Setup(int statusCode)
+        {
+            text = statusCode.ToString();
+            HttpStatusCodeUtil.ToggleStatusCodeClass(this, statusCode);
         }
     }
 }

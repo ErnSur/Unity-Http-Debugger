@@ -4,41 +4,39 @@
     -unity-text-align: middle-left;
 }
 
-.status-code.code-cell {
-    margin-bottom: 2px;
-    margin-top: 2px;
-    -unity-text-align: middle-center;
-}
-
-.type-cell {
-    /*-unity-font-style: bold;*/
-    color: var(--unity-colors-default-text-hover);
-
-    width: 28px;
+.method-cell {
     margin-left: 3px;
     margin-right: 2px;
     -unity-text-align: middle-center;
 }
 
-.url-cell {
-    font-size: 10px;
+.skin--dark .method-cell {
+    color: var(--unity-colors-default-text-hover);
 }
 
-.url-cell--text-input {
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    background-color: rgba(0, 0, 0, 0);
-    color: rgb(109, 158, 255);
+.id-cell {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+}
+
+.skin--dark .result-cell {
+    color: var(--unity-colors-default-text-hover);
+}
+
+.result-cell {
+    margin-bottom: 2px;
+    margin-top: 2px;
+    -unity-text-align: middle-center;
+}
+
+
+.url-cell {
+    font-size: 11px;
+}
+
+.unity-collection-view:focus .unity-collection-view__item--selected .url-cell {
+    color: white;
 }
 
 #clear-button {
@@ -46,10 +44,4 @@
     border-left-width: 0;
     min-width: 43px;
     left: 0;
-}
-
-.id-cell {
-    flex-grow: 1;
-    flex-direction: row;
-    align-items: center;
 }

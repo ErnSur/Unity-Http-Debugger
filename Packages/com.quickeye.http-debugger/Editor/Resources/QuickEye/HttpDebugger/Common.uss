@@ -20,10 +20,6 @@
     white-space: normal;
 }
 
-.sidebar {
-    width: 180px;
-}
-
 .header-toolbar {
     height: 25px;
     border-top-width: 0;
@@ -55,57 +51,32 @@
 }
 
 .status-code {
-    border-radius: 0;
-
     padding-left: 3px;
     padding-right: 3px;
     padding-top: 3px;
     padding-bottom: 3px;
-    color: rgb(255, 255, 255);
-    /*-unity-font: resource('QuickEye/HttpDebugger/RobotoMono-Regular');*/
-    /*-unity-font-definition: none;*/
-    -unity-text-align: middle-center;
-    /*border-left-width: 1px;*/
     border-right-width: 2px;
-    border-left-color: rgb(17, 17, 17);
-    border-right-color: rgb(17, 17, 17);
-    border-top-color: rgb(17, 17, 17);
-    border-bottom-color: rgb(17, 17, 17);
+    -unity-text-align: middle-center;
 }
 
 .status-code-100 {
-    border-left-color: rgb(36, 166, 186);
     border-right-color: rgb(36, 166, 186);
-    border-top-color: rgb(36, 166, 186);
-    border-bottom-color: rgb(36, 166, 186);
 }
 
 .status-code-200 {
-    border-radius: 0;
     border-width: 0;
-    border-left-color: rgb(98, 156, 30);
-    color: var(--unity-colors-default-text-hover);
 }
 
 .status-code-300 {
-    border-left-color: rgb(186, 36, 122);
     border-right-color: rgb(186, 36, 122);
-    border-top-color: rgb(186, 36, 122);
-    border-bottom-color: rgb(186, 36, 122);
 }
 
 .status-code-400 {
-    border-left-color: rgb(197, 113, 2);
     border-right-color: rgb(197, 113, 2);
-    border-top-color: rgb(197, 113, 2);
-    border-bottom-color: rgb(197, 113, 2);
 }
 
 .status-code-500 {
-    border-left-color: rgb(236, 54, 2);
     border-right-color: rgb(236, 54, 2);
-    border-top-color: rgb(236, 54, 2);
-    border-bottom-color: rgb(236, 54, 2);
 }
 
 DropdownButton {

@@ -113,10 +113,16 @@ namespace QuickEye.WebTools.Editor
 
         private void InitColumns()
         {
-            resultCol.makeCell = () => new StatusCodeCell();
+            timeCol.makeCell = () => new Label();
+            timeCol.bindCell = (element, i) =>
+            {
+                ((Label)element).text = ((ConsoleRequestData)Source[i]).timestamp.ToString();
+            };
+            
+            resultCol.makeCell = () => new ResultCell();
             resultCol.bindCell = (element, i) =>
             {
-                ((StatusCodeCell)element).Setup(Source[i].lastResponse?.statusCode ?? 0);
+                ((ResultCell)element).Setup(Source[i].lastResponse?.statusCode ?? 0);
                 AddContextMenu(element, i);
             };
 

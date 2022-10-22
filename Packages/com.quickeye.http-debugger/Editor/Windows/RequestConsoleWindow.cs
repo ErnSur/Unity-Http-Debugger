@@ -18,6 +18,7 @@ namespace QuickEye.WebTools.Editor
             titleContent = EditorGUIUtility.IconContent("UnityEditor.ConsoleWindow");
             titleContent.text = "Request Console";
             _database = RequestConsoleDatabase.instance;
+            rootVisualElement.AddToClassList(EditorGUIUtility.isProSkin ? "skin--dark" : "skin--light");
             requestConsole.Init(rootVisualElement);
             requestConsole.Setup(_database.requests);
             requestConsole.SelectionChanged += request => { ExchangeInspectorWindow.Select(request, true); };

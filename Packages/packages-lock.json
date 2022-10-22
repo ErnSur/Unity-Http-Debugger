@@ -13,7 +13,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d102d6ee1176b5984a956999da0d7a8b7e225d1c"
+      "hash": "91da1260c2af927aa56fbec26b03871a8fc7941d"
     },
     "com.quickeye.utility": {
       "version": "https://github.com/ErnSur/QuickEye-Utility.git",
