@@ -1,0 +1,24 @@
+{
+    "name": "QuickEye.DependencyMessage.WebTools",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "!DEP"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.quickeye.ui-toolkit-plus",
+            "expression": "",
+            "define": "DEP"
+        }
+    ],
+    "noEngineReferences": false
+}
