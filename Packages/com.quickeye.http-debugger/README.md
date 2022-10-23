@@ -1,10 +1,12 @@
 # Unity HTTP Debugger
-![](Documentation~/EditorWindow.png)
-HTTP request logging tool for Unity. 
+![license](https://img.shields.io/github/license/ErnSur/Unity-Http-Debugger)
+![UnityVersion](https://img.shields.io/static/v1?label=unity&message=2022.1%2B&color=blue&style=flat&logo=Unity)
+[![openupm](https://img.shields.io/npm/v/com.quickeye.http-debugger?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.quickeye.http-debugger/)
+[![HowToInstall](https://img.shields.io/badge/-How%20To%20Install-gray)](https://docs.unity3d.com/Manual/upm-ui-giturl.html)
 
-> Supported in Unity 2022+ (may be backported at the later stages of the project)
+![Main Image](Documentation~/EditorWindow.png)
+HTTP request logging tool for Unity.
 ## Features
-
 ### Runtime Extensions
 - Extension methods to Log web requests
 - Logged requests are visible in the *Request Console Window*
@@ -30,10 +32,8 @@ HTTP request logging tool for Unity.
   - fast request/response edit/inspect
 - Stash view is less important right now as Postman does it 100 times better. Development should focus on features unique to this tool.
 
-## Open Problems
-- I can't extract request headers from the `UnityWebRequest` object
-  - Decorator/wrapper class for `UnityWebRequest`?
-  - https://stackoverflow.com/questions/44855721/unitywebrequest-how-to-print-all-request-headers
+## Dependencies
+- [UI Toolkit Plus:1.7.0+](https://github.com/ErnSur/UI-Toolkit-Plus)
 
 ## References
 - [Insomnia](https://github.com/Kong/insomnia)

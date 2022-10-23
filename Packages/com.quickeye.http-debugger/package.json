@@ -1,8 +1,10 @@
 {
   "name": "com.quickeye.http-debugger",
   "displayName": "HTTP Debugger",
-  "version": "0.1.0",
   "author": "Quick Eye",
+  "version": "1.0.0",
+  "unity": "2022.1",
+  "description": "HTTP request logging tool for Unity.\nNon UPM dependencies:\n- com.quickeye.ui-toolkit-plus (https://github.com/ErnSur/UI-Toolkit-Plus.git)",
   "type": "library",
   "dependencies": {
     "com.unity.editorcoroutines": "1.0.0"

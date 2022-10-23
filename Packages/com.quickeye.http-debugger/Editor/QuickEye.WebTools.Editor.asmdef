@@ -14,7 +14,15 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
+    "defineConstraints": [
+        "UI_TOOLKIT_PLUS"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.quickeye.ui-toolkit-plus",
+            "expression": "",
+            "define": "UI_TOOLKIT_PLUS"
+        }
+    ],
     "noEngineReferences": false
 }
