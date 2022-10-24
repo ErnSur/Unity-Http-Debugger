@@ -45,8 +45,11 @@ namespace QuickEye.WebTools.Editor
             InitColumns();
             InitClearButton();
             InitSearchField();
-
+#if UNITY_2022_2_OR_NEWER
             requestList.selectionChanged += items =>
+#else
+            requestList.onSelectionChange += items =>
+#endif
             {
                 SelectionChanged?.Invoke(items.FirstOrDefault() as RequestData);
             };
@@ -118,7 +121,7 @@ namespace QuickEye.WebTools.Editor
             {
                 ((Label)element).text = ((ConsoleRequestData)Source[i]).timestamp.ToString();
             };
-            
+
             resultCol.makeCell = () => new ResultCell();
             resultCol.bindCell = (element, i) =>
             {

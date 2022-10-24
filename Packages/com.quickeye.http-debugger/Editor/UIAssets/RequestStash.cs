@@ -57,7 +57,7 @@ namespace QuickEye.WebTools.Editor
         {
             stashList.Rebuild();
         }
-        
+
         private void SetupList(IList propList)
         {
             stashList.itemsSource = propList;
@@ -104,7 +104,11 @@ namespace QuickEye.WebTools.Editor
                     stashList.Rebuild();
                 };
             };
+#if UNITY_2022_2_OR_NEWER
             stashList.selectionChanged += selection =>
+#else
+            stashList.onSelectionChange += selection =>
+#endif
             {
                 SelectionChanged?.Invoke((RequestData)selection.FirstOrDefault());
             };
@@ -115,7 +119,7 @@ namespace QuickEye.WebTools.Editor
                 newRequest.name = "New Request";
                 newRequest.type = HttpMethodType.Get;
                 newRequest.content = "{ }";
-                
+
                 _requestList.Add(newRequest);
                 stashList.Rebuild();
             };

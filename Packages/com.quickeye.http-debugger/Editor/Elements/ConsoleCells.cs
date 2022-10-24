@@ -47,7 +47,9 @@ namespace QuickEye.WebTools.Editor
         {
             AddToClassList("cell-text");
             AddToClassList("url-cell");
+#if UNITY_2022_2_OR_NEWER
             selection.isSelectable = true;
+#endif
         }
 
         public void Setup(string url)

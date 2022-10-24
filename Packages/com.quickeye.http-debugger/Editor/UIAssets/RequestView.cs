@@ -23,12 +23,14 @@ namespace QuickEye.WebTools.Editor
             _root = root;
             AssignQueryResults(root);
             _headersViewController = new HeadersView(headersView);
+#if UNITY_2022_2_OR_NEWER
             stackTraceView.RegisterCallback<PointerUpLinkTagEvent>(evt =>
             {
                 var (filePath, line) = _linksByLinkText[evt.linkText];
                 InternalEditorUtility.OpenFileAtLineExternal(filePath, line);
             });
             stackTraceLabel.selection.isSelectable = true;
+#endif
             InitTabs();
         }
 
