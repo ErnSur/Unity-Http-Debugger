@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace QuickEye.WebTools
 {
-    public class LogMessageHandler : DelegatingHandler
+    public class WebLogMessageHandler : DelegatingHandler
     {
         private readonly (string domain, string alias)[] domainAliases;
 
-        public LogMessageHandler(HttpMessageHandler innerHandler, string id) : base(innerHandler)
+        public WebLogMessageHandler(HttpMessageHandler innerHandler, string id) : base(innerHandler)
         {
             domainAliases = new (string domain, string alias)[]
             {
@@ -18,7 +18,7 @@ namespace QuickEye.WebTools
             };
         }
 
-        public LogMessageHandler(HttpMessageHandler innerHandler, IEnumerable<(string domain, string alias)> aliases) :
+        public WebLogMessageHandler(HttpMessageHandler innerHandler, IEnumerable<(string domain, string alias)> aliases) :
             base(innerHandler)
         {
             domainAliases = aliases.OrderByDescending(t => t.domain).ToArray();
@@ -32,7 +32,7 @@ namespace QuickEye.WebTools
             var url = request.RequestUri.OriginalString;
             if (!TryGetId(url, out var id))
                 id = url;
-            HttpClientLogger.Log(id, response);
+            WebLogger.Log(id, response);
             return response;
         }
 

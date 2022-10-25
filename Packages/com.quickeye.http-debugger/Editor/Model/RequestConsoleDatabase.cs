@@ -11,7 +11,7 @@ namespace QuickEye.WebTools.Editor
     {
         public const string FilePath = "Logs/RequestConsoleDatabase.asset";
         public const string BreakpointPropertyName = nameof(serializedBreakpoints);
-        public PersistentRequestList requests;
+        public PersistentRequestList requests = new ();
         public HashSet<string> breakpoints = new HashSet<string>();
 
         [SerializeField]

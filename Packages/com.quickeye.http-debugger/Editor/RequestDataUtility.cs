@@ -42,14 +42,11 @@ namespace QuickEye.WebTools.Editor
             result.type = HttpMethodTypeUtil.FromString(req.method);
             if (req.uploadHandler != null && req.uploadHandler.data != null)
             {
-                
                 result.headers.Add(new Header("Content-Type", req.uploadHandler.contentType));
                 var content = Encoding.UTF8.GetString(req.uploadHandler.data);
                 result.content = content;
             }
             
-
-            result.headers.AddRange(ContentHeadersToList(req.GetRequestHeaders()));
             result.lastResponse = ResponseFromUnityWebRequest(req);
             return result;
         }

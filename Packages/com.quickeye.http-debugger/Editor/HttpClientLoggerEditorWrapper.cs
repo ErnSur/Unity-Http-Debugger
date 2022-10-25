@@ -15,9 +15,9 @@ namespace QuickEye.WebTools.Editor
 
         static HttpClientLoggerEditorWrapper()
         {
-            HttpClientLogger.LoggedRequest += async (n, m, s) => await Log(n, m, s);
-            HttpClientLogger.LoggedResponse += async (n, m, s) => await Log(n, m, s);
-            HttpClientLogger.LoggedUnityRequest += Log;
+            WebLogger.LoggedRequest += async (n, m, s) => await Log(n, m, s);
+            WebLogger.LoggedResponse += async (n, m, s) => await Log(n, m, s);
+            WebLogger.LoggedUnityRequest += Log;
         }
 
         private static void HandleBreakpoint(string reqName)
