@@ -24,7 +24,7 @@ namespace QuickEye.WebTools.Editor
             AssignQueryResults(root);
             _headersViewController = new HeadersView(headersView);
 #if UNITY_2022_2_OR_NEWER
-            stackTraceView.RegisterCallback<PointerUpLinkTagEvent>(evt =>
+            stackTraceLabel.RegisterCallback<PointerUpLinkTagEvent>(evt =>
             {
                 var (filePath, line) = _linksByLinkText[evt.linkText];
                 InternalEditorUtility.OpenFileAtLineExternal(filePath, line);
