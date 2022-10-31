@@ -9,11 +9,11 @@
       }
     },
     "com.quickeye.ui-toolkit-plus": {
-      "version": "https://github.com/ErnSur/UI-Toolkit-Plus.git",
+      "version": "https://github.com/ErnSur/UI-Toolkit-Plus.git#1.9.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "bb25d98322029dddeda7fca8efd49bc9568f31a1"
+      "hash": "554f9201ad8474451211586595e43a1f6da60bad"
     },
     "com.quickeye.utility": {
       "version": "https://github.com/ErnSur/QuickEye-Utility.git",
@@ -236,17 +236,6 @@
     "com.unity.modules.uielements": {
       "version": "1.0.0",
       "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.ui": "1.0.0",
-        "com.unity.modules.imgui": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.uielementsnative": "1.0.0"
-      }
-    },
-    "com.unity.modules.uielementsnative": {
-      "version": "1.0.0",
-      "depth": 1,
       "source": "builtin",
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",

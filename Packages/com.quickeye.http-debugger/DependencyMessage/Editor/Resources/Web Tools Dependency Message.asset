@@ -16,4 +16,4 @@ MonoBehaviour:
     type: 3}
   dependencies:
   - name: UI Toolkit Plus
-    gitUrl: https://github.com/ErnSur/UI-Toolkit-Plus.git
+    gitUrl: https://github.com/ErnSur/UI-Toolkit-Plus.git#1.9.0

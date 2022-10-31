@@ -33,7 +33,7 @@ HTTP request logging tool for Unity.
 - Stash view is less important right now as Postman does it 100 times better. Development should focus on features unique to this tool.
 
 ## Dependencies
-- [UI Toolkit Plus:1.7.0+](https://github.com/ErnSur/UI-Toolkit-Plus)
+- [UI Toolkit Plus:1.9.0](https://github.com/ErnSur/UI-Toolkit-Plus)
 
 ## References
 - [Insomnia](https://github.com/Kong/insomnia)

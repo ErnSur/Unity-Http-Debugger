@@ -91,6 +91,12 @@ namespace QuickEye.DependencyMessage.WebTools
             var messages = Resources.LoadAll<DependencyMessage>("");
             return messages.FirstOrDefault();
         }
+        
+        [ContextMenu("Add Packages")]
+        private void AddPackages()
+        {
+            AddPackages(dependencies);
+        }
 
         private PackageManifestJson GetPackageManifestJson()
         {

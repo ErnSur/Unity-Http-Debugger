@@ -97,7 +97,7 @@ namespace QuickEye.WebTools.Editor
             }
         }
 
-        private void AddBodyTabMenuItems(GenericDropdownMenu menu)
+        private void AddBodyTabMenuItems(IGenericMenu menu)
         {
             menu.AddItem("JSON", _target.IsContentType(RequestDataUtils.JsonContentType),
                 () => { _target.SetContentType(RequestDataUtils.JsonContentType); });

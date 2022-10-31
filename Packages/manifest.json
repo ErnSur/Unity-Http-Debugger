@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.quickeye.ui-toolkit-plus": "https://github.com/ErnSur/UI-Toolkit-Plus.git",
+    "com.quickeye.ui-toolkit-plus": "https://github.com/ErnSur/UI-Toolkit-Plus.git#1.9.0",
     "com.quickeye.utility": "https://github.com/ErnSur/QuickEye-Utility.git",
     "com.unity.editorcoroutines": "1.0.0",
     "com.unity.ide.rider": "3.0.15",
