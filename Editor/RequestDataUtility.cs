@@ -66,7 +66,7 @@ namespace QuickEye.WebTools.Editor
             if (headerCollection == null)
                 return null;
             return new List<Header>(headerCollection
-                .Select(p => new Header(p.Key, string.Join("; ", p))));
+                .Select(p => new Header(p.Key, string.Join("; ", p.Value))));
         }
 
         private static List<Header> ContentHeadersToList(Dictionary<string, string> dictionary)
