@@ -15,7 +15,12 @@ namespace QuickEye.WebTools.Editor
         {
             var url = req.RequestUri.OriginalString;
             var type = HttpMethodTypeUtil.FromHttpMethod(req.Method);
-            var headers = ContentHeadersToList(req.Content?.Headers);
+
+            var headers = new List<Header>();
+            headers.AddRange(EnumerateHeaders(req.Headers));
+            if (req.Content?.Headers != null)
+                headers.AddRange(EnumerateHeaders(req.Content.Headers));
+
             var result = ScriptableObject.CreateInstance<T>();
             result.url = url;
             result.type = type;
@@ -28,10 +33,7 @@ namespace QuickEye.WebTools.Editor
         public static async Task<T> FromHttpResponseMessage<T>(HttpResponseMessage res) where T : RequestData
         {
             var hdRequest = await FromHttpRequestMessage<T>(res.RequestMessage);
-            hdRequest.lastResponse = new ResponseData((int)res.StatusCode);
-            if (res.Content != null)
-                hdRequest.lastResponse.content = await res.Content.ReadAsStringAsync();
-            hdRequest.lastResponse.headers = ContentHeadersToList(res.Content?.Headers);
+            hdRequest.lastResponse = await ResponseFromHttpResponseMessageAsync(res);
             return hdRequest;
         }
 
@@ -46,7 +48,7 @@ namespace QuickEye.WebTools.Editor
                 var content = Encoding.UTF8.GetString(req.uploadHandler.data);
                 result.content = content;
             }
-            
+
             result.lastResponse = ResponseFromUnityWebRequest(req);
             return result;
         }
@@ -54,23 +56,35 @@ namespace QuickEye.WebTools.Editor
         public static ResponseData ResponseFromUnityWebRequest(UnityWebRequest req)
         {
             var result = new ResponseData((int)req.responseCode);
-            result.headers = ContentHeadersToList(req.GetResponseHeaders());
+            result.headers = HeadersToList(req.GetResponseHeaders());
             if (req.downloadHandler?.text != null)
                 result.content = req.downloadHandler.text;
 
             return result;
         }
 
-        private static List<Header> ContentHeadersToList(HttpContentHeaders headerCollection)
+        public static async Task<ResponseData> ResponseFromHttpResponseMessageAsync(HttpResponseMessage res)
         {
-            if (headerCollection == null)
-                return null;
-            return new List<Header>(headerCollection
-                .Select(kvp => 
-                    new Header(kvp.Key, string.Join("; ", kvp.Value))));
+            var result = new ResponseData((int)res.StatusCode);
+            if (res.Content != null)
+                result.content = await res.Content.ReadAsStringAsync();
+
+            var headers = new List<Header>();
+            headers.AddRange(EnumerateHeaders(res.Headers));
+            if (res.Content?.Headers != null)
+                headers.AddRange(EnumerateHeaders(res.Content.Headers));
+            headers.AddRange(EnumerateHeaders(res.TrailingHeaders));
+            result.headers = headers;
+            return result;
         }
 
-        private static List<Header> ContentHeadersToList(Dictionary<string, string> dictionary)
+        private static IEnumerable<Header> EnumerateHeaders(HttpHeaders headerCollection)
+        {
+            return headerCollection?.Select(kvp =>
+                new Header(kvp.Key, string.Join("; ", kvp.Value)));
+        }
+
+        private static List<Header> HeadersToList(Dictionary<string, string> dictionary)
         {
             if (dictionary == null)
                 return null;
