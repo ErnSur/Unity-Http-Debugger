@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
+using System.Net.Http;
 using QuickEye.UIToolkit;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
 
@@ -18,7 +20,17 @@ namespace QuickEye.WebTools.Editor
         public RequestHeaderView(VisualElement root)
         {
             AssignQueryResults(root);
-            reqSendButton.clicked += OnSendButtonClick;
+            reqSendButton.clickable.activators.Add(new ManipulatorActivationFilter()
+            {
+                modifiers = EventModifiers.None | EventModifiers.Shift
+            });
+            reqSendButton.clickable.clickedWithEventInfo += e =>
+            {
+                if (e.imguiEvent.shift)
+                    SendRequestUsingHttpClient();
+                else
+                    SendRequestUsingUnityWebReq();
+            };
         }
 
         public void Setup(SerializedObject serializedObject)
@@ -58,7 +70,7 @@ namespace QuickEye.WebTools.Editor
             icon.EnableInClassList("icon-gray", isConsoleRequest);
         }
 
-        private void OnSendButtonClick()
+        private void SendRequestUsingUnityWebReq()
         {
             var unityWebRequest = _target.ToUnityWebRequest();
             EditorCoroutineUtility.StartCoroutineOwnerless(HandleWebRequest(unityWebRequest));
@@ -71,6 +83,18 @@ namespace QuickEye.WebTools.Editor
                 RequestAwaitEnded?.Invoke(_target.lastResponse);
                 request.Dispose();
             }
+        }
+
+        private async void SendRequestUsingHttpClient()
+        {
+            var message = _target.ToHttpRequestMessage();
+            using var client = new HttpClient();
+            RequestAwaitStarted?.Invoke();
+            using (var res = await client.SendAsync(message))
+            {
+                _target.lastResponse = await RequestDataUtility.ResponseFromHttpResponseMessageAsync(res);
+            }
+            RequestAwaitEnded?.Invoke(_target.lastResponse);
         }
     }
 }
